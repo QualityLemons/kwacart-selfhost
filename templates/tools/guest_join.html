@@ -1,0 +1,183 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Join session &mdash; {{ tool_meta.title }}{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ── Nickname screen ─────────────────────────────────────────────────────── */
+/* Deliberately full-height and visually dominant so a phone screen shows
+   nothing but the prompt after scanning the QR code. */
+
+#nickname-screen {
+    min-height: calc(100vh - 9rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.ns-card {
+    background: #1e293b;
+    color: #f8fafc;
+    border-radius: 14px;
+    padding: 2.5rem 2rem;
+    width: 100%;
+    max-width: 420px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.ns-eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: #94a3b8;
+    margin: 0 0 0.4rem;
+}
+
+.ns-session-label {
+    font-size: 1rem;
+    font-weight: 600;
+    color: #e2e8f0;
+    margin: 0 0 2rem;
+}
+
+.ns-question {
+    display: block;
+    font-size: 1.45rem;
+    font-weight: 700;
+    color: #f8fafc;
+    margin: 0 0 1.5rem;
+    line-height: 1.3;
+}
+
+.ns-input {
+    display: block;
+    width: 100%;
+    padding: 0.9rem 1rem;
+    border: 2px solid #475569;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-family: inherit;
+    background: #0f172a;
+    color: #f8fafc;
+    box-sizing: border-box;
+    transition: border-color 0.15s;
+    text-align: left;
+}
+
+.ns-input:focus {
+    outline: none;
+    border-color: #f59e0b;
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25);
+}
+
+.ns-input::placeholder {
+    color: #475569;
+}
+
+.ns-error {
+    color: #fca5a5;
+    font-size: 0.875rem;
+    margin: 0.6rem 0 0;
+    text-align: left;
+}
+
+.ns-btn {
+    display: block;
+    width: 100%;
+    margin-top: 1.25rem;
+    padding: 0.9rem;
+    background: #f59e0b;
+    color: #1c1917;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.1rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s;
+}
+
+.ns-btn:hover,
+.ns-btn:focus-visible {
+    background: #d97706;
+    outline: 2px solid #f8fafc;
+    outline-offset: 2px;
+}
+
+.ns-btn:disabled {
+    opacity: 0.6;
+    cursor: default;
+}
+
+.ns-hint {
+    font-size: 0.78rem;
+    color: #64748b;
+    margin: 1.25rem 0 0;
+    line-height: 1.55;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="nickname-screen">
+    <div class="ns-card">
+
+        <p class="ns-eyebrow">Live facilitation session</p>
+        <p class="ns-session-label">{{ tool_meta.title }}</p>
+
+        <label class="ns-question" for="guest_name">
+            What should we call you<br>in this session?
+        </label>
+
+        <form method="post"
+              data-disable-on-submit
+              data-loading-text="Joining&hellip;"
+              id="nickname-form">
+            {% csrf_token %}
+            <input type="text"
+                   id="guest_name"
+                   name="guest_name"
+                   class="ns-input"
+                   autofocus
+                   autocomplete="name"
+                   autocapitalize="words"
+                   enterkeyhint="go"
+                   spellcheck="true"
+                   maxlength="100"
+                   placeholder="e.g. Sarah &mdash; Marketing"
+                   aria-describedby="guest-name-hint{% if error %} guest-name-error{% endif %}">
+            {% if error %}
+            <p class="ns-error" id="guest-name-error" role="alert">{{ error }}</p>
+            {% endif %}
+            <button type="submit" class="ns-btn">
+                Join session &rarr;
+            </button>
+        </form>
+
+        <p class="ns-hint" id="guest-name-hint">
+            No account needed. Your name will appear next to your contribution
+            in the session summary and exported results.
+        </p>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+/* ── Nickname screen: sessionStorage bridge ──────────────────────────────── */
+/* If the guest previously joined a session this browser session, pre-fill
+   the field with the name they used so they don't have to retype it. */
+(function () {
+    try {
+        var input = document.getElementById('guest_name');
+        if (!input || input.value) return;
+        var saved = sessionStorage.getItem('kwacart_guest_name');
+        if (saved) input.value = saved;
+    } catch (_) { /* sessionStorage unavailable (private mode, etc.) */ }
+}());
+</script>
+{% endblock %}

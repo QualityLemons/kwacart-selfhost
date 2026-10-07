@@ -1,0 +1,322 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}My Profile — KwaCart{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/profile.css' %}">{% endblock %}
+
+{% block content %}
+<div class="profile-page">
+<h1>My Profile</h1>
+<p class="profile-intro">
+    Manage your account settings.
+</p>
+
+{% if billing_enabled %}
+<section aria-labelledby="billing-title"
+         class="profile-section profile-card billing-card">
+    <h2 id="billing-title">Plan and billing</h2>
+    {% if request.user.organisation_owner %}
+    <p>
+        Your account is included in the
+        <strong>{{ billing_account.get_plan_display }}</strong> plan for
+        <strong>{{ billing_account.email_domain }}</strong>.
+        There is no additional per-user charge.
+    </p>
+    <p>The Organisation account holder manages this subscription.</p>
+    {% elif billing_account.has_paid_access %}
+    <p>
+        <strong>{{ billing_account.get_plan_display }}</strong>
+        &middot; {{ billing_account.get_billing_interval_display }}
+        &middot; {{ billing_account.get_subscription_status_display }}
+    </p>
+    {% if billing_account.subscription_cancel_at_period_end %}
+    <p role="status">
+        Your subscription is set to cancel
+        {% if billing_account.subscription_current_period_end %}
+        on {{ billing_account.subscription_current_period_end|date:"j F Y" }}
+        {% endif %}. Access remains available until then.
+    </p>
+    {% endif %}
+    <form method="post" action="{% url 'accounts:billing_portal' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn">Manage or cancel with Stripe</button>
+    </form>
+    {% elif billing_account.subscription_status == "past_due" or billing_account.subscription_status == "unpaid" or billing_account.subscription_status == "incomplete" %}
+    <p role="alert">
+        <strong>{{ billing_account.get_subscription_status_display }}.</strong>
+        Your paid workspace is paused. Update your payment method to restore access.
+    </p>
+    <form method="post" action="{% url 'accounts:billing_portal' %}">
+        {% csrf_token %}
+        <button type="submit" class="btn">Fix payment with Stripe</button>
+    </form>
+    {% else %}
+    <p>You do not have an active paid plan.</p>
+    <a class="btn" href="{% url 'pricing' %}">Choose a plan</a>
+    {% endif %}
+</section>
+{% else %}
+<section class="profile-section profile-card">
+    <h2>Free self-hosted edition</h2>
+    <p>All KwaCart tools are available on this instance. No subscription or payment is required.</p>
+</section>
+{% endif %}
+
+{# ── Activity summary ─────────────────────────────────────────────────────── #}
+<section class="profile-section profile-card activity-card">
+    <h2>
+        Account activity
+    </h2>
+    <p>
+        <strong>{{ solo_count }}</strong> solo submission{{ solo_count|pluralize }} &nbsp;&middot;&nbsp;
+        <strong>{{ session_count }}</strong> session{{ session_count|pluralize }}
+    </p>
+    <p class="muted">
+        Signed in as <strong>{{ request.user.email }}</strong>
+    </p>
+</section>
+
+{# ── Update email ─────────────────────────────────────────────────────────── #}
+<section class="profile-section">
+    <h2>Email address</h2>
+
+    {% if messages %}
+    <ul class="messages">
+        {% for m in messages %}<li>{{ m }}</li>{% endfor %}
+    </ul>
+    {% endif %}
+
+    <form method="post" class="profile-form">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="update_email">
+
+        <label for="id_email">Email</label>
+        <input type="email"
+               id="id_email"
+               name="email"
+               value="{{ email_form.email.value }}"
+               autocomplete="email"
+               placeholder="you@example.com"
+               required>
+        {% if email_form.email.errors %}
+        <p class="field-error">
+            {{ email_form.email.errors|join:", " }}
+        </p>
+        {% endif %}
+
+        <button type="submit" class="btn btn-primary">
+            Update email
+        </button>
+    </form>
+</section>
+
+{# ── Change password ──────────────────────────────────────────────────────── #}
+<section class="profile-section">
+    <h2>Change password</h2>
+
+    <form method="post" class="profile-form">
+        {% csrf_token %}
+        <input type="hidden" name="action" value="change_password">
+        <input type="email"
+               name="username"
+               value="{{ request.user.email }}"
+               autocomplete="username"
+               hidden>
+
+        {% for field in password_form %}
+        <div class="form-field">
+            <label for="{{ field.id_for_label }}">
+                {{ field.label }}
+            </label>
+            <input type="password"
+                   id="{{ field.id_for_label }}"
+                   name="{{ field.html_name }}"
+                   autocomplete="{{ field.field.widget.attrs.autocomplete|default:'current-password' }}"
+                   required>
+            {% if field.errors %}
+            <p class="field-error">
+                {{ field.errors|join:", " }}
+            </p>
+            {% endif %}
+            {% if field.help_text %}
+            <p class="help-text">
+                {{ field.help_text }}
+            </p>
+            {% endif %}
+        </div>
+        {% endfor %}
+
+        <button type="submit" class="btn btn-primary">
+            Change password
+        </button>
+    </form>
+</section>
+
+{# ── Team data ownership and consent ─────────────────────────────────────── #}
+{% if is_organisation_owner or request.user.organisation_owner or current_data_policy or pending_transfer_requests %}
+<section class="profile-section" aria-labelledby="team-data-title">
+    <h2 id="team-data-title">Team data ownership</h2>
+    {% if is_organisation_owner %}
+    <div class="profile-card">
+        <p class="policy-intro">
+            Choose an existing account on <strong>{{ request.user.email_domain }}</strong>
+            and propose where that member’s KwaCart work should be retained. The member
+            reviews the request before anything is moved.
+        </p>
+        <form method="post" action="{% url 'accounts:organisation_data_policy_request' %}"
+              class="policy-form">
+            {% csrf_token %}
+            {% if team_policy_form.non_field_errors %}
+            <p class="field-error" role="alert">{{ team_policy_form.non_field_errors|join:", " }}</p>
+            {% endif %}
+            <div class="form-field">
+                <label for="{{ team_policy_form.email.id_for_label }}">
+                    {{ team_policy_form.email.label }}
+                </label>
+                {{ team_policy_form.email }}
+                {% if team_policy_form.email.errors %}
+                <p class="field-error" role="alert">{{ team_policy_form.email.errors|join:", " }}</p>
+                {% endif %}
+                <p class="help-text">The account must already exist and use your organisation’s email domain.</p>
+            </div>
+            <fieldset class="policy-fieldset">
+                <legend>{{ team_policy_form.policy.label }}</legend>
+                <div class="policy-options">
+                    {% for choice in team_policy_form.policy %}
+                    <label class="policy-option" for="{{ choice.id_for_label }}">
+                        {{ choice.tag }}
+                        <span>
+                            <strong>{{ choice.choice_label }}</strong>
+                            {% if choice.data.value == "member" %}
+                            <small>New work stays with the member’s account.</small>
+                            {% else %}
+                            <small>New work is retained in the organisation account.</small>
+                            {% endif %}
+                        </span>
+                    </label>
+                    {% endfor %}
+                </div>
+                {% if team_policy_form.policy.errors %}
+                <p class="field-error" role="alert">{{ team_policy_form.policy.errors|join:", " }}</p>
+                {% endif %}
+            </fieldset>
+            <button type="submit" class="btn btn-primary">Send data policy request</button>
+        </form>
+    </div>
+    <div class="team-list" aria-label="Linked team members">
+        {% for member in team_members %}
+        <article class="team-member" data-testid="team-member-{{ member.user.pk }}">
+            <div>
+                <div class="team-member-email">{{ member.user.email }}</div>
+                {% if member.pending %}
+                <span class="status-pill status-pending">Request pending · {{ member.pending.get_target_policy_display }}</span>
+                {% elif member.policy %}
+                <span class="status-pill">{{ member.policy.get_policy_display }}</span>
+                {% else %}
+                <span class="status-pill">No policy chosen</span>
+                {% endif %}
+            </div>
+            <p class="muted">Access through your organisation account</p>
+        </article>
+        {% empty %}
+        <div class="profile-card">
+            <p class="muted">No linked members yet. Add an existing same-domain account above.</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <div class="profile-card">
+        <p>
+            Your current data policy:
+            <strong>
+                {% if current_data_policy %}
+                    {{ current_data_policy.get_policy_display }}
+                {% else %}
+                    Keep with member
+                {% endif %}
+            </strong>
+        </p>
+        <p class="muted">
+            A policy controls where new work is retained. Previously transferred work is
+            not automatically returned by a later member-owned policy.
+        </p>
+    </div>
+    {% if pending_transfer_requests %}
+        {% for transfer_request in pending_transfer_requests %}
+        <article class="request-card" aria-labelledby="request-title-{{ transfer_request.pk }}">
+            <h3 id="request-title-{{ transfer_request.pk }}">A data-retention request needs your decision</h3>
+            <p>
+                <strong>{{ transfer_request.owner.email }}</strong> proposes:
+                <strong>{{ transfer_request.get_target_policy_display }}</strong>.
+            </p>
+            {% if transfer_request.target_policy == "organisation" %}
+            <p>
+                Accepting organisation retention moves your existing solo work and
+                hosted sessions to the main organisation account. Your creator and
+                host attribution is preserved. Your contributions in other people’s
+                sessions do not move.
+            </p>
+            {% else %}
+            <p>
+                Accepting keeps your work with your member account. Work previously
+                transferred to the organisation is not automatically returned by a
+                later member-owned policy.
+            </p>
+            {% endif %}
+            <div class="request-actions">
+                <form method="post" action="{% url 'accounts:organisation_data_policy_response' transfer_request.pk %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="accept">
+                    <button type="submit" class="btn btn-primary">Accept request</button>
+                </form>
+                <form method="post" action="{% url 'accounts:organisation_data_policy_response' transfer_request.pk %}">
+                    {% csrf_token %}
+                    <input type="hidden" name="action" value="decline">
+                    <button type="submit" class="btn btn-decline">Decline request</button>
+                </form>
+            </div>
+        </article>
+        {% endfor %}
+    {% endif %}
+    {% endif %}
+</section>
+{% endif %}
+
+{# ── Delete account (danger zone) ─────────────────────────────────────────── #}
+<section class="profile-section">
+    <details class="profile-card danger-zone">
+        <summary>Delete account
+        </summary>
+
+        <div>
+            {% if has_organisation_retained_work %}
+            <p class="danger-copy" role="status">
+                This account is the recorded creator or host of work retained by
+                your organisation. It cannot be deleted while that attribution
+                must be preserved. You can update your email without deleting the
+                retained work.
+            </p>
+            {% else %}
+            <p class="danger-copy">
+                This permanently deletes your account, all solo submissions,
+                all sessions you hosted, and every export file generated from
+                your data. <strong>This action cannot be undone.</strong>
+            </p>
+            {% if billing_enabled and not request.user.organisation_owner and request.user.subscription_status == "active" %}
+            <p role="alert" class="danger-copy">
+                Cancel your paid subscription and wait for access to end before
+                deleting the billing account, so Stripe cannot continue charging it.
+            </p>
+            {% endif %}
+            <form method="post" action="{% url 'accounts:delete' %}">
+                {% csrf_token %}
+                <input type="hidden" name="confirm" value="DELETE">
+                <button type="submit" class="btn btn-danger">
+                    Yes, permanently delete my account
+                </button>
+            </form>
+            {% endif %}
+        </div>
+    </details>
+</section>
+</div>
+{% endblock %}

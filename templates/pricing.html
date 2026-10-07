@@ -1,0 +1,128 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pricing — KwaCart</title>
+    <link rel="stylesheet" href="{% static 'css/pricing.css' %}">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<header>
+    <nav class="nav" aria-label="Main navigation">
+        <a href="{% url 'home' %}" class="nav-brand kwacart-wordmark" aria-label="KwaCart home">KwaCart</a>
+        <span class="nav-spacer"></span>
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'tools:catalog' %}">All tools</a>
+            <a href="{% url 'archive:knowledge_bank' %}">Knowledge Bank</a>
+            <a href="{% url 'pricing' %}" aria-current="page">Pricing</a>
+        {% else %}
+            <a href="{% url 'about' %}">About</a>
+            <a href="{% url 'accessibility' %}">Accessibility</a>
+            <a href="{% url 'pricing' %}" aria-current="page">Pricing</a>
+            <a href="{% url 'accounts:login' %}">Log in</a>
+            <a href="{% url 'accounts:signup' %}">Register</a>
+        {% endif %}
+    </nav>
+</header>
+<main id="main-content">
+    <section class="pricing-hero" aria-labelledby="pricing-title">
+        <span class="eyebrow">Simple, shared access</span>
+        <h1 id="pricing-title">Make room for every voice.</h1>
+        <p>Choose the home for your facilitation practice and pay securely with Stripe.</p>
+    </section>
+    <section class="pricing-main" aria-label="KwaCart plans">
+        {% if request.GET.billing %}
+        <div class="billing-alert" role="alert">
+            {% if request.GET.billing == "required" %}
+            Choose a paid plan to unlock the full KwaCart workspace.
+            {% else %}
+            Checkout is temporarily unavailable. No payment was taken; please try again.
+            {% endif %}
+        </div>
+        {% endif %}
+        <p class="billing-note">Every plan includes the full KwaCart toolkit: solo work, live browser sessions, structured downloads, and a searchable archive.</p>
+        <div class="plans">
+            <article class="plan" aria-labelledby="solo-plan">
+                <span class="plan-kicker">For independent facilitators</span>
+                <h2 id="solo-plan">Solo</h2>
+                <p class="plan-copy">A calm, capable place to prepare, host, and keep your work.</p>
+                <div class="price"><strong>£5</strong><span>per month</span></div>
+                <p class="annual">or £50 per year <span>— save £10</span></p>
+                <ul>
+                    <li>All KwaCart facilitation tools</li>
+                    <li>Unlimited solo work and live sessions</li>
+                    <li>Your personal, searchable archive</li>
+                </ul>
+                <div class="plan-actions" aria-label="Choose Solo billing">
+                    {% if request.user.is_authenticated %}
+                    <form method="post" action="{% url 'accounts:checkout' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="plan" value="solo">
+                        <input type="hidden" name="interval" value="month">
+                        <button type="submit" class="btn">Choose monthly — £5</button>
+                    </form>
+                    <form method="post" action="{% url 'accounts:checkout' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="plan" value="solo">
+                        <input type="hidden" name="interval" value="year">
+                        <button type="submit" class="btn btn--secondary">Choose annual — £50</button>
+                    </form>
+                    {% else %}
+                    <a href="{% url 'accounts:signup' %}?plan=solo&amp;interval=month" class="btn">Register monthly — £5</a>
+                    <a href="{% url 'accounts:signup' %}?plan=solo&amp;interval=year" class="btn btn--secondary">Register annually — £50</a>
+                    {% endif %}
+                </div>
+            </article>
+            <article class="plan plan--featured" aria-labelledby="organisation-plan">
+                <span class="plan-kicker">For community teams</span>
+                <h2 id="organisation-plan">Organisation</h2>
+                <p class="plan-copy">One shared home for the people who make your work happen.</p>
+                <div class="price"><strong>£12</strong><span>per month</span></div>
+                <p class="annual">or £100 per year <span>— save £44</span></p>
+                <ul>
+                    <li>Everything in Solo</li>
+                    <li>Additional users from your email domain included free</li>
+                    <li>Made for teams hosting together</li>
+                </ul>
+                <div class="plan-actions" aria-label="Choose Organisation billing">
+                    {% if request.user.is_authenticated %}
+                    <form method="post" action="{% url 'accounts:checkout' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="plan" value="organisation">
+                        <input type="hidden" name="interval" value="month">
+                        <button type="submit" class="btn">Choose monthly — £12</button>
+                    </form>
+                    <form method="post" action="{% url 'accounts:checkout' %}">
+                        {% csrf_token %}
+                        <input type="hidden" name="plan" value="organisation">
+                        <input type="hidden" name="interval" value="year">
+                        <button type="submit" class="btn btn--secondary">Choose annual — £100</button>
+                    </form>
+                    {% else %}
+                    <a href="{% url 'accounts:signup' %}?plan=organisation&amp;interval=month" class="btn">Register monthly — £12</a>
+                    <a href="{% url 'accounts:signup' %}?plan=organisation&amp;interval=year" class="btn btn--secondary">Register annually — £100</a>
+                    {% endif %}
+                </div>
+            </article>
+        </div>
+        <section class="included" aria-labelledby="included-title">
+            <div>
+                <h2 id="included-title">Tools should not be the loudest voice in the room.</h2>
+                <p>KwaCart holds the structure so people can bring their experience, questions, and ideas. It works in a browser, wherever your group gathers.</p>
+            </div>
+            <aside class="promise">
+                <strong>Organisation means together.</strong><br>
+                Invite colleagues using the same email domain at no additional user charge.
+            </aside>
+        </section>
+        <details class="faq">
+            <summary>What happens when I register?</summary>
+            <p>You create an account, sign in, and complete payment on Stripe's secure checkout. Your KwaCart workspace unlocks after Stripe confirms payment.</p>
+        </details>
+    </section>
+</main>
+<footer class="footer">KwaCart — a Liberating Structures facilitation platform.</footer>
+</body>
+</html>

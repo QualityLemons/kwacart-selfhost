@@ -1,0 +1,121 @@
+{% extends "base.html" %}
+{% load archive_extras static %}
+
+{% block title %}Archive &mdash; {{ record.tool_slug }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/archive_md_preview.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>{{ record.tool_slug|title }}</h1>
+
+<p style="color:#64748b; margin-top:-0.5rem;">
+    Submitted {{ record.submitted_at|date:"Y-m-d H:i" }}
+    &middot; version {{ record.tool_version }}
+    &middot; {{ record.user.email }}
+</p>
+
+{% if record.payload_output %}
+<section style="margin-top:1.5rem;">
+    <h2>Results</h2>
+    {% for key, value in record.payload_output.items %}
+    <div style="margin-bottom:1.25rem;">
+        <strong style="display:block; margin-bottom:0.25rem; color:#334155;">
+            {{ key|human_key }}
+        </strong>
+        {% if key == 'canvas_data' and value %}
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:0.75rem 1rem;">
+            <img src="{{ value }}" alt="Saved drawing for this activity"
+                 style="display:block; max-width:100%; height:auto; border-radius:4px;">
+        </div>
+        {% else %}
+        <div style="white-space: pre-wrap; word-break: break-word; overflow-wrap: anywhere;
+                    background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px;
+                    padding:0.75rem 1rem; line-height:1.6;">{{ value }}</div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</section>
+{% endif %}
+
+{% if record.payload_input %}
+<section style="margin-top:2rem;">
+    <h2>Your input</h2>
+    {% for key, value in record.payload_input.items %}
+    <div style="margin-bottom:1.25rem;">
+        <strong style="display:block; margin-bottom:0.25rem; color:#334155;">
+            {{ key|human_key }}
+        </strong>
+        {% if key == 'canvas_data' and value %}
+        <div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px; padding:0.75rem 1rem;">
+            <img src="{{ value }}" alt="Saved drawing input for this activity"
+                 style="display:block; max-width:100%; height:auto; border-radius:4px;">
+        </div>
+        {% else %}
+        <div style="white-space: pre-wrap; word-break: break-word; overflow-wrap: anywhere;
+                    background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px;
+                    padding:0.75rem 1rem; line-height:1.6;">{{ value }}</div>
+        {% endif %}
+    </div>
+    {% endfor %}
+</section>
+{% endif %}
+
+{% include "feedback_prompt.html" with source="tool_completion" tool_slug=record.tool_slug interaction_mode="solo" %}
+
+<div style="margin-top:2rem; display:flex; gap:0.5rem; flex-wrap:wrap; align-items:center;">
+    {% if record.md_file %}
+    <button type="button" class="btn mdv-preview-btn"
+            data-preview-url="{% url 'archive:md_preview' record.id %}"
+            data-download-url="{% url 'archive:download' record.id 'md' %}"
+            data-title="{{ record.tool_slug }} &mdash; {{ record.submitted_at|date:'Y-m-d' }}">
+        Preview Markdown
+    </button>
+    <a class="btn" href="{% url 'archive:download' record.id 'md' %}"
+       style="background:#fff; border:1px solid #cbd5e1; color:#475569;">
+        Download .md
+    </a>
+    {% endif %}
+    {% if record.rtf_file %}
+    <a class="btn" href="{% url 'archive:download' record.id 'rtf' %}">Download RTF</a>
+    {% endif %}
+    <a href="{% url 'archive:dashboard' %}" style="margin-left:0.5rem;">&larr; Back to archive</a>
+</div>
+
+{% if not record.data_owner_id or record.data_owner_id == user.id %}
+<details style="margin-top:2.5rem; border-top:1px solid #e2e8f0; padding-top:1.5rem;">
+    <summary style="cursor:pointer; color:#dc2626; font-size:0.9rem; width:fit-content;">
+        Delete this record
+    </summary>
+    <div style="margin-top:1rem; background:#fff5f5; border:1px solid #fecaca;
+                border-radius:8px; padding:1rem 1.25rem; max-width:480px;">
+        <p style="margin:0 0 1rem; color:#7f1d1d; font-size:0.95rem;">
+            This will permanently delete your submission and any downloaded files
+            associated with it. This cannot be undone.
+        </p>
+        <form method="post" action="{% url 'archive:delete' record.id %}">
+            {% csrf_token %}
+            <button type="submit"
+                    style="background:#dc2626; color:white; border:none; border-radius:6px;
+                           padding:0.5rem 1.25rem; font-size:0.9rem; cursor:pointer;">
+                Yes, delete permanently
+            </button>
+            <button type="button"
+                    onclick="this.closest('details').removeAttribute('open')"
+                    style="margin-left:0.75rem; background:none; border:1px solid #94a3b8;
+                           border-radius:6px; padding:0.5rem 1rem; font-size:0.9rem;
+                           cursor:pointer; color:#475569;">
+                Cancel
+            </button>
+        </form>
+    </div>
+</details>
+{% endif %}
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/libraries/marked.min.js' %}"></script>
+<script src="{% static 'js/libraries/purify.min.js' %}"></script>
+<script src="{% static 'js/archive_md_preview.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,139 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="See how 25/10 Crowd Sourcing turned six environmental ideas into a focused, evidence-led school grant concept.">
+    <title>Writing a stronger grant with 25/10 Crowd Sourcing — KwaCart case study</title>
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+    <link rel="stylesheet" href="{% static 'css/case-study.css' %}">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+<header>
+    <nav class="nav" aria-label="Main navigation">
+        <a href="{% url 'home' %}" class="nav-brand kwacart-wordmark" aria-label="KwaCart home">KwaCart</a>
+        <span class="nav-spacer"></span>
+        <a href="{% url 'home' %}#when-to-use">Examples</a>
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'tools:catalog' %}">All Tools</a>
+            <a href="{% url 'archive:knowledge_bank' %}">Knowledge Bank</a>
+        {% else %}
+            <a href="{% url 'self_hosting' %}">Self-host</a>
+            <a href="{% url 'accounts:login' %}">Log in</a>
+            <a href="{% url 'accounts:signup' %}">Register</a>
+        {% endif %}
+    </nav>
+</header>
+
+<main id="main-content">
+    <header class="case-hero">
+        <div class="case-hero__inner">
+            <a class="case-back" href="{% url 'home' %}#when-to-use">&larr; Back to examples</a>
+            <p class="case-eyebrow">Case study · Grant development</p>
+            <h1>Turning six bold ideas into one compelling environmental grant concept</h1>
+            <p class="case-lead">
+                A cross-functional group used 25/10 Crowd Sourcing to generate, score
+                and combine ideas for a primary school project with measurable impact,
+                strong pupil ownership and a lasting community legacy.
+            </p>
+        </div>
+    </header>
+
+    <section class="case-section case-summary" aria-labelledby="grant-summary-heading">
+        <div>
+            <p class="case-kicker">The opportunity</p>
+            <h2 id="grant-summary-heading">Find the idea with enough ambition—and enough evidence—to interest funders</h2>
+            <p>
+                The group wanted an environmental project that would do more than raise
+                awareness. It needed to involve pupils in real problem-solving, create
+                visible improvements at school, connect education with local industry,
+                and produce evidence that could demonstrate value over time.
+            </p>
+        </div>
+        <dl class="case-facts">
+            <div><dt>Structure</dt><dd>25/10 Crowd Sourcing</dd></div>
+            <div><dt>Ideas tested</dt><dd>Six bold proposals</dd></div>
+            <div><dt>Output</dt><dd>One integrated grant concept</dd></div>
+        </dl>
+    </section>
+
+    <section class="case-section" aria-labelledby="grant-approach-heading">
+        <p class="case-kicker">The crowd-sourcing round</p>
+        <h2 id="grant-approach-heading">Each idea paired a bold ambition with a practical first step</h2>
+        <p class="case-intro">
+            Participants proposed ideas independently, then scored them over five rounds.
+            The ranking showed which qualities the group considered both bold and
+            actionable.
+        </p>
+        <div class="perspective-grid">
+            <article><h3>24/25 · Living laboratory</h3><p>Pupils measure energy, waste, water and biodiversity, producing real evidence of environmental improvement.</p></article>
+            <article><h3>23/25 · Eco-innovators</h3><p>Children identify problems, design solutions and see the strongest ideas implemented for real.</p></article>
+            <article><h3>21/25 · Environmental engineers</h3><p>Employees mentor pupils as they design practical sustainability improvements for their school.</p></article>
+            <article><h3>20/25 · Renewable energy zone</h3><p>Solar technology, live energy displays and demonstrations create a visible, hands-on learning asset.</p></article>
+            <article><h3>18/25 · Biodiversity corridor</h3><p>Pupil-led habitats and pollinator planting connect science learning with a tangible natural legacy.</p></article>
+            <article><h3>17/25 · Circular economy</h3><p>Local businesses provide surplus materials for pupils to transform into useful environmental assets.</p></article>
+        </div>
+    </section>
+
+    <section class="case-band" aria-labelledby="grant-insight-heading">
+        <div class="case-band__inner">
+            <p class="case-kicker">What the scores revealed</p>
+            <h2 id="grant-insight-heading">The strongest proposition was bigger than any single idea</h2>
+            <ul class="theme-list">
+                <li>Pupils should be researchers, designers and problem-solvers—not passive recipients.</li>
+                <li>Environmental improvements should be measured so impact is visible to funders.</li>
+                <li>Hands-on STEM learning should lead to change in the real world.</li>
+                <li>School, business and community partnerships should extend the benefits.</li>
+                <li>The project should leave a lasting physical and educational legacy.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="case-section case-outcome" aria-labelledby="grant-outcome-heading">
+        <div>
+            <p class="case-kicker">The outcome</p>
+            <h2 id="grant-outcome-heading">A Primary School Environmental Innovation Hub</h2>
+            <p>
+                Rather than choose one activity, the group combined the highest-value
+                elements into a single coherent grant concept with five reinforcing
+                strands.
+            </p>
+            <ol class="action-list">
+                <li><span>01</span><p>A living laboratory measuring energy, waste, water and biodiversity.</p></li>
+                <li><span>02</span><p>Eco-innovation challenges shaped and led by pupils.</p></li>
+                <li><span>03</span><p>Biodiversity and renewable-energy improvements pupils can see and study.</p></li>
+                <li><span>04</span><p>Mentoring and material support from local businesses.</p></li>
+                <li><span>05</span><p>Evidence collected over time to show environmental, educational and community impact.</p></li>
+            </ol>
+        </div>
+        <blockquote>
+            <p>“The highest-scoring ideas combined education with measurable environmental outcomes. They weren’t just awareness projects.”</p>
+            <footer>— Group debrief</footer>
+        </blockquote>
+    </section>
+
+    <section class="case-cta" aria-labelledby="grant-cta-heading">
+        <div>
+            <p class="case-kicker">Use the pattern</p>
+            <h2 id="grant-cta-heading">Let the crowd reveal what makes an idea fundable</h2>
+            <p>Use 25/10 Crowd Sourcing to generate bold proposals, test collective enthusiasm and build a stronger case from the best elements.</p>
+        </div>
+        <div class="case-cta__actions">
+            {% if request.user.is_authenticated %}
+                <a class="btn btn-primary btn-large" href="{% url 'tools:catalog' %}">Find 25/10 Crowd Sourcing</a>
+            {% else %}
+                <a class="btn btn-primary btn-large" href="{% url 'accounts:signup' %}">Register to get started</a>
+                <a class="btn btn-large" href="{% url 'self_hosting' %}">Self-host KwaCart</a>
+            {% endif %}
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    KwaCart &mdash; a Liberating Structures facilitation platform.
+</footer>
+</body>
+</html>

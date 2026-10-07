@@ -1,0 +1,231 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Privacy | KwaCart{% endblock %}
+
+{% block meta %}
+<meta name="description" content="How KwaCart approaches user privacy, UK GDPR principles and ISO/IEC 27001-aligned information-security practices.">
+<meta property="og:title" content="Privacy | KwaCart">
+<meta property="og:description" content="KwaCart's commitments to careful data handling, meaningful user control and improving information security.">
+<meta property="og:type" content="website">
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/privacy.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="privacy-page">
+    <header class="privacy-hero">
+        <div class="privacy-hero-copy">
+            <p class="privacy-eyebrow">Trust centre / working in the open</p>
+            <h1>Privacy is part of how a good session feels.</h1>
+            <p class="privacy-intro">
+                People can bring honest, sometimes sensitive reflections into a KwaCart session.
+                We think that deserves clear choices, careful handling, and plain language about
+                the work still in progress.
+            </p>
+        </div>
+        <aside class="review-card" aria-label="Page review information">
+            <span class="review-mark" aria-hidden="true"></span>
+            <p class="review-label">Living transparency page</p>
+            <p class="review-date">Last reviewed: <strong>September 2026</strong></p>
+            <p>We revisit this page when the product or our practices meaningfully change.</p>
+        </aside>
+    </header>
+
+    <nav class="privacy-jump-nav" aria-label="On this page">
+        <a href="#promise">Our promise</a>
+        <a href="#handled">What is handled</a>
+        <a href="#control">Your control</a>
+        <a href="#security">Security practice</a>
+        <a href="#questions">Questions</a>
+    </nav>
+
+    <section class="privacy-section promise-section" id="promise" aria-labelledby="promise-heading">
+        <div class="section-kicker"><span>01</span> The starting point</div>
+        <div class="section-main">
+            <h2 id="promise-heading">Less collection. More clarity.</h2>
+            <p class="section-lead">
+                KwaCart is designed to support useful group work without treating every reflection
+                as product fuel. We aim to collect and use only what is needed to provide,
+                maintain, and improve the service responsibly.
+            </p>
+        </div>
+        <div class="principle-list" role="list">
+            <article role="listitem">
+                <h3>Purpose first</h3>
+                <p>We seek to be clear about why information is needed before it is requested or used.</p>
+            </article>
+            <article role="listitem">
+                <h3>Keep it proportionate</h3>
+                <p>We aim to minimise personal data and avoid gathering detail simply because it may be useful later.</p>
+            </article>
+            <article role="listitem">
+                <h3>Respect the room</h3>
+                <p>Facilitators and participants should consider what is appropriate to put into a shared session.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="privacy-section split-section" id="handled" aria-labelledby="handled-heading">
+        <div class="section-kicker"><span>02</span> What may be handled</div>
+        <div class="section-main">
+            <h2 id="handled-heading">A practical view of the information around a session.</h2>
+            <p class="section-lead">
+                The exact information involved depends on how people use KwaCart. This is a
+                transparent overview, not a promise that every feature, account, or organisation
+                operates in exactly the same way.
+            </p>
+        </div>
+        <div class="data-map">
+            <article class="data-row">
+                <p class="data-label">Account &amp; access</p>
+                <div>
+                    <h3>Details that help an account work</h3>
+                    <p>For example, an email address, sign-in information, plan or workspace relationship, and account preferences.</p>
+                </div>
+            </article>
+            <article class="data-row">
+                <p class="data-label">Session work</p>
+                <div>
+                    <h3>Contributions people choose to make</h3>
+                    <p>Responses, drafts, session outputs, and related information may be handled so a group can participate, review, and export its work.</p>
+                </div>
+            </article>
+            <article class="data-row">
+                <p class="data-label">Service operation</p>
+                <div>
+                    <h3>Information that helps us run and protect the service</h3>
+                    <p>This can include technical, security, support, and feedback information needed to investigate problems, prevent misuse, and improve the product.</p>
+                </div>
+            </article>
+        </div>
+        <aside class="candid-note">
+            <p class="note-label">A candid note</p>
+            <p>KwaCart is a facilitation tool, not a confidential counselling or emergency service. Avoid entering information that a group does not need to work with, particularly highly sensitive personal information.</p>
+        </aside>
+    </section>
+
+    <section class="privacy-section control-section" id="control" aria-labelledby="control-heading">
+        <div class="section-kicker"><span>03</span> Choice &amp; control</div>
+        <div class="section-main">
+            <h2 id="control-heading">People should not have to guess where their work belongs.</h2>
+            <p class="section-lead">We aim to make meaningful control visible in the product and approachable when a person needs help.</p>
+        </div>
+        <div class="control-grid">
+            <article>
+                <h3>Access &amp; correction</h3>
+                <p>Account holders can review and update account details through their profile. Questions about access to other personal data can be raised through the feedback route.</p>
+            </article>
+            <article>
+                <h3>Deletion</h3>
+                <p>Account and work deletion options are available in context. Deletion requests can be affected by a live organisation retention choice or other legitimate operational needs; ask if the outcome is not clear.</p>
+            </article>
+            <article>
+                <h3>Organisation retention</h3>
+                <p>Where an organisation proposes retaining a member’s work, KwaCart is designed to seek that member’s explicit response. A declined request should not become consent by silence.</p>
+            </article>
+            <article>
+                <h3>Exports &amp; sharing</h3>
+                <p>Session outputs may be exported by people with the relevant access. Before sharing an export, consider the people and reflections represented in it.</p>
+            </article>
+            <article>
+                <h3>Other data rights</h3>
+                <p>Where UK GDPR applies, people may also have rights relating to restriction, objection, portability, and decisions made solely by automated means. Whether a right applies depends on the circumstances.</p>
+            </article>
+            <article>
+                <h3>Concerns &amp; complaints</h3>
+                <p>We aim to respond constructively to privacy concerns. People may also have the right to complain to the UK Information Commissioner’s Office or another relevant supervisory authority.</p>
+            </article>
+        </div>
+    </section>
+
+    <section class="privacy-section security-section" id="security" aria-labelledby="security-heading">
+        <div class="section-kicker"><span>04</span> Information security</div>
+        <div class="section-main">
+            <h2 id="security-heading">Security is a practice, not a badge.</h2>
+            <p class="section-lead">
+                Our information-security practices are designed with ISO/IEC 27001 principles in
+                mind: understanding risk, limiting access, keeping change visible, learning from
+                incidents, and improving over time.
+            </p>
+        </div>
+        <div class="security-layout">
+            <div class="security-controls">
+                <div><span class="control-number">A</span><p><strong>Access discipline.</strong> We aim to restrict access to information and administrative functions to people and systems that need it.</p></div>
+                <div><span class="control-number">B</span><p><strong>Careful operations.</strong> We aim to use controlled development, monitoring, backups, and review practices proportionate to the service.</p></div>
+                <div><span class="control-number">C</span><p><strong>Incident readiness.</strong> We aim to investigate suspected security or privacy incidents, contain them where possible, document learning, and consider appropriate communications.</p></div>
+            </div>
+            <aside class="not-a-claim">
+                <p class="note-label">Important boundary</p>
+                <h3>Aligned is not certified.</h3>
+                <p>KwaCart is not claiming ISO/IEC 27001 certification unless and until it has been independently certified. These are aligned practices and commitments, not a certification statement.</p>
+            </aside>
+        </div>
+    </section>
+
+    <section class="privacy-section" aria-labelledby="partners-heading">
+        <div class="section-kicker"><span>05</span> Suppliers &amp; boundaries</div>
+        <div class="section-main">
+            <h2 id="partners-heading">We cannot do this responsibly by pretending the service is isolated.</h2>
+            <p class="section-lead">Digital services depend on specialist suppliers. We aim to make cautious choices, review them as the product develops, and consider the safeguards needed when information may be processed outside the UK.</p>
+        </div>
+        <div class="boundary-copy">
+            <p>Where suppliers help provide hosting, storage, communications, payments, or other operational functions, their involvement may mean they handle information on KwaCart’s behalf or under their own terms. International processing can occur depending on the service and configuration. We aim to consider appropriate contractual, technical, and organisational safeguards where relevant.</p>
+            <p>We are not publishing a fixed processor list or making a blanket statement about all data locations here. The right detail depends on the arrangement in question, and should be confirmed in the applicable formal notice or contract documentation.</p>
+        </div>
+    </section>
+
+    <section class="privacy-section compact-section" aria-labelledby="storage-heading">
+        <div class="section-kicker"><span>06</span> Storage &amp; browser data</div>
+        <div class="section-main">
+            <h2 id="storage-heading">Keep information only for a reason.</h2>
+            <p class="section-lead">We aim to retain information only while it is needed for its stated purpose, service operation, security, or an applicable obligation. The appropriate period depends on the information and context.</p>
+        </div>
+        <div class="boundary-copy">
+            <p>KwaCart uses essential browser cookies for functions such as sign-in sessions and protection against forged requests. Display choices may be kept in browser storage so accessibility preferences continue between visits.</p>
+            <p>We aim to make deletion and retention controls meaningful, including the consent process where an organisation asks to retain a member’s work.</p>
+        </div>
+    </section>
+
+    <section class="privacy-section compact-section" aria-labelledby="children-heading">
+        <div class="section-kicker"><span>07</span> Children’s data</div>
+        <div class="section-main">
+            <h2 id="children-heading">Extra care where children may be involved.</h2>
+            <p class="section-lead">KwaCart is not designed around collecting children’s personal data. Organisations and facilitators using the platform with children should make sure they have an appropriate basis, notices, safeguards, and adult oversight for their own context.</p>
+        </div>
+    </section>
+
+    <section class="privacy-section legal-section" aria-labelledby="gdpr-heading">
+        <div class="section-kicker"><span>08</span> The legal frame</div>
+        <div class="section-main">
+            <h2 id="gdpr-heading">Designed to support UK GDPR principles.</h2>
+            <p class="section-lead">
+                KwaCart’s approach is designed to support principles such as fairness, transparency,
+                purpose limitation, data minimisation, accuracy, storage limitation, integrity and
+                confidentiality, and accountability. It is not a guarantee of legal compliance in
+                every circumstance.
+            </p>
+            <p class="section-lead">
+                Depending on the activity, processing may need to rely on a basis such as performing
+                a contract, meeting a legal obligation, legitimate interests, consent, or another
+                basis available under data-protection law. The applicable formal notice should explain
+                the basis for the processing it covers.
+            </p>
+        </div>
+        <div class="legal-boundary">
+            <p><strong>This transparency page is not a formal privacy notice or a contract-specific data processing agreement.</strong> It does not replace the notices, agreements, or professional advice that may be needed for a particular use of KwaCart.</p>
+        </div>
+    </section>
+
+    <section class="questions-panel" id="questions" aria-labelledby="questions-heading">
+        <div>
+            <p class="privacy-eyebrow">Keep us accountable</p>
+            <h2 id="questions-heading">A question, concern, or correction?</h2>
+            <p>Use the existing feedback route to ask about privacy, data protection, access, correction, or deletion. Tell us enough to understand the issue, but please do not include more sensitive detail than is needed.</p>
+        </div>
+        <a class="privacy-feedback-link" href="{% url 'feedback' %}">Ask a privacy question <span aria-hidden="true">&rarr;</span></a>
+    </section>
+</div>
+{% endblock %}

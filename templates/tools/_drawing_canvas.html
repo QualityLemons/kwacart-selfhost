@@ -1,0 +1,45 @@
+<div class="drawing-canvas-wrapper" data-activity-canvas>
+    <div class="canvas-context">
+        <strong>{{ tool_meta.canvas_label|default:"Make it visible" }}</strong>
+        <span>{{ tool_meta.canvas_instruction|default:"Draw, mark, or sketch in the way that works for you. You can also describe your thinking in the text field below." }}</span>
+    </div>
+    <div class="drawing-toolbar" role="toolbar" aria-label="Drawing tools">
+
+        <span class="toolbar-label">Colour</span>
+        <button type="button" class="color-swatch active" data-color="#E69F00"
+                title="Orange (Okabe-Ito 1)" aria-label="Orange" aria-pressed="true"
+                style="background:#E69F00;"></button>
+        <button type="button" class="color-swatch" data-color="#56B4E9"
+                title="Sky Blue (Okabe-Ito 2)" aria-label="Sky Blue" aria-pressed="false"
+                style="background:#56B4E9;"></button>
+        <button type="button" class="color-swatch" data-color="#009E73"
+                title="Bluish Green (Okabe-Ito 3)" aria-label="Bluish Green" aria-pressed="false"
+                style="background:#009E73;"></button>
+        <button type="button" class="color-swatch" data-color="#F0E442"
+                title="Yellow (Okabe-Ito 4)" aria-label="Yellow" aria-pressed="false"
+                style="background:#F0E442; border: 1px solid #d4c200;"></button>
+        <button type="button" class="color-swatch" data-color="#000000"
+                title="Black" aria-label="Black" aria-pressed="false"
+                style="background:#000;"></button>
+
+        <span class="toolbar-divider"></span>
+        <span class="toolbar-label">Size</span>
+        <button type="button" class="size-btn active" data-size="3"  title="Small"  aria-label="Pen size: small"  aria-pressed="true">S</button>
+        <button type="button" class="size-btn"        data-size="8"  title="Medium" aria-label="Pen size: medium" aria-pressed="false">M</button>
+        <button type="button" class="size-btn"        data-size="16" title="Large"  aria-label="Pen size: large"  aria-pressed="false">L</button>
+
+        <span class="toolbar-divider"></span>
+        <button type="button" class="eraser-btn"  title="Eraser" aria-label="Eraser tool" aria-pressed="false">&#9999;</button>
+        <button type="button" class="undo-btn"    title="Undo last stroke"  aria-label="Undo">&#8617;</button>
+        <button type="button" class="clear-btn"   title="Clear canvas"      aria-label="Clear canvas">&#10005; Clear</button>
+    </div>
+
+    <canvas id="drawing-canvas" width="800" height="480"
+            aria-label="{{ tool_meta.canvas_label|default:'Drawing area' }} — {{ tool_meta.canvas_instruction|default:'Use the canvas to draw or sketch your response.' }}"
+            style="touch-action:none;"></canvas>
+
+    <p class="drawing-hint">
+        {{ tool_meta.canvas_hint|default:"There is no right way to draw. Use colour, shapes, words, or leave it blank and explain your response in text." }}
+    </p>
+    <div class="sr-only" aria-live="polite" aria-atomic="true" id="canvas-announcer"></div>
+</div>

@@ -1,0 +1,43 @@
+/* KwaCart public pricing — a warm, editorial "noticeboard" aesthetic */
+*, *::before, *::after { box-sizing: border-box; }
+:root { --ink:#2b2140; --purple:#5D3A9B; --plum:#41236e; --paper:#fffaf2; --lilac:#f0e8f8; --line:#d9cbe8; --gold:#d9a43c; --teal:#257e78; }
+body { margin:0; background:var(--paper); color:var(--ink); font-family:system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif; line-height:1.55; }
+.skip-link { position:absolute; left:-9999px; top:1rem; z-index:20; padding:.6rem 1rem; background:var(--purple); color:#fff; border-radius:.35rem; }
+.skip-link:focus { left:1rem; }
+.nav { max-width:1120px; margin:auto; padding:1rem 1.5rem; display:flex; align-items:center; gap:1rem; border-bottom:1px solid var(--line); }
+.nav-spacer { flex:1; }
+.nav a:not(.nav-brand) { color:var(--plum); text-decoration:none; font-size:.92rem; }
+.nav a:not(.nav-brand):hover, .nav a:not(.nav-brand):focus-visible { text-decoration:underline; text-underline-offset:.25em; }
+.nav .btn { padding:.45rem .8rem; border:1px solid var(--purple); border-radius:999px; }
+.nav .btn-primary { background:var(--purple); color:#fff; }
+.kwacart-wordmark, .nav-brand { font:700 clamp(1.4rem,3vw,1.8rem)/1 Georgia,"Times New Roman",serif; letter-spacing:-.065em; color:var(--purple); text-decoration:none; }
+.pricing-hero { position:relative; overflow:hidden; padding:5.5rem 1.5rem 4rem; text-align:center; background:linear-gradient(120deg,#f0e6f6 0%,#fff6dd 100%); border-bottom:1px solid var(--line); }
+.pricing-hero::before,.pricing-hero::after { content:""; position:absolute; width:22rem; height:22rem; border:1px solid rgba(93,58,155,.18); border-radius:48% 52% 57% 43%; pointer-events:none; }
+.pricing-hero::before { left:-13rem; top:-11rem; transform:rotate(20deg); }.pricing-hero::after { right:-13rem; bottom:-15rem; transform:rotate(-25deg); }
+.eyebrow { display:inline-block; margin-bottom:1rem; padding:.28rem .7rem; border-radius:999px; background:#fff9ed; color:var(--plum); border:1px solid #e4c979; font-size:.75rem; font-weight:800; letter-spacing:.09em; text-transform:uppercase; }
+.pricing-hero h1 { max-width:760px; margin:0 auto .9rem; font:700 clamp(2.7rem,7vw,5.4rem)/.98 Georgia,"Times New Roman",serif; letter-spacing:-.07em; }
+.pricing-hero p { max-width:600px; margin:auto; font-size:1.1rem; }
+.pricing-main { max-width:1060px; margin:auto; padding:3rem 1.5rem 5rem; }
+.billing-alert { max-width:690px; margin:0 auto 1.5rem; padding:1rem 1.2rem; border:2px solid var(--gold); border-radius:.6rem; background:#fff3d7; color:#493b28; font-weight:700; }
+.billing-note { max-width:690px; margin:0 auto 2.5rem; text-align:center; color:#594f68; }
+.plans { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:1.25rem; align-items:stretch; }
+.plan { position:relative; padding:2rem; background:#fffdf9; border:1px solid var(--line); border-radius:1.1rem; box-shadow:0 12px 24px rgba(58,37,88,.07); }
+.plan--featured { background:var(--purple); color:#fff; border-color:var(--purple); transform:translateY(-.45rem); box-shadow:0 20px 32px rgba(65,35,110,.2); }
+.plan-kicker { font-size:.78rem; text-transform:uppercase; letter-spacing:.11em; font-weight:800; color:var(--teal); }.plan--featured .plan-kicker { color:#ffe39a; }
+.plan h2 { margin:.45rem 0 .8rem; font:700 2.45rem/1 Georgia,"Times New Roman",serif; letter-spacing:-.055em; }
+.plan-copy { min-height:3.2rem; margin:0; color:#584e66; }.plan--featured .plan-copy { color:#ece1fa; }
+.price { display:flex; align-items:baseline; gap:.3rem; margin:1.8rem 0 .25rem; }.price strong { font:700 3.5rem/.9 Georgia,"Times New Roman",serif; letter-spacing:-.06em; }.price span { font-weight:700; }
+.annual { margin:0 0 1.5rem; font-size:.9rem; color:var(--teal); font-weight:700; }.plan--featured .annual { color:#ffe39a; }
+.annual span { white-space: nowrap; }
+.plan ul { display:grid; gap:.75rem; margin:1.5rem 0 2rem; padding:0; list-style:none; }.plan li { padding-left:1.4rem; position:relative; }.plan li::before { content:""; position:absolute; width:.48rem; height:.48rem; border-radius:50%; left:0; top:.48rem; background:var(--gold); }.plan--featured li::before { background:#ffe39a; }
+.plan-actions { display:grid; gap:.7rem; }
+.plan-actions form { margin:0; }
+.plan .btn { display:block; width:100%; padding:.8rem 1rem; border-radius:.5rem; text-decoration:none; text-align:center; font:800 1rem/1.3 inherit; cursor:pointer; border:2px solid var(--purple); color:var(--purple); background:#fffdf9; }.plan--featured .btn { border-color:#ffe39a; background:#ffe39a; color:var(--plum); }.plan .btn:hover { transform:translateY(-2px); }
+.plan .btn--secondary { background:transparent; }.plan--featured .btn--secondary { color:#fff; border-color:#fff; }
+.included { display:grid; grid-template-columns:1.1fr .9fr; gap:3rem; margin:5rem 0 0; padding:3rem 0; border-top:1px solid var(--line); }
+.included h2 { margin:0 0 .7rem; font:700 clamp(2rem,4vw,3.2rem)/1 Georgia,"Times New Roman",serif; letter-spacing:-.06em; }.included p { color:#594f68; }
+.promise { padding:1.4rem; border-left:4px solid var(--gold); background:#fff3d7; color:#493b28; }
+.faq { margin-top:2rem; }.faq summary { cursor:pointer; color:var(--purple); font-weight:800; }.faq p { max-width:46rem; color:#594f68; }
+.footer { padding:1.75rem; border-top:1px solid var(--line); text-align:center; color:#665d70; font-size:.85rem; }
+@media (max-width:680px) { .nav { gap:.65rem .9rem; flex-wrap:wrap; }.nav-spacer { display:none; }.plans,.included { grid-template-columns:1fr; }.plan--featured { transform:none; }.pricing-hero { padding-top:4rem; }.plan-copy { min-height:0; } }
+@media (prefers-reduced-motion:no-preference) { .plan,.plan .btn { transition:transform 180ms ease,box-shadow 180ms ease; }.plan:hover { transform:translateY(-.3rem); }.plan--featured:hover { transform:translateY(-.7rem); } }

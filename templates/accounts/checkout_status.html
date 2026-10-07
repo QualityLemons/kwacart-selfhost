@@ -1,0 +1,26 @@
+{% extends "base.html" %}
+{% block title %}{{ title }} — KwaCart{% endblock %}
+
+{% block content %}
+<section aria-labelledby="checkout-title"
+         style="max-width:42rem; margin:2rem auto; padding:2rem;
+                border:1px solid #d8dee9; border-radius:0.75rem; background:#fff;">
+    <p aria-live="polite" style="margin:0 0 0.5rem; color:#0f766e; font-weight:700;">
+        Subscription update
+    </p>
+    <h1 id="checkout-title" style="margin-top:0;">{{ title }}</h1>
+    <p>{{ message }}</p>
+    <div style="display:flex; flex-wrap:wrap; gap:0.75rem; margin-top:1.5rem;">
+        {% if status == "success" %}
+        <a class="btn" href="{% url 'tools:catalog' %}">Open my workspace</a>
+        <a href="{% url 'accounts:profile' %}">View billing details</a>
+        {% elif retry_url %}
+        <a class="btn" href="{{ retry_url }}">Return to pricing</a>
+        <a href="{% url 'accounts:profile' %}">View my account</a>
+        {% else %}
+        <a class="btn" href="{% url 'accounts:profile' %}">View my account</a>
+        <a href="{% url 'pricing' %}">Return to pricing</a>
+        {% endif %}
+    </div>
+</section>
+{% endblock %}

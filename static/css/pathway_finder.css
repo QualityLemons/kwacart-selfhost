@@ -1,0 +1,355 @@
+/* ── Pathway Finder ─────────────────────────────────────────────────────── */
+
+.pathway-wrap {
+    max-width: 900px;
+    margin: 2.5rem auto 4rem;
+    padding: 0 1.25rem;
+}
+
+/* ── Step indicator ── */
+.pathway-steps {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    margin-bottom: 2.5rem;
+}
+.pathway-step-dot {
+    width: 2.2rem;
+    height: 2.2rem;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 0.85rem;
+    font-weight: 700;
+    background: #e5e7eb;
+    color: #6b7280;
+    transition: background 0.2s, color 0.2s;
+    flex-shrink: 0;
+}
+.pathway-step-dot.active {
+    background: #6d28d9;
+    color: #fff;
+}
+.pathway-step-dot.done {
+    background: #4f46e5;
+    color: #fff;
+}
+.pathway-step-line {
+    flex: 1;
+    height: 3px;
+    background: #e5e7eb;
+    max-width: 4rem;
+    transition: background 0.2s;
+}
+.pathway-step-line.done {
+    background: #4f46e5;
+}
+
+/* ── Step panel ── */
+.pathway-panel {
+    display: none;
+}
+.pathway-panel.active {
+    display: block;
+}
+
+.pathway-question {
+    font-size: 1.55rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 0.5rem;
+    line-height: 1.3;
+}
+.pathway-hint {
+    color: #6b7280;
+    margin-bottom: 1.75rem;
+    font-size: 0.95rem;
+}
+
+/* ── Option buttons (steps 1-3) ── */
+.pathway-options {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    margin-bottom: 2rem;
+}
+.pathway-option {
+    padding: 0.7rem 1.25rem;
+    border: 2px solid #d1d5db;
+    border-radius: 0.6rem;
+    background: #fff;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    transition: border-color 0.15s, background 0.15s, color 0.15s;
+    color: #374151;
+    user-select: none;
+}
+.pathway-option:hover {
+    border-color: #6d28d9;
+    background: #f5f3ff;
+}
+.pathway-option.selected {
+    border-color: #6d28d9;
+    background: #6d28d9;
+    color: #fff;
+}
+
+/* ── Goal circles grid ── */
+.pathway-circles-intro {
+    margin-bottom: 1.25rem;
+}
+.pathway-circles-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(130px, 1fr));
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+.goal-circle {
+    width: 130px;
+    height: 130px;
+    border-radius: 50%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    position: relative;
+    border: 3px solid transparent;
+    padding: 0.5rem;
+    box-sizing: border-box;
+    transition: transform 0.15s, box-shadow 0.15s, border-color 0.15s;
+    justify-self: center;
+    user-select: none;
+}
+.goal-circle:hover {
+    transform: scale(1.06);
+    box-shadow: 0 4px 14px rgba(0,0,0,0.18);
+}
+.goal-circle.selected {
+    border-color: #1f2937;
+    box-shadow: 0 0 0 4px rgba(31,41,57,0.25);
+}
+.goal-circle.selected::after {
+    content: "✓";
+    position: absolute;
+    top: 6px;
+    right: 8px;
+    font-size: 1.1rem;
+    font-weight: 900;
+    line-height: 1;
+}
+.goal-circle-text {
+    font-size: 0.78rem;
+    font-weight: 700;
+    text-align: center;
+    line-height: 1.3;
+    flex: 1;
+    display: flex;
+    align-items: center;
+    padding: 0 0.2rem;
+}
+.goal-audio-btn {
+    background: rgba(255,255,255,0.35);
+    border: none;
+    border-radius: 50%;
+    width: 1.7rem;
+    height: 1.7rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    cursor: pointer;
+    font-size: 0.85rem;
+    margin-top: 0.2rem;
+    flex-shrink: 0;
+    transition: background 0.15s;
+    padding: 0;
+}
+.goal-audio-btn:hover {
+    background: rgba(255,255,255,0.65);
+}
+.goal-audio-btn:focus-visible {
+    outline: 2px solid #1f2937;
+    outline-offset: 1px;
+}
+.goal-circle:focus-visible {
+    outline: 3px solid #1f2937;
+    outline-offset: 3px;
+}
+
+/* ── Nav / action row ── */
+.pathway-nav {
+    display: flex;
+    justify-content: flex-end;
+    gap: 0.75rem;
+    margin-top: 0.5rem;
+}
+.pathway-btn {
+    padding: 0.65rem 1.6rem;
+    border-radius: 0.5rem;
+    font-size: 1rem;
+    font-weight: 600;
+    cursor: pointer;
+    border: none;
+    transition: opacity 0.15s;
+}
+.pathway-btn:disabled {
+    opacity: 0.4;
+    cursor: not-allowed;
+}
+.pathway-btn-primary {
+    background: #6d28d9;
+    color: #fff;
+}
+.pathway-btn-primary:hover:not(:disabled) {
+    background: #5b21b6;
+}
+.pathway-btn-secondary {
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+}
+.pathway-btn-secondary:hover:not(:disabled) {
+    background: #e5e7eb;
+}
+
+/* ── Results ── */
+.pathway-results-header {
+    text-align: center;
+    margin-bottom: 2rem;
+}
+.pathway-results-header h2 {
+    font-size: 1.6rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin-bottom: 0.4rem;
+}
+.pathway-results-header p {
+    color: #6b7280;
+}
+.pathway-result-cards {
+    display: flex;
+    flex-direction: column;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+.pathway-result-card {
+    border: 1px solid #e5e7eb;
+    border-radius: 0.75rem;
+    padding: 1.1rem 1.4rem;
+    display: flex;
+    align-items: flex-start;
+    gap: 1rem;
+    background: #fff;
+    box-shadow: 0 1px 4px rgba(0,0,0,0.06);
+}
+.pathway-result-rank {
+    font-size: 1.4rem;
+    font-weight: 900;
+    color: #6d28d9;
+    min-width: 2rem;
+    text-align: center;
+    padding-top: 0.1rem;
+}
+.pathway-result-body {
+    flex: 1;
+}
+.pathway-result-body h3 {
+    font-size: 1.05rem;
+    font-weight: 700;
+    color: #1f2937;
+    margin: 0 0 0.2rem;
+}
+.pathway-result-body p {
+    color: #6b7280;
+    font-size: 0.9rem;
+    margin: 0 0 0.6rem;
+}
+.pathway-result-actions {
+    display: flex;
+    gap: 0.5rem;
+    flex-wrap: wrap;
+}
+.pathway-result-actions a {
+    padding: 0.35rem 0.9rem;
+    border-radius: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    text-decoration: none;
+    transition: opacity 0.15s;
+}
+.pathway-result-actions a:first-child {
+    background: #6d28d9;
+    color: #fff;
+}
+.pathway-result-actions a:first-child:hover {
+    background: #5b21b6;
+}
+.pathway-result-actions a:last-child {
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+}
+.pathway-result-actions a:last-child:hover {
+    background: #e5e7eb;
+}
+.pathway-session-btn {
+    padding: 0.35rem 0.9rem;
+    border-radius: 0.4rem;
+    font-size: 0.85rem;
+    font-weight: 600;
+    background: #f3f4f6;
+    color: #374151;
+    border: 1px solid #d1d5db;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s;
+}
+.pathway-session-btn:hover {
+    background: #e5e7eb;
+}
+.pathway-no-results {
+    text-align: center;
+    color: #6b7280;
+    padding: 2rem;
+}
+
+/* ── Selection count badge ── */
+.pathway-selected-count {
+    display: inline-block;
+    background: #6d28d9;
+    color: #fff;
+    border-radius: 999px;
+    padding: 0.15rem 0.6rem;
+    font-size: 0.8rem;
+    font-weight: 700;
+    margin-left: 0.5rem;
+    vertical-align: middle;
+}
+
+/* ── Accessibility theme overrides ── */
+.a11y-theme .goal-circle {
+    border-radius: 0.5rem !important;
+}
+.a11y-theme .pathway-option,
+.a11y-theme .pathway-btn {
+    border-radius: 0 !important;
+}
+
+@media (max-width: 560px) {
+    .pathway-circles-grid {
+        grid-template-columns: repeat(auto-fill, minmax(110px, 1fr));
+    }
+    .goal-circle {
+        width: 110px;
+        height: 110px;
+    }
+    .goal-circle-text {
+        font-size: 0.72rem;
+    }
+    .pathway-question {
+        font-size: 1.25rem;
+    }
+}

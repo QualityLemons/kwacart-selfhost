@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+
+{% block title %}Archive &mdash; {{ record.tool_slug }}{% endblock %}
+
+{% block content %}
+<h1>{{ record.tool_slug }}</h1>
+<p><strong>Submitted:</strong> {{ record.submitted_at|date:"Y-m-d H:i" }}</p>
+<p><strong>Version:</strong> {{ record.tool_version }}</p>
+
+<h2>Result</h2>
+<pre>{{ record.payload_output }}</pre>
+
+<p><a href="{% url 'archive:dashboard' %}">&larr; Back to dashboard</a></p>
+{% endblock %}

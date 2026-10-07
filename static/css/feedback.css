@@ -1,0 +1,48 @@
+/* Feedback surfaces: quiet plum, sea-glass teal, and generous readable space. */
+.feedback-shell { max-width: 760px; margin: 0 auto; }
+.feedback-hero { border-left: 4px solid #40B0A6; padding: .25rem 0 .25rem 1.25rem; margin-bottom: 2rem; }
+.feedback-hero h1 { margin-bottom: .45rem; color: #34205f; }
+.feedback-hero p { max-width: 62ch; color: #52606d; line-height: 1.65; }
+.feedback-card, .feedback-panel { background: #fbfafc; border: 1px solid #ded5ea; border-radius: 12px; padding: 1.4rem; box-shadow: 0 5px 20px rgba(74,46,125,.06); }
+.feedback-form .form-row { margin-bottom: 1.15rem; }
+.feedback-form [hidden] { display:none !important; }
+.feedback-form .form-row--split { display:grid; grid-template-columns: 1fr 1fr; gap:1rem; }
+.feedback-form label, .feedback-form legend { color:#34205f; }
+.feedback-form select { width:100%; padding:.58rem .7rem; border:1px solid #c8bfd8; border-radius:5px; background:#fff; font:inherit; color:#263238; }
+.feedback-form input:focus, .feedback-form textarea:focus, .feedback-form select:focus { border-color:#0d9488; box-shadow:0 0 0 3px rgba(13,148,136,.18); }
+.feedback-help { color:#64748b; font-size:.87rem; margin:.3rem 0 0; }
+.feedback-actions { display:flex; gap:.75rem; align-items:center; flex-wrap:wrap; margin-top:1.5rem; }
+.feedback-success { background:#effaf7; border:1px solid #78cfc4; color:#145c58; border-radius:9px; padding:1rem 1.15rem; margin-bottom:1.25rem; }
+.feedback-prompt { margin:1.5rem 0; border:1px solid #b8ddd8; border-radius:10px; padding:1rem 1.15rem; background:#f2fbfa; }
+.feedback-prompt__heading { color:#245b58; font-weight:700; margin:0 0 .3rem; }
+.feedback-prompt__copy { color:#416463; margin:.2rem 0 .85rem; }
+.feedback-rating { display:flex; gap:.4rem; flex-wrap:wrap; }
+.feedback-rating label { display:inline-flex; align-items:center; justify-content:center; min-width:2.8rem; min-height:2.8rem; border:1px solid #8ccbc4; border-radius:6px; background:#fff; color:#245b58; cursor:pointer; }
+.feedback-rating input { position:absolute; opacity:0; }
+.feedback-rating label:has(input:checked) { background:#0d766f; color:#fff; border-color:#0d766f; }
+.feedback-rating label:has(input:focus-visible) { outline:3px solid rgba(93,58,155,.35); outline-offset:2px; }
+.feedback-prompt__dismiss { color:#52606d; background:none; border:0; padding:.35rem .1rem; text-decoration:underline; cursor:pointer; font:inherit; }
+.feedback-table-wrap { overflow-x:auto; border:1px solid #ded5ea; border-radius:10px; background:#fff; }
+.feedback-table { width:100%; border-collapse:collapse; min-width:680px; }
+.feedback-table th, .feedback-table td { text-align:left; padding:.75rem .8rem; border-bottom:1px solid #eeeaf3; vertical-align:top; }
+.feedback-table th { background:#f3eff8; color:#34205f; font-size:.82rem; letter-spacing:.04em; text-transform:uppercase; }
+.feedback-table tr:last-child td { border-bottom:0; }
+.feedback-filter { display:grid; grid-template-columns:1.5fr 1fr 1fr 1fr auto; gap:.7rem; align-items:end; margin:1.2rem 0; }
+.feedback-filter label { display:block; color:#34205f; font-size:.84rem; font-weight:600; }
+.feedback-filter input, .feedback-filter select { width:100%; margin-top:.25rem; padding:.5rem .6rem; border:1px solid #c8bfd8; border-radius:5px; font:inherit; background:#fff; }
+.feedback-clear-filter { align-self:center; font-size:.9rem; }
+.feedback-meta { color:#64748b; font-size:.9rem; }
+.feedback-status { display:inline-block; padding:.18rem .5rem; border-radius:999px; background:#e8e1f4; color:#4a2e7d; font-size:.8rem; font-weight:700; }
+.feedback-detail-grid { display:grid; grid-template-columns:minmax(0,1.5fr) minmax(220px, .8fr); gap:1.25rem; align-items:start; }
+.feedback-detail-grid dd { margin:0 0 1rem; color:#263238; overflow-wrap:anywhere; }
+.feedback-detail-grid dt { color:#64748b; font-size:.78rem; font-weight:700; letter-spacing:.04em; text-transform:uppercase; margin-bottom:.2rem; }
+.feedback-longtext { white-space:pre-wrap; overflow-wrap:anywhere; line-height:1.7; }
+.feedback-confirm { border-top:1px solid #ded5ea; margin-top:2rem; padding-top:1rem; }
+.feedback-status-panel { margin-top:1.25rem; }
+@media (max-width: 680px) {
+  .feedback-form .form-row--split, .feedback-detail-grid, .feedback-filter { grid-template-columns:1fr; }
+  .feedback-card, .feedback-panel { padding:1rem; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .feedback-card, .feedback-panel, .feedback-prompt, .feedback-table * { scroll-behavior:auto !important; transition:none !important; animation:none !important; }
+}

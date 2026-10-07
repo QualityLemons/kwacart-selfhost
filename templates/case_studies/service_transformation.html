@@ -1,0 +1,139 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="See how Shift & Share helped a cross-functional team find the real causes of service delays and create a practical improvement plan.">
+    <title>Transforming a service with Shift &amp; Share — KwaCart case study</title>
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+    <link rel="stylesheet" href="{% static 'css/case-study.css' %}">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+<header>
+    <nav class="nav" aria-label="Main navigation">
+        <a href="{% url 'home' %}" class="nav-brand kwacart-wordmark" aria-label="KwaCart home">KwaCart</a>
+        <span class="nav-spacer"></span>
+        <a href="{% url 'home' %}#when-to-use">Examples</a>
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'tools:catalog' %}">All Tools</a>
+            <a href="{% url 'archive:knowledge_bank' %}">Knowledge Bank</a>
+        {% else %}
+            <a href="{% url 'self_hosting' %}">Self-host</a>
+            <a href="{% url 'accounts:login' %}">Log in</a>
+            <a href="{% url 'accounts:signup' %}">Register</a>
+        {% endif %}
+    </nav>
+</header>
+
+<main id="main-content">
+    <header class="case-hero">
+        <div class="case-hero__inner">
+            <a class="case-back" href="{% url 'home' %}#when-to-use">&larr; Back to examples</a>
+            <p class="case-eyebrow">Case study · Service transformation</p>
+            <h1>Finding the hidden causes of delay across an entire service</h1>
+            <p class="case-lead">
+                A cross-functional team used Shift &amp; Share to compare six improvement
+                experiments—and discovered that waiting, handoffs and bottlenecks mattered
+                more than how quickly people completed the work itself.
+            </p>
+        </div>
+    </header>
+
+    <section class="case-section case-summary" aria-labelledby="service-summary-heading">
+        <div>
+            <p class="case-kicker">The challenge</p>
+            <h2 id="service-summary-heading">Move beyond the assumption that people simply needed to work faster</h2>
+            <p>
+                Delays were visible, but their causes were not. Work arrived incomplete,
+                status was hard to see, specialist decisions created queues, and customer
+                or supplier waiting time was often attributed to internal teams. The group
+                needed a shared view of where the service was really getting stuck.
+            </p>
+        </div>
+        <dl class="case-facts">
+            <div><dt>Structure</dt><dd>Shift &amp; Share</dd></div>
+            <div><dt>Perspectives</dt><dd>Six service experiments</dd></div>
+            <div><dt>Output</dt><dd>One combined improvement plan</dd></div>
+        </dl>
+    </section>
+
+    <section class="case-section" aria-labelledby="service-ideas-heading">
+        <p class="case-kicker">The stations</p>
+        <h2 id="service-ideas-heading">Six practical ways to see and reduce service delays</h2>
+        <p class="case-intro">
+            Each station shared an experiment, then gathered questions and feedback from
+            colleagues rotating around the room.
+        </p>
+        <div class="perspective-grid">
+            <article><h3>Lead-time radar</h3><p>Map the complete journey and measure working time separately from time spent waiting between stages.</p></article>
+            <article><h3>Ready-to-start standard</h3><p>Use a simple intake checklist and stop incomplete requests entering the workflow before they create rework.</p></article>
+            <article><h3>Delay classification</h3><p>Record consistent causes—from missing information to approval waits—so recurring patterns become visible.</p></article>
+            <article><h3>Bottleneck busting</h3><p>Map work by role, then use cross-training and delegated decisions to remove single points of failure.</p></article>
+            <article><h3>External dependency tracking</h3><p>Separate internal delays from time spent waiting for customers and suppliers, with clearer escalation routes.</p></article>
+            <article><h3>Visual workflow management</h3><p>Show every job’s current stage so queues, blocked work and ownership are visible to everyone involved.</p></article>
+        </div>
+    </section>
+
+    <section class="case-band" aria-labelledby="service-insight-heading">
+        <div class="case-band__inner">
+            <p class="case-kicker">What changed</p>
+            <h2 id="service-insight-heading">The evidence reframed delay as a system-flow problem</h2>
+            <ul class="theme-list">
+                <li>In one process map, work was active for only about 20% of its lifespan; the rest was waiting.</li>
+                <li>Many delays began before work formally started because requests were incomplete.</li>
+                <li>One specialist was involved in almost 40% of delayed work, exposing a single point of failure.</li>
+                <li>Nearly a third of outstanding work was waiting on external parties.</li>
+                <li>Simple visibility and process changes could be trialled before adding staff or buying new software.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="case-section case-outcome" aria-labelledby="service-outcome-heading">
+        <div>
+            <p class="case-kicker">The outcome</p>
+            <h2 id="service-outcome-heading">A six-part service-flow improvement plan</h2>
+            <p>
+                Instead of selecting a single experiment, the group connected the strongest
+                ideas into a practical approach for understanding the service and targeting
+                improvement without assigning blame.
+            </p>
+            <ol class="action-list">
+                <li><span>01</span><p>Map the end-to-end customer journey and measure waiting as well as working time.</p></li>
+                <li><span>02</span><p>Introduce a clear ready-to-start checklist for incoming work.</p></li>
+                <li><span>03</span><p>Categorise delay causes consistently and review the patterns.</p></li>
+                <li><span>04</span><p>Visualise all work in progress, including blocked and waiting work.</p></li>
+                <li><span>05</span><p>Identify overloaded roles and reduce bottlenecks through cross-training or delegation.</p></li>
+                <li><span>06</span><p>Report internal and external waiting separately to clarify ownership and expectations.</p></li>
+            </ol>
+        </div>
+        <blockquote>
+            <p>“The service suffers primarily from waiting, handoffs, unclear ownership and bottlenecks—not from the actual execution of work.”</p>
+            <footer>— Group learning summary</footer>
+        </blockquote>
+    </section>
+
+    <section class="case-cta" aria-labelledby="service-cta-heading">
+        <div>
+            <p class="case-kicker">Use the pattern</p>
+            <h2 id="service-cta-heading">Let teams learn from each other before choosing what to change</h2>
+            <p>Use Shift &amp; Share to compare improvement experiments, sharpen them through peer feedback and reveal the themes that connect them.</p>
+        </div>
+        <div class="case-cta__actions">
+            {% if request.user.is_authenticated %}
+                <a class="btn btn-primary btn-large" href="{% url 'tools:catalog' %}">Find Shift &amp; Share</a>
+            {% else %}
+                <a class="btn btn-primary btn-large" href="{% url 'accounts:signup' %}">Register to get started</a>
+                <a class="btn btn-large" href="{% url 'self_hosting' %}">Self-host KwaCart</a>
+            {% endif %}
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    KwaCart &mdash; a Liberating Structures facilitation platform.
+</footer>
+</body>
+</html>

@@ -1,0 +1,27 @@
+{% load feedback_tags static %}
+{% feedback_context_token source tool_slug interaction_mode as feedback_token %}
+{% feedback_prompts_suppressed as feedback_suppressed %}
+{% if feedback_token and not feedback_suppressed %}
+<aside class="feedback-prompt" data-feedback-prompt data-source="{{ source }}" data-tool-slug="{{ tool_slug }}" data-interaction-mode="{{ interaction_mode }}" aria-labelledby="feedback-prompt-title-{{ source }}-{{ tool_slug }}-{{ interaction_mode }}">
+    <p class="feedback-prompt__heading" id="feedback-prompt-title-{{ source }}-{{ tool_slug }}-{{ interaction_mode }}">A quick check-in, if you have a moment</p>
+    <p class="feedback-prompt__copy">How useful was this for you? This is optional and helps us improve the experience.</p>
+    <form method="post" action="{% url 'contextual_feedback' %}">
+        {% csrf_token %}
+        <input type="hidden" name="context_token" value="{{ feedback_token }}">
+        <input type="hidden" name="feedback_type" value="rating">
+        <fieldset class="feedback-rating">
+            <legend class="sr-only">Usefulness rating from 1 to 5</legend>
+            {% for value in "12345" %}
+            <label><input required type="radio" name="rating" value="{{ value }}"> <span aria-hidden="true">{{ value }}</span><span class="sr-only">{{ value }}{% if value == "1" %} — not useful{% elif value == "5" %} — very useful{% endif %}</span></label>
+            {% endfor %}
+            <button class="btn btn-primary" type="submit">Send rating</button>
+        </fieldset>
+    </form>
+    <form method="post" action="{% url 'feedback_prompt_dismiss' %}">
+        {% csrf_token %}
+        <input type="hidden" name="context_token" value="{{ feedback_token }}">
+        <input type="hidden" name="return_to" value="{{ request.get_full_path }}">
+        <button type="submit" class="feedback-prompt__dismiss" data-feedback-dismiss>Not now</button>
+    </form>
+</aside>
+{% endif %}

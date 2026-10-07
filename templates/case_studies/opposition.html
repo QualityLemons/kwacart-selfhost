@@ -1,0 +1,158 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="See how Wicked Questions and Generative Relationships STAR helped a project team understand opposition and turn good intentions into visible commitments.">
+    <title>Navigating opposition with Wicked Questions and STAR — KwaCart case study</title>
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+    <link rel="stylesheet" href="{% static 'css/case-study.css' %}">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+<header>
+    <nav class="nav" aria-label="Main navigation">
+        <a href="{% url 'home' %}" class="nav-brand kwacart-wordmark" aria-label="KwaCart home">KwaCart</a>
+        <span class="nav-spacer"></span>
+        <a href="{% url 'home' %}#when-to-use">Examples</a>
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'tools:catalog' %}">All Tools</a>
+            <a href="{% url 'archive:knowledge_bank' %}">Knowledge Bank</a>
+        {% else %}
+            <a href="{% url 'self_hosting' %}">Self-host</a>
+            <a href="{% url 'accounts:login' %}">Log in</a>
+            <a href="{% url 'accounts:signup' %}">Register</a>
+        {% endif %}
+    </nav>
+</header>
+
+<main id="main-content">
+    <header class="case-hero">
+        <div class="case-hero__inner">
+            <a class="case-back" href="{% url 'home' %}#when-to-use">&larr; Back to examples</a>
+            <p class="case-eyebrow">Case study · Stakeholder opposition</p>
+            <h1>Turning opposition into a test of visible commitment</h1>
+            <p class="case-lead">
+                A project team used Wicked Questions and Generative Relationships STAR
+                to understand why teachers and parents remained cautious about a proposed
+                Environmental Innovation Hub—and what businesses needed to do next.
+            </p>
+        </div>
+    </header>
+
+    <section class="case-section case-summary" aria-labelledby="opposition-summary-heading">
+        <div>
+            <p class="case-kicker">The challenge</p>
+            <h2 id="opposition-summary-heading">Support the school without leaving it another programme to run</h2>
+            <p>
+                The educational and environmental case was compelling, but teachers and
+                parents were concerned about workload, reliability and whether business
+                support would last. Explaining the benefits again would not answer those
+                concerns. The team needed to design for both school ownership and dependable
+                outside support.
+            </p>
+        </div>
+        <dl class="case-facts">
+            <div><dt>Structures</dt><dd>Two connected sessions</dd></div>
+            <div><dt>Central tension</dt><dd>Ownership and support</dd></div>
+            <div><dt>Outcome</dt><dd>A visible commitment plan</dd></div>
+        </dl>
+    </section>
+
+    <section class="case-section" aria-labelledby="wicked-heading">
+        <p class="case-kicker">Part one · Wicked Questions</p>
+        <h2 id="wicked-heading">Replace either-or arguments with tensions the design must hold</h2>
+        <p class="case-intro">
+            The group generated pairs of apparently opposing needs, then refined the six
+            tensions most important to a credible three-year programme.
+        </p>
+        <div class="perspective-grid">
+            <article><h3>Ownership and delivery</h3><p>Let schools own educational outcomes while businesses carry much of the organising and delivery effort.</p></article>
+            <article><h3>Ambition and available time</h3><p>Create meaningful environmental impact with only a few volunteer hours available each month.</p></article>
+            <article><h3>Partnership and resilience</h3><p>Welcome broad business support while ensuring the core programme survives fluctuating participation.</p></article>
+            <article><h3>Evidence and workload</h3><p>Measure environmental outcomes without adding significant administration for teachers.</p></article>
+            <article><h3>Pupil leadership and continuity</h3><p>Give pupils genuine ownership while adults provide structure, safety and sustained support.</p></article>
+            <article><h3>Innovation and reliability</h3><p>Refresh projects each year within a stable framework that communities can trust for three years.</p></article>
+        </div>
+    </section>
+
+    <section class="case-band" aria-labelledby="wicked-insight-heading">
+        <div class="case-band__inner">
+            <p class="case-kicker">The pivotal question</p>
+            <h2 id="wicked-insight-heading">How can the school own the Hub while businesses carry much of the burden simultaneously?</h2>
+            <ul class="theme-list">
+                <li>Schools lead educational priorities and retain ownership of learning outcomes.</li>
+                <li>Businesses coordinate volunteers, activities, evidence gathering and reporting.</li>
+                <li>Pupils generate ideas while adults provide mentoring, resources and safeguarding.</li>
+                <li>A stable core programme protects continuity; new challenges keep it fresh.</li>
+                <li>Additional partners strengthen the programme without becoming critical dependencies.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="case-section case-summary" aria-labelledby="star-heading">
+        <div>
+            <p class="case-kicker">Part two · Generative Relationships STAR</p>
+            <h2 id="star-heading">Diagnose why a strong idea was not yet earning trust</h2>
+            <p>
+                The STAR assessment showed abundant perspectives and a compelling shared
+                reason for acting. Alignment was only moderate, however, and action was
+                notably weaker. The opposition was not evidence that stakeholders rejected
+                the purpose; it reflected reasonable doubt about delivery.
+            </p>
+        </div>
+        <dl class="case-facts">
+            <div><dt>Separateness</dt><dd>7.8/10</dd></div>
+            <div><dt>Tuning</dt><dd>5.7/10</dd></div>
+            <div><dt>Action</dt><dd>4.5/10</dd></div>
+            <div><dt>Reason</dt><dd>9.2/10</dd></div>
+        </dl>
+    </section>
+
+    <section class="case-section case-outcome" aria-labelledby="opposition-outcome-heading">
+        <div>
+            <p class="case-kicker">The outcome</p>
+            <h2 id="opposition-outcome-heading">Six visible commitments to replace reassurance with evidence</h2>
+            <p>
+                The group stopped generating more concepts and defined early actions that
+                would let teachers and parents judge the partnership by what it did.
+            </p>
+            <ol class="action-list">
+                <li><span>01</span><p>Appoint a project lead and named owners for each major activity.</p></li>
+                <li><span>02</span><p>Recruit an initial volunteer team and publish a realistic monthly time commitment.</p></li>
+                <li><span>03</span><p>Listen directly to teachers and parents before finalising the programme.</p></li>
+                <li><span>04</span><p>Invite local businesses to adopt specific activities and spread delivery risk.</p></li>
+                <li><span>05</span><p>Publish a Year 1 calendar so stakeholders can see when support will arrive.</p></li>
+                <li><span>06</span><p>Book one achievable environmental activity to demonstrate progress within a month.</p></li>
+            </ol>
+        </div>
+        <blockquote>
+            <p>“The quickest way to build trust is not to explain our commitment. It is to demonstrate it.”</p>
+            <footer>— Group conclusion</footer>
+        </blockquote>
+    </section>
+
+    <section class="case-cta" aria-labelledby="opposition-cta-heading">
+        <div>
+            <p class="case-kicker">Use the pattern</p>
+            <h2 id="opposition-cta-heading">Treat opposition as information about what your plan still needs</h2>
+            <p>Use Wicked Questions to hold competing needs together, then Generative Relationships STAR to identify which relationship conditions need practical attention.</p>
+        </div>
+        <div class="case-cta__actions">
+            {% if request.user.is_authenticated %}
+                <a class="btn btn-primary btn-large" href="{% url 'tools:catalog' %}">Explore the tools</a>
+            {% else %}
+                <a class="btn btn-primary btn-large" href="{% url 'accounts:signup' %}">Register to get started</a>
+                <a class="btn btn-large" href="{% url 'self_hosting' %}">Self-host KwaCart</a>
+            {% endif %}
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    KwaCart &mdash; a Liberating Structures facilitation platform.
+</footer>
+</body>
+</html>

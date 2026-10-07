@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}{{ lesson.title }} | KwaCart Academy{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/academy.css' %}">{% endblock %}
+{% block content %}
+<div class="academy-shell">
+    <header class="academy-lesson-header">
+        <a class="academy-back" href="{% url 'academy_dashboard' %}">Back to Academy</a>
+        <p class="academy-kicker">Lesson {{ lesson.number }} · {{ lesson.duration }}</p>
+        <h1>{{ lesson.title }}</h1>
+        <p class="academy-summary">{{ lesson.summary }}</p>
+        <div class="academy-progress" aria-label="Academy progress">
+            <p>{{ completed_count }} of {{ total_count }} lessons complete</p><p>{{ percent }}% complete</p>
+            <div class="academy-progress-meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ percent }}" aria-label="{{ percent }} percent complete"><span style="width: {{ percent }}%"></span></div>
+        </div>
+    </header>
+    <div class="academy-detail-grid">
+        <article class="academy-guide">
+            <section class="academy-outcome" aria-labelledby="outcome-title"><h2 id="outcome-title">By the end, you will be able to</h2><p>{{ lesson.outcome }}</p></section>
+            {% for section in lesson.sections %}<section><h2>{{ section.heading }}</h2><p>{{ section.body|linebreaksbr }}</p></section>{% endfor %}
+        </article>
+        <aside class="academy-aside">
+            <section class="academy-checklist" aria-labelledby="checklist-title">
+                <h2 id="checklist-title">Try this in practice</h2><ul>{% for item in lesson.checklist %}<li>{{ item }}</li>{% endfor %}</ul>
+                {% if lesson.action_url %}<a class="academy-secondary-link academy-action" href="{{ lesson.action_url }}">{{ lesson.action_label }} <span aria-hidden="true">→</span></a>{% endif %}
+            </section>
+            {% if completed %}
+                <section class="academy-completed-panel" aria-labelledby="done-title"><h2 id="done-title">Lesson completed</h2><p>You have marked this step as done. Come back whenever you need a refresher.</p></section>
+            {% elif not authenticated %}
+                <section class="academy-completion" aria-labelledby="complete-title"><h2 id="complete-title">Ready to begin?</h2><p>Create an account or log in to save your progress and resume on any device.</p><a class="academy-button" href="{% url 'accounts:signup' %}?next={{ request.path|urlencode }}">Register to save progress <span aria-hidden="true">→</span></a><a class="academy-secondary-link" href="{% url 'accounts:login' %}?next={{ request.path|urlencode }}">Log in to continue</a></section>
+            {% else %}
+                <section class="academy-completion" aria-labelledby="complete-title"><h2 id="complete-title">Ready to move on?</h2><p>Mark this lesson complete when you have tried the action, or when you are ready to carry it into your next session.</p><form method="post" action="{% url 'academy_complete' lesson.slug %}">{% csrf_token %}<button class="academy-button" type="submit">Mark lesson complete <span aria-hidden="true">→</span></button></form></section>
+            {% endif %}
+        </aside>
+    </div>
+    <nav class="academy-pagination" aria-label="Lesson navigation">
+        <div>{% if previous_lesson %}<a href="{{ previous_lesson.url }}"><span aria-hidden="true">←</span> Previous: {{ previous_lesson.title }}</a>{% endif %}</div>
+        <div>{% if next_lesson %}<a href="{{ next_lesson.url }}">Next: {{ next_lesson.title }} <span aria-hidden="true">→</span></a>{% else %}<a href="{% url 'academy_dashboard' %}">Return to Academy</a>{% endif %}</div>
+    </nav>
+</div>
+{% endblock %}

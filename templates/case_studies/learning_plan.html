@@ -1,0 +1,161 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="See how What, So What, Now What? turned observations about an engineering apprentice into a structured 12-month workplace learning plan.">
+    <title>Designing a learning plan with What, So What, Now What? — KwaCart case study</title>
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+    <link rel="stylesheet" href="{% static 'css/case-study.css' %}">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+<header>
+    <nav class="nav" aria-label="Main navigation">
+        <a href="{% url 'home' %}" class="nav-brand kwacart-wordmark" aria-label="KwaCart home">KwaCart</a>
+        <span class="nav-spacer"></span>
+        <a href="{% url 'home' %}#when-to-use">Examples</a>
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'tools:catalog' %}">All Tools</a>
+            <a href="{% url 'archive:knowledge_bank' %}">Knowledge Bank</a>
+        {% else %}
+            <a href="{% url 'self_hosting' %}">Self-host</a>
+            <a href="{% url 'accounts:login' %}">Log in</a>
+            <a href="{% url 'accounts:signup' %}">Register</a>
+        {% endif %}
+    </nav>
+</header>
+
+<main id="main-content">
+    <header class="case-hero">
+        <div class="case-hero__inner">
+            <a class="case-back" href="{% url 'home' %}#when-to-use">&larr; Back to examples</a>
+            <p class="case-eyebrow">Case study · Learning design</p>
+            <h1>Turning development goals into a year of purposeful practice</h1>
+            <p class="case-lead">
+                A workplace group used What, So What, Now What? to move from observations
+                about an engineering apprentice to a structured learning plan for technical
+                growth, communication, adaptability and resilience.
+            </p>
+        </div>
+    </header>
+
+    <section class="case-section case-summary" aria-labelledby="learning-summary-heading">
+        <div>
+            <p class="case-kicker">The opportunity</p>
+            <h2 id="learning-summary-heading">Design a personalised route to the same professional destination</h2>
+            <p>
+                The apprentice was technically capable, motivated and clear about the skills
+                they wanted to strengthen. The task was not to lower expectations, but to
+                organise real workplace experiences, mentoring and reflection so development
+                would be gradual, supported and visible.
+            </p>
+        </div>
+        <dl class="case-facts">
+            <div><dt>Structure</dt><dd>What, So What, Now What?</dd></div>
+            <div><dt>Learning goals</dt><dd>Four connected areas</dd></div>
+            <div><dt>Plan length</dt><dd>12 months</dd></div>
+        </dl>
+    </section>
+
+    <section class="case-section" aria-labelledby="what-heading">
+        <p class="case-kicker">What? · Start with evidence</p>
+        <h2 id="what-heading">Separate observations from assumptions</h2>
+        <p class="case-intro">
+            The group first recorded what it knew before interpreting what those facts meant
+            for the learning plan.
+        </p>
+        <div class="perspective-grid">
+            <article><h3>Existing capability</h3><p>The apprentice brought a relevant engineering qualification, technical knowledge and evidence of persistence.</p></article>
+            <article><h3>Self-defined goals</h3><p>Communication, adaptability and resilience were priorities the apprentice had chosen—not deficits imposed by others.</p></article>
+            <article><h3>Useful conditions</h3><p>Clear expectations, preparation time and constructive feedback supported confidence and participation.</p></article>
+            <article><h3>Motivation to stretch</h3><p>The apprentice wanted opportunities to practise and grow rather than having every challenge removed.</p></article>
+            <article><h3>Available support</h3><p>A manager, mentor, colleagues and support worker could form a coordinated learning network.</p></article>
+            <article><h3>Real learning contexts</h3><p>Projects, presentations, team discussions and cross-functional work could make development relevant.</p></article>
+        </div>
+    </section>
+
+    <section class="case-band" aria-labelledby="so-what-heading">
+        <div class="case-band__inner">
+            <p class="case-kicker">So what? · Find the learning principles</p>
+            <h2 id="so-what-heading">Six principles for effective workplace learning</h2>
+            <ul class="theme-list">
+                <li>Build the apprenticeship around strengths and professional ambition.</li>
+                <li>Treat communication, adaptability and resilience as formal learning objectives.</li>
+                <li>Embed development in meaningful engineering work rather than separating it into generic training.</li>
+                <li>Use supported challenge instead of avoidance or overprotection.</li>
+                <li>Make inclusion and learning a shared workplace responsibility.</li>
+                <li>Use structure, advance notice, feedback and regular reviews to increase confidence.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="case-section" aria-labelledby="pathway-heading">
+        <p class="case-kicker">Now what? · Sequence the practice</p>
+        <h2 id="pathway-heading">A graduated 12-month learning pathway</h2>
+        <p class="case-intro">
+            Increasingly demanding experiences would develop the target skills through
+            practice, coaching and reflection.
+        </p>
+        <div class="perspective-grid">
+            <article><h3>Months 1–3 · Establish foundations</h3><p>Complete structured tasks, observe workplace routines and take part in small-team interactions with mentor support.</p></article>
+            <article><h3>Months 4–6 · Widen participation</h3><p>Join cross-functional activities, give short presentations and contribute to project discussions.</p></article>
+            <article><h3>Months 7–12 · Apply with autonomy</h3><p>Lead small pieces of work, explain technical solutions and collaborate with less familiar colleagues.</p></article>
+        </div>
+    </section>
+
+    <section class="case-section case-outcome" aria-labelledby="learning-outcome-heading">
+        <div>
+            <p class="case-kicker">The learning plan</p>
+            <h2 id="learning-outcome-heading">Four goals with actions and evidence of progress</h2>
+            <ol class="action-list">
+                <li><span>01</span><p><strong>Technical practice:</strong> complete apprenticeship milestones, apply prior knowledge and contribute to engineering projects.</p></li>
+                <li><span>02</span><p><strong>Communication:</strong> ask questions, contribute to meetings and gradually present technical work.</p></li>
+                <li><span>03</span><p><strong>Adaptability:</strong> work across teams, experience planned changes and reflect on strategies that help.</p></li>
+                <li><span>04</span><p><strong>Resilience:</strong> receive feedback, learn from mistakes and recognise successful recovery from setbacks.</p></li>
+            </ol>
+        </div>
+        <blockquote>
+            <p>“I don’t need to be perfect now. I need opportunities to practise and learn from experience.”</p>
+            <footer>— The apprentice</footer>
+        </blockquote>
+    </section>
+
+    <section class="case-section" aria-labelledby="first-steps-heading">
+        <p class="case-kicker">Making it real</p>
+        <h2 id="first-steps-heading">Seven actions for the first 30 days</h2>
+        <ul class="theme-list">
+            <li>Appoint a workplace mentor.</li>
+            <li>Hold a planning meeting with the apprentice and support worker.</li>
+            <li>Agree measurable learning goals for the next 12 months.</li>
+            <li>Schedule monthly support reviews and quarterly progress reviews.</li>
+            <li>Brief the team on clear and inclusive communication.</li>
+            <li>Create a learning journal and a simple reflection template.</li>
+            <li>Choose the first engineering project that includes communication and teamwork practice.</li>
+        </ul>
+    </section>
+
+    <section class="case-cta" aria-labelledby="learning-cta-heading">
+        <div>
+            <p class="case-kicker">Use the pattern</p>
+            <h2 id="learning-cta-heading">Move from experience to insight—and from insight to deliberate practice</h2>
+            <p>Use What, So What, Now What? to distinguish facts from interpretation, identify what matters for learning and agree practical next steps.</p>
+        </div>
+        <div class="case-cta__actions">
+            {% if request.user.is_authenticated %}
+                <a class="btn btn-primary btn-large" href="{% url 'tools:catalog' %}">Find What, So What, Now What?</a>
+            {% else %}
+                <a class="btn btn-primary btn-large" href="{% url 'accounts:signup' %}">Register to get started</a>
+                <a class="btn btn-large" href="{% url 'self_hosting' %}">Self-host KwaCart</a>
+            {% endif %}
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    KwaCart &mdash; a Liberating Structures facilitation platform.
+</footer>
+</body>
+</html>

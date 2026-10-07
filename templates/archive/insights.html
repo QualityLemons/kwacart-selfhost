@@ -1,0 +1,196 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Insights &mdash; Archive{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/insights_dashboard.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1 style="margin-bottom:0.25rem;">Insights Dashboard</h1>
+<p style="margin:0 0 1.25rem; color:#64748b; font-size:0.9rem;">
+    Trends and themes across workshops you&rsquo;ve facilitated.
+</p>
+
+<!-- ── Sub-navigation ── -->
+<nav class="idb-nav" aria-label="Archive navigation">
+    <a href="{% url 'archive:dashboard' %}">My Archive</a>
+    <a href="{% url 'archive:insights' %}" class="active">Insights</a>
+</nav>
+
+<!-- ── Summary stats ── -->
+<div class="idb-stats" role="region" aria-label="Summary statistics">
+    <div class="idb-stat">
+        <span class="idb-stat__value">{{ total_sessions }}</span>
+        <span class="idb-stat__label">Sessions hosted</span>
+    </div>
+    <div class="idb-stat">
+        <span class="idb-stat__value">{{ total_responses }}</span>
+        <span class="idb-stat__label">Responses analysed</span>
+    </div>
+    <div class="idb-stat" style="flex-basis:12rem;">
+        <span class="idb-stat__value" style="font-size:1rem; margin-top:0.25rem;">{{ range_label|capfirst }}</span>
+        <span class="idb-stat__label">Date window</span>
+    </div>
+</div>
+
+<!-- ── Keyword search form ── -->
+<section class="idb-search-section" aria-label="Keyword tracker">
+    <label for="keyword-input" class="idb-search-label">
+        Track a keyword across your workshops
+    </label>
+    <form method="get" id="keyword-form">
+        <div class="idb-keyword-row">
+            <input type="text" name="keyword" id="keyword-input"
+                   value="{{ keyword }}"
+                   placeholder="e.g. Bottleneck, Communication, Budget&hellip;"
+                   class="idb-keyword-input"
+                   aria-label="Keyword or phrase to track"
+                   autocomplete="off"
+                   autocapitalize="none"
+                   spellcheck="false">
+            <button type="submit" class="btn btn-primary">
+                Track &rarr;
+            </button>
+            {% if keyword %}
+            <a href="{% url 'archive:insights' %}{% if date_range != '3m' %}?range={{ date_range }}{% endif %}"
+               class="idb-clear">Clear</a>
+            {% endif %}
+        </div>
+        <div class="idb-range-row" role="group" aria-label="Date range">
+            <span class="idb-range-label-text">Range:</span>
+            {% for val, label in range_options %}
+            <label class="idb-pill{% if date_range == val %} idb-pill--active{% endif %}">
+                <input type="radio" name="range" value="{{ val }}"
+                       {% if date_range == val %}checked{% endif %}
+                       style="position:absolute;opacity:0;pointer-events:none;"
+                       onchange="document.getElementById('keyword-form').submit()">
+                {{ label }}
+            </label>
+            {% endfor %}
+        </div>
+    </form>
+</section>
+
+{% if keyword %}
+<!-- ════════════════════════════════════════════
+     KEYWORD TREND VIEW
+     ════════════════════════════════════════════ -->
+
+{% if chart_data %}
+<section class="idb-chart-section" aria-label="Keyword trend chart">
+    <div class="idb-chart-heading">
+        <span>Trend for</span>
+        <span class="idb-chart-heading__kw">&ldquo;{{ keyword }}&rdquo;</span>
+        <span class="idb-chart-heading__total">
+            &mdash; {{ chart_data.total }} total mention{{ chart_data.total|pluralize }}
+            across the {{ range_label }}
+            &middot; by {{ granularity }}
+        </span>
+    </div>
+
+    <div class="idb-chart" role="img"
+         aria-label="Bar chart: '{{ keyword }}' mentioned {{ chart_data.total }} time{{ chart_data.total|pluralize }} over the {{ range_label }}">
+        <div class="idb-chart__bars">
+            {% for period in chart_data.periods %}
+            <div class="idb-period{% if period.count == chart_data.max_count and period.count > 0 %} idb-period--peak{% endif %}{% if period.count == 0 %} idb-period--zero{% endif %}">
+                <div class="idb-bar-wrap">
+                    <span class="idb-count{% if period.count == 0 %} idb-count--zero{% endif %}"
+                          aria-hidden="true">{{ period.count }}</span>
+                    <div class="idb-bar{% if period.count == chart_data.max_count and period.count > 0 %} idb-bar--peak{% endif %}"
+                         style="height:{{ period.pct }}%"
+                         title="{{ period.count }} mention{{ period.count|pluralize }} &mdash; {{ period.label }}"></div>
+                </div>
+                <div class="idb-period__label" aria-hidden="true">{{ period.label }}</div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+    <p style="margin:0.4rem 0 0; font-size:0.72rem; color:#94a3b8; text-align:right;">
+        Peak bar highlighted in teal. Scroll chart right if periods extend beyond view.
+    </p>
+</section>
+
+{% else %}
+<div class="idb-no-results">
+    <strong>&ldquo;{{ keyword }}&rdquo;</strong> was not found in any response
+    during the {{ range_label }}. Try a different term or extend the date range.
+</div>
+{% endif %}
+
+<!-- ── Matching workshops ── -->
+{% if matching_records %}
+<h2 class="idb-matches-heading">
+    Workshops where &ldquo;{{ keyword }}&rdquo; appears
+</h2>
+<ul class="idb-matches">
+    {% for rec in matching_records %}
+    <li class="idb-match">
+        <span class="idb-match__badge idb-match__badge--{{ rec.type }}">
+            {% if rec.type == 'session' %}Session{% else %}Solo{% endif %}
+        </span>
+        <div class="idb-match__body">
+            <div class="idb-match__title">
+                <span class="idb-match__tool">{{ rec.tool_slug }}</span>
+                <span class="idb-match__date">
+                    {% if rec.date %}{{ rec.date|date:"j M Y" }}{% endif %}
+                </span>
+                <span class="idb-match__count" aria-label="{{ rec.count }} mention{{ rec.count|pluralize }}">
+                    &times;{{ rec.count }}
+                </span>
+            </div>
+            <p class="idb-match__snippet">{{ rec.snippet }}</p>
+            <a href="{{ rec.url }}" style="font-size:0.78rem; color:#2563eb;">
+                Open&nbsp;&rarr;
+            </a>
+        </div>
+    </li>
+    {% endfor %}
+</ul>
+{% elif chart_data %}
+<p style="font-size:0.85rem; color:#94a3b8; margin-top:1rem;">
+    No individual records found (keyword may appear only in combined session exports).
+</p>
+{% endif %}
+
+{% else %}
+<!-- ════════════════════════════════════════════
+     DEFAULT VIEW — word cloud of top terms
+     ════════════════════════════════════════════ -->
+
+<section class="idb-terms-section" aria-label="Top terms from your workshops">
+    <h2 class="idb-terms-heading">Top terms from your workshops</h2>
+    <p class="idb-terms-hint">
+        Click any word to track how often it appears over time.
+    </p>
+
+    {% if top_terms %}
+    <div class="idb-terms" role="list" aria-label="Top content words">
+        {% for item in top_terms %}
+        <button type="button" class="idb-term"
+                role="listitem"
+                style="font-size:{{ item.size }}rem;"
+                title="{{ item.count }} occurrence{{ item.count|pluralize }}"
+                onclick="document.getElementById('keyword-input').value='{{ item.term|escapejs }}';
+                         document.getElementById('keyword-form').submit();">
+            {{ item.term }}
+        </button>
+        {% endfor %}
+    </div>
+    <p style="font-size:0.75rem; color:#94a3b8; margin:0.5rem 0 0; text-align:right;">
+        {{ top_terms|length }} terms &mdash; size reflects relative frequency
+    </p>
+    {% else %}
+    <div class="idb-terms">
+        <span class="idb-terms-empty">
+            No workshop responses found in the {{ range_label }}.
+            Run a session or extend the date range to see themes emerge.
+        </span>
+    </div>
+    {% endif %}
+</section>
+
+{% endif %}
+
+{% endblock %}

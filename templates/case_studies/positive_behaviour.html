@@ -1,0 +1,158 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="See how Project Vision Map and Min Specs helped a workplace define the everyday behaviours needed to rebuild trust and support inclusion.">
+    <title>Supporting positive behaviour with Project Vision Map and Min Specs — KwaCart case study</title>
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+    <link rel="stylesheet" href="{% static 'css/case-study.css' %}">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<header>
+    <nav class="nav" aria-label="Main navigation">
+        <a href="{% url 'home' %}" class="nav-brand kwacart-wordmark" aria-label="KwaCart home">KwaCart</a>
+        <span class="nav-spacer"></span>
+        <a href="{% url 'home' %}#when-to-use">Examples</a>
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'tools:catalog' %}">All Tools</a>
+            <a href="{% url 'archive:knowledge_bank' %}">Knowledge Bank</a>
+        {% else %}
+            <a href="{% url 'self_hosting' %}">Self-host</a>
+            <a href="{% url 'accounts:login' %}">Log in</a>
+            <a href="{% url 'accounts:signup' %}">Register</a>
+        {% endif %}
+    </nav>
+</header>
+
+<main id="main-content">
+    <header class="case-hero">
+        <div class="case-hero__inner">
+            <a class="case-back" href="{% url 'home' %}#when-to-use">&larr; Back to examples</a>
+            <p class="case-eyebrow">Case study · Positive behaviour</p>
+            <h1>Rebuilding trust through small, consistent workplace behaviours</h1>
+            <p class="case-lead">
+                A workplace group used Min Specs and Project Vision Map to replace blame
+                with a practical, non-punitive approach to communication, accountability
+                and inclusive working relationships.
+            </p>
+        </div>
+    </header>
+
+    <section class="case-section case-summary" aria-labelledby="behaviour-summary-heading">
+        <div>
+            <p class="case-kicker">The challenge</p>
+            <h2 id="behaviour-summary-heading">Strengthen relationships without making one person the problem</h2>
+            <p>
+                An apprentice, managers and colleagues were experiencing growing tension.
+                Earlier support commitments had drifted, misunderstandings were not always
+                addressed directly, and outside support was increasingly needed to repair
+                relationships. The group wanted better everyday habits—not blame, special
+                treatment or reduced performance expectations.
+            </p>
+        </div>
+        <dl class="case-facts">
+            <div><dt>Structures</dt><dd>Two connected sessions</dd></div>
+            <div><dt>Timeframe</dt><dd>Six months</dd></div>
+            <div><dt>Focus</dt><dd>Behaviour and relationships</dd></div>
+        </dl>
+    </section>
+
+    <section class="case-section" aria-labelledby="min-specs-heading">
+        <p class="case-kicker">Part one · Min Specs</p>
+        <h2 id="min-specs-heading">Sift a long wish list down to what must happen</h2>
+        <p class="case-intro">
+            The group tested each proposed rule by asking whether its absence would place
+            the apprenticeship and working relationships at serious risk. Desirable but
+            unsustainable requirements were dropped or made more proportionate.
+        </p>
+        <div class="perspective-grid">
+            <article><h3>Practical notice</h3><p>Give advance notice where reasonably possible, while still developing strategies for unexpected change.</p></article>
+            <article><h3>Proportionate support</h3><p>Match support to the challenge rather than removing every difficulty or creating dependency.</p></article>
+            <article><h3>Purposeful involvement</h3><p>Bring in support professionals for significant issues and reviews—not every routine conversation.</p></article>
+            <article><h3>Early repair</h3><p>Accept that misunderstandings happen, then address them quickly before they become relationship problems.</p></article>
+        </div>
+    </section>
+
+    <section class="case-band" aria-labelledby="essentials-heading">
+        <div class="case-band__inner">
+            <p class="case-kicker">What survived the test</p>
+            <h2 id="essentials-heading">Eight essential everyday behaviours</h2>
+            <ul class="theme-list">
+                <li>Communicate clearly and directly.</li>
+                <li>Hold regular one-to-one check-ins.</li>
+                <li>Discuss concerns with the person, not about them.</li>
+                <li>Honour the support commitments already agreed.</li>
+                <li>Continue offering meaningful opportunities for growth and challenge.</li>
+                <li>Share responsibility for inclusion and success.</li>
+                <li>Maintain active mentoring and coaching.</li>
+                <li>Address misunderstandings and tensions early.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="case-section" aria-labelledby="vision-heading">
+        <p class="case-kicker">Part two · Project Vision Map</p>
+        <h2 id="vision-heading">A six-month reflection and inclusion project</h2>
+        <p class="case-intro">
+            With the minimum conditions clear, the group designed a project to make those
+            behaviours part of normal working life.
+        </p>
+        <div class="perspective-grid">
+            <article><h3>Leadership commitment</h3><p>Managers recommit visibly, protect time for one-to-ones and participate in reflection.</p></article>
+            <article><h3>Safe reflection</h3><p>Facilitated, non-punitive sessions let people discuss frustrations, mistakes and improvements honestly.</p></article>
+            <article><h3>Full participation</h3><p>The apprentice helps shape decisions, explains what works and develops greater self-advocacy.</p></article>
+            <article><h3>Structured mentoring</h3><p>Scheduled check-ins and reflection after difficult situations turn support into a daily practice.</p></article>
+            <article><h3>Shared expectations</h3><p>Everyone understands the support commitments, responsibilities and development goals.</p></article>
+            <article><h3>Regular review</h3><p>Monthly reviews check whether agreed support and the Min Specs are actually happening.</p></article>
+        </div>
+    </section>
+
+    <section class="case-section case-outcome" aria-labelledby="behaviour-outcome-heading">
+        <div>
+            <p class="case-kicker">The intended difference</p>
+            <h2 id="behaviour-outcome-heading">A team that handles challenges well</h2>
+            <p>
+                Success was not defined as the absence of difficulty. It meant stronger
+                habits for raising concerns, giving feedback, keeping commitments and
+                repairing misunderstandings before trust eroded.
+            </p>
+            <ol class="action-list">
+                <li><span>01</span><p>Regular mentoring and one-to-one conversations take place consistently.</p></li>
+                <li><span>02</span><p>Concerns are discussed directly, using observable behaviour rather than assumptions.</p></li>
+                <li><span>03</span><p>The apprentice feels supported, appropriately challenged and increasingly independent.</p></li>
+                <li><span>04</span><p>Managers become more confident in honest performance and development conversations.</p></li>
+                <li><span>05</span><p>Outside support becomes strategic rather than a recurring crisis response.</p></li>
+                <li><span>06</span><p>The organisation gains a repeatable approach for people with different communication styles.</p></li>
+            </ol>
+        </div>
+        <blockquote>
+            <p>“Keep commitments. Communicate clearly. Stay connected. Solve problems early. Grow together.”</p>
+            <footer>— Group conclusion</footer>
+        </blockquote>
+    </section>
+
+    <section class="case-cta" aria-labelledby="behaviour-cta-heading">
+        <div>
+            <p class="case-kicker">Use the pattern</p>
+            <h2 id="behaviour-cta-heading">Design the conditions that make positive behaviour easier to sustain</h2>
+            <p>Use Min Specs to identify the few behaviours that cannot be lost, then Project Vision Map to build the commitment, practice and review needed to sustain them.</p>
+        </div>
+        <div class="case-cta__actions">
+            {% if request.user.is_authenticated %}
+                <a class="btn btn-primary btn-large" href="{% url 'tools:catalog' %}">Explore the tools</a>
+            {% else %}
+                <a class="btn btn-primary btn-large" href="{% url 'accounts:signup' %}">Register to get started</a>
+                <a class="btn btn-large" href="{% url 'self_hosting' %}">Self-host KwaCart</a>
+            {% endif %}
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    KwaCart &mdash; a Liberating Structures facilitation platform.
+</footer>
+</body>
+</html>

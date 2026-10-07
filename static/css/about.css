@@ -1,0 +1,162 @@
+/* ── Reset ── */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+/* ── Base ── */
+body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+    color: #1e293b;
+    background: #fff;
+    line-height: 1.6;
+}
+
+/* ── Navigation ── */
+.nav {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    max-width: 960px;
+    margin: 0 auto;
+    padding: 1rem 1.5rem;
+    border-bottom: 1px solid #e2e8f0;
+}
+.kwacart-wordmark, .nav-brand { font-family: Georgia, "Times New Roman", serif; font-weight: 700; font-size: 1.55rem; letter-spacing: -0.065em; color: #5D3A9B; text-decoration: none; line-height: 1; }
+.nav-spacer { flex: 1; }
+.nav a:not(.nav-brand) { color: #5D3A9B; text-decoration: none; font-size: 0.95rem; }
+
+/* ── Buttons ── */
+.btn {
+    display: inline-block;
+    padding: 0.55rem 1.1rem;
+    border-radius: 5px;
+    font-size: 0.95rem;
+    text-decoration: none;
+    border: 2px solid #5D3A9B;
+    color: #5D3A9B;
+    background: #fff;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s, color 0.15s;
+}
+.btn:hover { background: #f5f0ff; }
+.btn-primary { background: #5D3A9B; color: #fff; }
+.btn-primary:hover { background: #4a2e7d; }
+
+/* ── Page hero ── */
+.page-hero {
+    background: linear-gradient(135deg, #f8f3ff 0%, #eeddf7 100%);
+    padding: 3.5rem 1.5rem 2.75rem;
+    text-align: center;
+}
+.page-hero-inner { max-width: 680px; margin: 0 auto; }
+.page-hero h1 {
+    font-size: clamp(1.8rem, 4vw, 2.4rem);
+    font-weight: 800;
+    color: #0f172a;
+    margin-bottom: 0.75rem;
+    line-height: 1.2;
+}
+.page-hero h1 span { color: #5D3A9B; }
+.page-hero p {
+    font-size: 1.1rem;
+    color: #475569;
+    max-width: 560px;
+    margin: 0 auto;
+}
+
+/* ── Content sections ── */
+.section { max-width: 760px; margin: 0 auto; padding: 3rem 1.5rem; }
+.section + .section { padding-top: 0; }
+.section h2 { font-size: 1.35rem; font-weight: 700; color: #0f172a; margin-bottom: 0.75rem; }
+.section h2 span { color: #5D3A9B; }
+.section p { color: #334155; margin-bottom: 1rem; }
+.section p:last-child { margin-bottom: 0; }
+
+/* ── Principle cards ── */
+.principle-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(210px, 1fr));
+    gap: 1rem;
+    margin-top: 1.5rem;
+}
+.principle-card {
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1.1rem 1.2rem;
+    background: #f8fafc;
+}
+.principle-card .icon { font-size: 1.5rem; margin-bottom: 0.4rem; display: block; }
+.principle-card h3 { font-size: 0.95rem; font-weight: 700; color: #0f172a; margin-bottom: 0.3rem; }
+.principle-card p { font-size: 0.875rem; color: #64748b; margin: 0; }
+
+/* ── Stat row ── */
+.stat-row { display: flex; gap: 1.5rem; flex-wrap: wrap; margin: 1.5rem 0; }
+.stat {
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1rem 1.5rem;
+    text-align: center;
+    flex: 1;
+    min-width: 120px;
+}
+.stat-num { font-size: 2rem; font-weight: 800; color: #5D3A9B; display: block; line-height: 1.1; }
+.stat-label { font-size: 0.85rem; color: #64748b; }
+
+/* ── Accent block ── */
+.accent-block {
+    border-left: 4px solid #40B0A6;
+    background: #f0fdfa;
+    border-radius: 0 8px 8px 0;
+    padding: 1rem 1.25rem;
+    margin: 1.5rem 0;
+}
+.accent-block p { color: #0d4f4b; margin: 0; font-style: italic; }
+
+/* ── CTA band ── */
+.cta-band {
+    background: #5D3A9B;
+    color: #fff;
+    text-align: center;
+    padding: 3rem 1.5rem;
+    margin-top: 1rem;
+}
+.cta-band h2 { font-size: 1.5rem; font-weight: 700; margin-bottom: 0.5rem; }
+.cta-band p { color: #e0caff; margin-bottom: 1.5rem; font-size: 1rem; }
+.cta-band .btn { border-color: #fff; color: #fff; }
+.cta-band .btn:hover { background: rgba(255,255,255,0.15); }
+.cta-band .btn-primary-inv {
+    background: #E1BE6A;
+    color: #3a1a6b;
+    border-color: #E1BE6A;
+}
+.cta-band .btn-primary-inv:hover { background: #d4ae55; border-color: #d4ae55; }
+
+/* ── Divider ── */
+.divider { border: none; border-top: 1px solid #e2e8f0; max-width: 760px; margin: 0 auto; }
+
+/* ── Footer ── */
+.footer {
+    border-top: 1px solid #e2e8f0;
+    padding: 1.5rem;
+    text-align: center;
+    color: #64748b;
+    font-size: 0.85rem;
+}
+
+/* ── Accessibility: skip link + screen-reader utility ── */
+.skip-link {
+    position: absolute; left: -9999px; top: 1rem;
+    background: #5D3A9B; color: #fff;
+    padding: 0.5rem 1rem; border-radius: 4px;
+    font-weight: bold; z-index: 9999; text-decoration: none;
+}
+.skip-link:focus { left: 1rem; }
+.sr-only {
+    position: absolute; width: 1px; height: 1px;
+    padding: 0; margin: -1px; overflow: hidden;
+    clip: rect(0,0,0,0); white-space: nowrap; border: 0;
+}
+@media (max-width: 600px) {
+    .nav { flex-wrap:wrap; gap:.75rem 1rem; }
+    .nav-spacer { display:none; }
+}

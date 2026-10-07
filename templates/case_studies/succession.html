@@ -1,0 +1,136 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="See how a Discovery & Action Dialogue turned an approaching senior departure into a practical, shared succession plan.">
+    <title>Planning for succession with Discovery &amp; Action Dialogue — KwaCart case study</title>
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+    <link rel="stylesheet" href="{% static 'css/case-study.css' %}">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+<header>
+    <nav class="nav" aria-label="Main navigation">
+        <a href="{% url 'home' %}" class="nav-brand kwacart-wordmark" aria-label="KwaCart home">KwaCart</a>
+        <span class="nav-spacer"></span>
+        <a href="{% url 'home' %}#when-to-use">Examples</a>
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'tools:catalog' %}">All Tools</a>
+            <a href="{% url 'archive:knowledge_bank' %}">Knowledge Bank</a>
+        {% else %}
+            <a href="{% url 'self_hosting' %}">Self-host</a>
+            <a href="{% url 'accounts:login' %}">Log in</a>
+            <a href="{% url 'accounts:signup' %}">Register</a>
+        {% endif %}
+    </nav>
+</header>
+
+<main id="main-content">
+    <header class="case-hero">
+        <div class="case-hero__inner">
+            <a class="case-back" href="{% url 'home' %}#when-to-use">&larr; Back to examples</a>
+            <p class="case-eyebrow">Case study · Succession planning</p>
+            <h1>Turning an approaching departure into a shared capability-building plan</h1>
+            <p class="case-lead">
+                A cross-functional group used Discovery &amp; Action Dialogue to expose
+                succession risks, find practices that were already working, and agree
+                immediate actions with named owners.
+            </p>
+        </div>
+    </header>
+
+    <section class="case-section case-summary" aria-labelledby="succession-summary-heading">
+        <div>
+            <p class="case-kicker">The situation</p>
+            <h2 id="succession-summary-heading">The organisation had notice—but preparation had not caught up</h2>
+            <p>
+                A senior leader’s departure was known in advance, yet critical decisions,
+                specialist knowledge and external relationships still depended on one
+                person. Potential successors lacked visibility and practical exposure,
+                while uncertainty was beginning to slow decisions and fuel rumours.
+            </p>
+        </div>
+        <dl class="case-facts">
+            <div><dt>Structure</dt><dd>Discovery &amp; Action Dialogue</dd></div>
+            <div><dt>Perspectives</dt><dd>Six business functions</dd></div>
+            <div><dt>Output</dt><dd>A shared 30-day action plan</dd></div>
+        </dl>
+    </section>
+
+    <section class="case-section" aria-labelledby="succession-approach-heading">
+        <p class="case-kicker">The dialogue</p>
+        <h2 id="succession-approach-heading">Move from symptoms to barriers, then learn from people already succeeding</h2>
+        <p class="case-intro">
+            The group worked through seven focused questions: how the problem appears,
+            what effective action looks like, what gets in the way, who already overcomes
+            those barriers, which ideas could spread, what must happen next, and who else
+            needs to be involved.
+        </p>
+        <div class="perspective-grid">
+            <article><h3>Warning signs</h3><p>Decision authority was unclear, rumours replaced communication, and important work still waited for one individual.</p></article>
+            <article><h3>Hidden dependency</h3><p>Tacit knowledge, stakeholder trust and escalation judgement were concentrated rather than shared.</p></article>
+            <article><h3>Everyday barriers</h3><p>Today’s delivery pressures made coaching and delegation feel slower than doing the work directly.</p></article>
+            <article><h3>Positive deviants</h3><p>Some managers already delegated real responsibility, cross-trained teams and involved emerging leaders early.</p></article>
+            <article><h3>Future needs</h3><p>The group challenged the assumption that succession meant reproducing the existing role without redesign.</p></article>
+            <article><h3>Shared ownership</h3><p>Leadership, HR, process owners, potential successors and key external stakeholders all had a part to play.</p></article>
+        </div>
+    </section>
+
+    <section class="case-band" aria-labelledby="succession-insight-heading">
+        <div class="case-band__inner">
+            <p class="case-kicker">What the group surfaced</p>
+            <h2 id="succession-insight-heading">The gap was not talent. It was deliberate transfer.</h2>
+            <ul class="theme-list">
+                <li>Knowledge and decision-making logic remained concentrated.</li>
+                <li>Customer, supplier and regulatory relationships needed wider ownership.</li>
+                <li>Development was happening informally rather than through a visible plan.</li>
+                <li>Potential successors needed real experience, not information alone.</li>
+                <li>Succession had to become business continuity work, not an HR-only exercise.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="case-section case-outcome" aria-labelledby="succession-outcome-heading">
+        <div>
+            <p class="case-kicker">The outcome</p>
+            <h2 id="succession-outcome-heading">Six actions for the next 30 days</h2>
+            <ol class="action-list">
+                <li><span>01</span><p>Sponsor a review of the role’s responsibilities, decisions, relationships, risks and specialist knowledge.</p></li>
+                <li><span>02</span><p>Identify potential successors and give them exposure to meetings, reviews and real decisions.</p></li>
+                <li><span>03</span><p>Capture tacit knowledge, including judgement, escalation triggers, unwritten rules and lessons learned.</p></li>
+                <li><span>04</span><p>Map single points of failure and spread capability through shadowing and cross-training.</p></li>
+                <li><span>05</span><p>Broaden ownership of key customer, supplier, auditor and partner relationships.</p></li>
+                <li><span>06</span><p>Review the role against future business needs rather than simply copying its current shape.</p></li>
+            </ol>
+        </div>
+        <blockquote>
+            <p>“The best succession plans are not replacement plans. They spread knowledge, authority, relationships and leadership capacity.”</p>
+            <footer>— Group’s final recap</footer>
+        </blockquote>
+    </section>
+
+    <section class="case-cta" aria-labelledby="succession-cta-heading">
+        <div>
+            <p class="case-kicker">Use the pattern</p>
+            <h2 id="succession-cta-heading">Turn succession from a future concern into shared action</h2>
+            <p>Use Discovery &amp; Action Dialogue to find the risks, effective behaviours and willing owners already present in your organisation.</p>
+        </div>
+        <div class="case-cta__actions">
+            {% if request.user.is_authenticated %}
+                <a class="btn btn-primary btn-large" href="{% url 'tools:catalog' %}">Find Discovery &amp; Action Dialogue</a>
+            {% else %}
+                <a class="btn btn-primary btn-large" href="{% url 'accounts:signup' %}">Register to get started</a>
+                <a class="btn btn-large" href="{% url 'self_hosting' %}">Self-host KwaCart</a>
+            {% endif %}
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    KwaCart &mdash; a Liberating Structures facilitation platform.
+</footer>
+</body>
+</html>

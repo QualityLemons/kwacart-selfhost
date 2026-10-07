@@ -1,0 +1,88 @@
+{% if tool_meta.phases or tool_meta.timer_seconds %}
+{% if tool_meta.phases %}{{ tool_meta.phases|json_script:"phase-data" }}{% endif %}
+{% if timer_session_id %}{{ timer_started_at|json_script:"timer-started-at" }}{{ timer_paused_at|json_script:"timer-paused-at" }}{% endif %}
+<div class="timer-widget"
+     data-duration="{{ tool_meta.timer_seconds|default:0 }}"
+     data-is-host="{{ is_host|yesno:"true,false"|default:"false" }}"
+     data-pause-threshold="{{ pause_reminder_threshold_js|default:"300" }}"
+     data-inclusive-pacing="{{ inclusive_pacing|yesno:'true,false'|default:'false' }}"
+     data-inclusive-multiplier="{{ inclusive_pacing_multiplier|default:3 }}"
+     {% if timer_session_id %}
+     data-status-url="{% url 'tools:session_status' timer_session_id %}"
+     data-timer-start-url="{% url 'tools:timer_start' timer_session_id %}"
+     data-timer-reset-url="{% url 'tools:timer_reset' timer_session_id %}"
+     {% endif %}>
+    {% if tool_meta.phases %}
+    <div class="timer-phase-info">
+        <span class="timer-phase-label"></span>
+        <span class="timer-phase-progress"></span>
+    </div>
+    {% endif %}
+    <div class="timer-display" role="timer" aria-label="Time remaining">--:--</div>
+
+    <!-- Calm timer block — replaces the digit display when calm mode is active.
+         Background color is driven by JS (green → amber → red).
+         The transition is long so colour drifts rather than jumps;
+         the a11y theme overrides it to instant for zero-motion users. -->
+    <div class="calm-block" hidden
+         role="img"
+         aria-label="Session time indicator — colour shows how much time remains">
+        <p class="calm-block__label">Not started</p>
+    </div>
+
+    <div class="timer-paused-badge" hidden></div>
+    <div class="timer-stale-badge" hidden role="status" aria-live="polite">&#9888; Out of sync</div>
+    <div class="timer-reconnect-toast" hidden role="status" aria-live="polite"></div>
+    {% if tool_meta.phases %}
+    <div class="phase-progress-bar" role="group" aria-label="Session phase progress"></div>
+    {% endif %}
+    <div class="sr-only" aria-live="assertive" aria-atomic="true" id="phase-announcer"></div>
+    {% if not timer_session_id %}
+    <div class="timer-controls">
+        <button type="button" class="btn timer-start">Start</button>
+        <button type="button" class="btn timer-pause" disabled>Pause</button>
+        <button type="button" class="btn timer-reset">Reset</button>
+    </div>
+    {% elif is_host %}
+    <div class="timer-controls">
+        <button type="button" class="btn timer-start">Start</button>
+        <button type="button" class="btn timer-reset">Reset</button>
+    </div>
+    {% endif %}
+
+    {% if not is_host %}
+    <!-- Toggle between the digit countdown and the calm colour block.
+         Shown for participants only; hosts always need the exact time. -->
+    <div class="calm-timer-toggle-row">
+        <button type="button"
+                class="btn calm-timer-toggle"
+                aria-pressed="false"
+                title="Replace the ticking countdown with a steady colour indicator">
+            Calm timer
+        </button>
+    </div>
+    {% endif %}
+</div>
+
+{% if not is_host and timer_session_id %}
+<!-- Inclusive Pacing extended timer — visible only when the host enables it.
+     Participants start their own personal countdown here; the group timer
+     continues to run normally on the host's screen. -->
+<div class="ext-timer-panel"{% if not inclusive_pacing %} hidden{% endif %}
+     aria-live="polite">
+    <p class="ext-timer-panel__intro">
+        &#9656;&nbsp;Inclusive Pacing active &mdash; the host has given AAC users extra time.
+        You have up to <strong class="ext-multiplier-label">{{ inclusive_pacing_multiplier|default:3 }}&times;</strong>
+        the group&rsquo;s time to finish.
+    </p>
+    <button type="button" class="btn ext-timer-activate" aria-pressed="false">
+        Activate my extended time
+    </button>
+    <div class="ext-timer-running" hidden>
+        <p class="ext-timer-running__label">Your personal time remaining</p>
+        <div class="ext-timer-display" role="timer"
+             aria-label="Personal extended time remaining">--:--</div>
+    </div>
+</div>
+{% endif %}
+{% endif %}

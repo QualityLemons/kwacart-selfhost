@@ -1,0 +1,31 @@
+{% extends "base.html" %}
+{% block title %}Private feedback — KwaCart{% endblock %}
+{% block content %}
+<div class="feedback-shell">
+  <div class="feedback-hero">
+    <h1>Private feedback</h1>
+    <p>Help us make KwaCart more useful and welcoming. Share an idea, report a problem, describe your experience, or leave a rating. You can leave your name and email blank.</p>
+  </div>
+  {% if success %}<div class="feedback-success" role="status"><strong>Thank you. Your feedback was received.</strong><br>We will treat it respectfully and use it to improve KwaCart.</div>{% endif %}
+  <section class="feedback-card" aria-labelledby="feedback-form-heading">
+    <h2 id="feedback-form-heading">Tell us what you noticed</h2>
+    <p class="feedback-help">Only staff with a reason to review feedback can access these responses.</p>
+    <form method="post" class="feedback-form" data-feedback-form novalidate>
+      {% csrf_token %}
+      {% if context_token %}<input type="hidden" name="context_token" value="{{ context_token }}">{% endif %}
+      {% if form.non_field_errors %}<div class="non-field-errors">{{ form.non_field_errors|join:" " }}</div>{% endif %}
+      <div class="form-row form-row--split">
+        <div data-feedback-type-field>{{ form.feedback_type.label_tag }}{{ form.feedback_type }}{% if form.feedback_type.errors %}<p class="field-error" id="{{ form.feedback_type.auto_id }}-error">{{ form.feedback_type.errors|join:", " }}</p>{% endif %}</div>
+        <div data-feedback-rating-field>{{ form.rating.label_tag }}{{ form.rating }}{% if form.rating.help_text %}<p class="feedback-help">{{ form.rating.help_text }}</p>{% endif %}{% if form.rating.errors %}<p class="field-error" id="{{ form.rating.auto_id }}-error">{{ form.rating.errors|join:", " }}</p>{% endif %}</div>
+      </div>
+      <div class="form-row" data-feedback-title-field>{{ form.title.label_tag }}{{ form.title }}{% if form.title.errors %}<p class="field-error" id="{{ form.title.auto_id }}-error">{{ form.title.errors|join:", " }}</p>{% endif %}</div>
+      <div class="form-row" data-feedback-description-field>{{ form.description.label_tag }}{{ form.description }}{% if form.description.help_text %}<p class="feedback-help">{{ form.description.help_text }}</p>{% endif %}{% if form.description.errors %}<p class="field-error" id="{{ form.description.auto_id }}-error">{{ form.description.errors|join:", " }}</p>{% endif %}</div>
+      <div class="form-row form-row--split">
+        <div>{{ form.name.label_tag }}{{ form.name }}{% if form.name.help_text %}<p class="feedback-help">{{ form.name.help_text }}</p>{% endif %}{% if form.name.errors %}<p class="field-error" id="{{ form.name.auto_id }}-error">{{ form.name.errors|join:", " }}</p>{% endif %}</div>
+        <div>{{ form.email.label_tag }}{{ form.email }}{% if form.email.help_text %}<p class="feedback-help">{{ form.email.help_text }}</p>{% endif %}{% if form.email.errors %}<p class="field-error" id="{{ form.email.auto_id }}-error">{{ form.email.errors|join:", " }}</p>{% endif %}</div>
+      </div>
+      <div class="feedback-actions"><button class="btn btn-primary" type="submit">Send private feedback</button><span class="feedback-help">You choose what to share.</span></div>
+    </form>
+  </section>
+</div>
+{% endblock %}

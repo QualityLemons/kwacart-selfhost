@@ -1,0 +1,154 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="See how five Liberating Structures shaped a practical, strengths-led communication plan for a three-week engineering placement.">
+    <title>Shaping a communication plan with five Liberating Structures — KwaCart case study</title>
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+    <link rel="stylesheet" href="{% static 'css/case-study.css' %}">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+<header>
+    <nav class="nav" aria-label="Main navigation">
+        <a href="{% url 'home' %}" class="nav-brand kwacart-wordmark" aria-label="KwaCart home">KwaCart</a>
+        <span class="nav-spacer"></span>
+        <a href="{% url 'home' %}#when-to-use">Examples</a>
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'tools:catalog' %}">All Tools</a>
+            <a href="{% url 'archive:knowledge_bank' %}">Knowledge Bank</a>
+        {% else %}
+            <a href="{% url 'self_hosting' %}">Self-host</a>
+            <a href="{% url 'accounts:login' %}">Log in</a>
+            <a href="{% url 'accounts:signup' %}">Register</a>
+        {% endif %}
+    </nav>
+</header>
+
+<main id="main-content">
+    <header class="case-hero">
+        <div class="case-hero__inner">
+            <a class="case-back" href="{% url 'home' %}#when-to-use">&larr; Back to examples</a>
+            <p class="case-eyebrow">Case study · Communication planning</p>
+            <h1>Building shared understanding into every stage of a placement</h1>
+            <p class="case-lead">
+                A workplace team combined five Liberating Structures to shape a
+                strengths-led communication plan: listening before acting, agreeing
+                essential support and learning from experience week by week.
+            </p>
+        </div>
+    </header>
+
+    <section class="case-section case-summary" aria-labelledby="communication-summary-heading">
+        <div>
+            <p class="case-kicker">The challenge</p>
+            <h2 id="communication-summary-heading">Support communication without reducing independence or expectations</h2>
+            <p>
+                A new engineer was preparing for a three-week placement across quality
+                and manufacturing teams. Colleagues needed to support communication
+                through British Sign Language, keyboard responses, written notes and
+                visual prompts while keeping the engineer’s strengths, aspirations and
+                technical capability at the centre of the experience.
+            </p>
+        </div>
+        <dl class="case-facts">
+            <div><dt>Structures</dt><dd>Five connected activities</dd></div>
+            <div><dt>Timeframe</dt><dd>Three-week placement</dd></div>
+            <div><dt>Focus</dt><dd>Communication and learning</dd></div>
+        </dl>
+    </section>
+
+    <section class="case-section" aria-labelledby="cycle-heading">
+        <p class="case-kicker">The approach</p>
+        <h2 id="cycle-heading">Five structures, one communication cycle</h2>
+        <p class="case-intro">
+            Each structure had a distinct job, moving the team from preparation to
+            shared understanding, reflection, discovery and practical adjustment.
+        </p>
+        <div class="perspective-grid">
+            <article><h3>Min Specs</h3><p>Agree the minimum conditions needed before the placement starts.</p></article>
+            <article><h3>Conversation Café</h3><p>Give equal airtime to strengths, concerns, preferences and career goals.</p></article>
+            <article><h3>What, So What, Now What?</h3><p>Review observed interactions and adjust support at the end of each week.</p></article>
+            <article><h3>Discovery &amp; Action Dialogue</h3><p>Find the communication practices already helping successful participation.</p></article>
+            <article><h3>Wicked Questions</h3><p>Hold independence and continuous support—or real expectations and adjustments—at the same time.</p></article>
+        </div>
+    </section>
+
+    <section class="case-band" aria-labelledby="conditions-heading">
+        <div class="case-band__inner">
+            <p class="case-kicker">Before the placement</p>
+            <h2 id="conditions-heading">Five minimum conditions for success</h2>
+            <ul class="theme-list">
+                <li>Allow enough time for keyboard responses.</li>
+                <li>Ensure at least one colleague who can use British Sign Language is available.</li>
+                <li>Speak directly to the engineer rather than only through a support person.</li>
+                <li>Provide written and visual instructions wherever possible.</li>
+                <li>Give feedback every day and check understanding rather than assuming it.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="case-section" aria-labelledby="plan-heading">
+        <p class="case-kicker">The practical output</p>
+        <h2 id="plan-heading">A three-week communication and review plan</h2>
+        <p class="case-intro">
+            The team translated the activities into named support, regular feedback and
+            review points that could adapt as real experience replaced assumptions.
+        </p>
+        <div class="perspective-grid">
+            <article><h3>Assigned support</h3><p>A primary communication buddy supports introductions and daily check-ins during the quality placement.</p></article>
+            <article><h3>Manufacturing support</h3><p>A second buddy provides shop-floor support and helps with manufacturing terminology.</p></article>
+            <article><h3>Daily reflection</h3><p>A 10-minute end-of-day review captures what worked, what was difficult and what should change tomorrow.</p></article>
+            <article><h3>Flexible channels</h3><p>Communication can use British Sign Language, a talking keyboard, written notes or visual rating scales.</p></article>
+            <article><h3>Weekly review</h3><p>The group considers technical learning, team interaction, confidence, independence and the value the engineer contributed.</p></article>
+            <article><h3>Final recommendations</h3><p>The last review produces placement, employment, workplace-adjustment and personal-development recommendations.</p></article>
+        </div>
+    </section>
+
+    <section class="case-section case-outcome" aria-labelledby="communication-outcome-heading">
+        <div>
+            <p class="case-kicker">The outcome</p>
+            <h2 id="communication-outcome-heading">A plan designed to learn and improve</h2>
+            <p>
+                Rather than fixing support around assumptions made in advance, the
+                communication plan created a rhythm for observing what happened,
+                recognising strengths and adjusting the next stage.
+            </p>
+            <ol class="action-list">
+                <li><span>01</span><p>Communication preferences and essential support are agreed before work begins.</p></li>
+                <li><span>02</span><p>The engineer has a direct voice in discussions about strengths, concerns and goals.</p></li>
+                <li><span>03</span><p>Successful practices are identified from real experience and shared across teams.</p></li>
+                <li><span>04</span><p>Daily feedback makes small adjustments possible before difficulties accumulate.</p></li>
+                <li><span>05</span><p>Weekly reviews connect communication support with technical growth and independence.</p></li>
+            </ol>
+        </div>
+        <blockquote>
+            <p>“Listen first, understand before acting, and create practical support without reducing expectations.”</p>
+            <footer>— Planning principle</footer>
+        </blockquote>
+    </section>
+
+    <section class="case-cta" aria-labelledby="communication-cta-heading">
+        <div>
+            <p class="case-kicker">Use the pattern</p>
+            <h2 id="communication-cta-heading">Shape a communication plan around the person and the work</h2>
+            <p>Combine minimum conditions, shared listening and regular reflection so support can evolve with experience.</p>
+        </div>
+        <div class="case-cta__actions">
+            {% if request.user.is_authenticated %}
+                <a class="btn btn-primary btn-large" href="{% url 'tools:catalog' %}">Explore the tools</a>
+            {% else %}
+                <a class="btn btn-primary btn-large" href="{% url 'accounts:signup' %}">Register to get started</a>
+                <a class="btn btn-large" href="{% url 'self_hosting' %}">Self-host KwaCart</a>
+            {% endif %}
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    KwaCart &mdash; a Liberating Structures facilitation platform.
+</footer>
+</body>
+</html>

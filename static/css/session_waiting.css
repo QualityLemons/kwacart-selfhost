@@ -1,0 +1,114 @@
+/* ── Session-closed waiting overlay ── */
+/* Shown on participant screens the moment the host closes the session,
+   replacing the abrupt page-reload with a calm, branded holding state.  */
+
+/* The [hidden] attribute is overridden by the display:flex rule below, so an
+   explicit companion rule is needed — matching the pattern used throughout the
+   project (timer.css, archive_md_preview.css, multimedia_input.css, etc.). */
+.session-waiting-overlay[hidden] { display: none; }
+
+.session-waiting-overlay {
+    position: fixed;
+    inset: 0;
+    z-index: 9000;
+    background: rgba(15, 23, 42, 0.65);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 1rem;
+    animation: swl-fade-in 0.3s ease both;
+}
+
+@keyframes swl-fade-in {
+    from { opacity: 0; }
+    to   { opacity: 1; }
+}
+
+.swl-card {
+    background: #fff;
+    border-radius: 14px;
+    box-shadow: 0 24px 60px rgba(15, 23, 42, 0.22), 0 4px 12px rgba(15, 23, 42, 0.08);
+    padding: 2.5rem 2.25rem 2rem;
+    max-width: 26rem;
+    width: 100%;
+    text-align: center;
+    animation: swl-slide-up 0.35s cubic-bezier(0.22, 1, 0.36, 1) both;
+}
+
+@keyframes swl-slide-up {
+    from { transform: translateY(18px); opacity: 0; }
+    to   { transform: translateY(0);    opacity: 1; }
+}
+
+/* ── Pulsing dots ── */
+.swl-dots {
+    display: flex;
+    justify-content: center;
+    gap: 0.5rem;
+    margin-bottom: 1.5rem;
+}
+
+.swl-dots span {
+    display: block;
+    width: 10px;
+    height: 10px;
+    border-radius: 50%;
+    background: #5D3A9B;
+    animation: swl-pulse 1.4s ease-in-out infinite both;
+}
+
+.swl-dots span:nth-child(1) { animation-delay: 0s;    }
+.swl-dots span:nth-child(2) { animation-delay: 0.2s;  }
+.swl-dots span:nth-child(3) { animation-delay: 0.4s;  }
+
+@keyframes swl-pulse {
+    0%, 80%, 100% { transform: scale(0.6); opacity: 0.4; }
+    40%            { transform: scale(1);   opacity: 1;   }
+}
+
+/* ── Typography ── */
+.swl-heading {
+    font-size: 1.25rem;
+    font-weight: 800;
+    color: #1e293b;
+    margin: 0 0 0.6rem;
+}
+
+.swl-body {
+    font-size: 0.9rem;
+    color: #475569;
+    line-height: 1.6;
+    margin: 0 0 1.4rem;
+}
+
+.swl-saved-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.35rem;
+    background: #f0fdf4;
+    border: 1px solid #86efac;
+    color: #15803d;
+    font-size: 0.8rem;
+    font-weight: 600;
+    border-radius: 20px;
+    padding: 0.25rem 0.75rem;
+    margin-bottom: 1rem;
+}
+
+.swl-btn {
+    display: inline-block;
+    margin-bottom: 1rem;
+}
+
+.swl-hint {
+    font-size: 0.75rem;
+    color: #94a3b8;
+    margin: 0;
+}
+
+/* Reduced-motion: drop the animations but keep the overlay visible */
+@media (prefers-reduced-motion: reduce) {
+    .session-waiting-overlay,
+    .swl-card { animation: none; }
+    .swl-dots span { animation: none; opacity: 0.7; transform: none; }
+}

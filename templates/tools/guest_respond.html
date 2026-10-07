@@ -1,0 +1,237 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Session &mdash; {{ tool_meta.title }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/timer.css' %}">
+<link rel="stylesheet" href="{% static 'css/activity_remix.css' %}">
+<link rel="stylesheet" href="{% static 'css/multimedia_input.css' %}">
+<link rel="stylesheet" href="{% static 'css/session_waiting.css' %}">
+{% if tool_meta.show_canvas %}<link rel="stylesheet" href="{% static 'css/drawing_canvas.css' %}">{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="activity-frame">
+<h1>{{ tool_meta.title }} <small style="color:#64748b;">— live session</small></h1>
+
+<p style="color:#475569;">
+    You're joining as <strong>{{ instance.guest_name }}</strong>.
+    Fill in the form below and save your response before the host closes the session.
+</p>
+<p class="activity-guidance">
+    You can write, draw, or use both. <a href="{% url 'feedback' %}">Need another way to participate? Share private feedback.</a>
+</p>
+
+{% include "tools/info_box.html" %}
+{% include "tools/_timer.html" with timer_session_id=session.id is_host=False timer_started_at=timer_started_at timer_paused_at=timer_paused_at pause_reminder_threshold_sec=pause_reminder_threshold_sec pause_reminder_threshold_js=pause_reminder_threshold_js inclusive_pacing=inclusive_pacing inclusive_pacing_multiplier=inclusive_pacing_multiplier %}
+
+<!-- ── Hybrid Pacing banners ──
+     All three start as display:none. guest_poll.js shows/hides them based on
+     inclusive_pacing, timer_started_at, and verbal_breakout in each poll
+     response. Placed above the form so they are immediately visible. -->
+<div id="ip-early-preview"
+     style="display:none; background:#f0fdf4; border:1px solid #86efac; border-radius:6px;
+            padding:0.75rem 1rem; margin-bottom:0.75rem;"
+     aria-live="polite">
+    <strong>&#128221; Inclusive Pacing active</strong> &mdash;
+    You can start composing your response now, before the group timer begins.
+    Take the time you need.
+</div>
+<div id="vb-aac-banner"
+     style="display:none; background:#fffbeb; border:1px solid #fcd34d; border-radius:6px;
+            padding:0.75rem 1rem; margin-bottom:0.75rem;"
+     aria-live="polite">
+    <strong>&#128483;&#65039; Verbal discussion in progress</strong> &mdash;
+    The group has moved to a spoken conversation. Take your time &mdash;
+    your digital submission window is still open.
+    Continue composing and save when you&rsquo;re ready.
+</div>
+<div id="vb-group-banner"
+     style="display:none; background:#eff6ff; border:1px solid #93c5fd; border-radius:6px;
+            padding:0.75rem 1rem; margin-bottom:0.75rem;"
+     aria-live="polite">
+    <strong>&#128172; Verbal discussion in progress</strong> &mdash;
+    Join the spoken conversation with your group.
+    AAC participants are still composing their digital responses.
+</div>
+
+<h2>Your response</h2>
+
+<!-- Buffer autosave anchor — session_autosave.js reads data-buffer-url to
+     know where to POST in-progress form state every few seconds. -->
+<div id="session-buffer"
+     data-buffer-url="{% url 'tools:session_buffer_save' session.id %}"></div>
+
+{% if form %}
+<form method="post"
+      data-disable-on-submit
+      data-loading-text="Saving&hellip;">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+    <p class="non-field-errors">{{ form.non_field_errors|join:" " }}</p>
+    {% endif %}
+    {% if tool_meta.show_canvas %}
+        {% for field in form %}
+            {% if field.name == 'canvas_data' %}
+                {% include "tools/_drawing_canvas.html" %}
+                {{ field }}
+            {% elif field.is_hidden %}
+                {{ field }}
+            {% elif field.name == 'mood' %}
+                <fieldset class="expressive-fieldset">
+                    <legend>{{ field.label }}</legend>
+                    {{ field }}
+                    {% if field.errors %}<span id="{{ field.auto_id }}-error" class="field-error">{{ field.errors|join:", " }}</span>{% endif %}
+                </fieldset>
+            {% else %}
+                <p>{{ field.label_tag }} {{ field }}
+                {% if field.errors %}<span id="{{ field.auto_id }}-error" class="field-error">{{ field.errors|join:", " }}</span>{% endif %}
+                </p>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        {% for field in form %}
+            {% if field.is_hidden %}
+                {{ field }}
+            {% else %}
+                <div style="margin-bottom:1.25rem;">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.errors %}<p id="{{ field.auto_id }}-error" class="field-error">{{ field.errors|join:", " }}</p>{% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+        <button type="submit" class="btn btn-primary">Save my response</button>
+        <span id="buffer-status"
+              style="font-size:0.8rem; color:#64748b;"
+              aria-live="polite"></span>
+    </div>
+</form>
+{% else %}
+<p><em>This tool has no input form configured yet.</em></p>
+{% endif %}
+
+<!-- ── Multimedia Input Bridge ── -->
+{{ instance.attachments|json_script:"mmi-existing-attachments" }}
+<div class="mmi-panel"
+     data-upload-url="{% url 'tools:session_attachment_upload' session.id %}"
+     data-remove-url="{% url 'tools:session_attachment_remove' session.id %}">
+    <p class="mmi-panel__heading">Add to your response</p>
+    <div class="mmi-mode-row" role="group" aria-label="Input method">
+        <button type="button" class="btn mmi-mode-btn" aria-pressed="true" data-mode="text">
+            &#128221;&nbsp;Text
+        </button>
+        <button type="button" class="btn mmi-mode-btn" aria-pressed="false" data-mode="audio">
+            &#127908;&nbsp;Audio
+        </button>
+        <button type="button" class="btn mmi-mode-btn" aria-pressed="false" data-mode="image">
+            &#128444;&nbsp;Image
+        </button>
+    </div>
+    <div class="mmi-audio-controls" hidden>
+        <button type="button" class="btn mmi-record-btn">&#9679;&nbsp;Start Recording</button>
+        <span class="mmi-record-timer" hidden>0:00</span>
+        <p class="mmi-audio-hint">Speak, or play your speech-generating device close to the microphone.</p>
+    </div>
+    <div class="mmi-image-controls" hidden>
+        <label class="mmi-image-label" for="mmi-image-input">Choose image or screenshot</label>
+        <input type="file" id="mmi-image-input" class="mmi-image-input"
+               accept="image/*"
+               aria-label="Upload a symbol board screenshot or photograph">
+        <p class="mmi-image-hint">Accepted: PNG, JPG, WebP, GIF &mdash; max 10&nbsp;MB</p>
+    </div>
+    <div class="mmi-uploading" hidden aria-live="polite">Uploading&hellip;</div>
+    <p class="mmi-error" hidden role="alert"></p>
+    <ul class="mmi-attachments" aria-label="Uploaded attachments"></ul>
+</div>
+
+<div class="sr-only" aria-live="polite" aria-atomic="true" id="session-announcer"
+     data-status-url="{% url 'tools:session_status' session.id %}"></div>
+
+<!-- ── AAC Composition Presence Flag ── -->
+<div id="aac-presence"
+     data-composing-url="{% url 'tools:session_mark_composing' session.id %}"
+     style="margin-top:1.5rem; padding:1rem 1.25rem;
+            background:#fffbeb; border:1px solid #fcd34d; border-radius:6px;">
+    <p style="margin:0 0 0.3rem; font-size:0.9rem; font-weight:600; color:#92400e;">
+        Using external composition software? (AAC, Grid&nbsp;3, etc.)
+    </p>
+    <p style="margin:0 0 0.75rem; font-size:0.82rem; color:#78350f; line-height:1.5;">
+        If you compose your response in a separate app, press the button so
+        the host knows you are working and will wait for you.
+    </p>
+    <button type="button"
+            id="aac-composing-btn"
+            aria-pressed="false"
+            style="padding:0.55rem 1.1rem; background:#d97706; color:#fff;
+                   border:none; border-radius:5px; font-size:0.9rem;
+                   cursor:pointer; font-family:inherit; font-weight:600;">
+        &#128483;&#65039; I&rsquo;m Composing
+    </button>
+    <span id="aac-composing-status"
+          aria-live="polite"
+          style="display:inline-block; margin-left:0.75rem;
+                 font-size:0.82rem; color:#92400e;"></span>
+</div>
+
+<p style="margin-top:1.5rem; color:#64748b;">
+    The host will close the session when everyone is done.
+    This page will refresh automatically once that happens.
+</p>
+
+<!-- ── Session-closed waiting overlay ──
+     Hidden until guest_poll.js detects data.status === 'closed'.
+     Shown instead of an abrupt page reload so participants see a calm
+     holding state while the facilitator prepares the next steps. -->
+<div id="session-waiting-overlay"
+     class="session-waiting-overlay"
+     hidden
+     role="status"
+     aria-live="assertive"
+     aria-label="Session closed — waiting for host to share results">
+    <div class="swl-card">
+        <div class="swl-dots" aria-hidden="true">
+            <span></span><span></span><span></span>
+        </div>
+        <p class="swl-saved-badge" aria-hidden="true">
+            &#10003;&nbsp;Response saved
+        </p>
+        <h2 class="swl-heading">Session closed</h2>
+        <p class="swl-body">
+            The host is reviewing your results.<br>
+            They&rsquo;ll be shared with you in a moment.
+        </p>
+        <a id="swl-view-btn" href="#" class="btn btn-primary swl-btn" hidden>
+            View results &rarr;
+        </a>
+        <p class="swl-hint">This page will update automatically.</p>
+    </div>
+</div>
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+/* Write the guest's chosen name to sessionStorage so it can pre-fill the
+   nickname screen if this browser joins another session later. */
+(function () {
+    try {
+        sessionStorage.setItem('kwacart_guest_name', '{{ instance.guest_name|escapejs }}');
+    } catch (_) { /* sessionStorage unavailable */ }
+}());
+</script>
+<script src="{% static 'js/timer.js' %}"></script>
+<script src="{% static 'js/activity_feedback.js' %}"></script>
+{% if tool_meta.show_canvas %}<script src="{% static 'js/drawing_canvas.js' %}"></script>{% endif %}
+<!-- draft_init.js provides getCookie() and adds .tool-input to form fields,
+     both required by session_autosave.js. Load before the autosave script. -->
+<script src="{% static 'js/draft_init.js' %}"></script>
+<script src="{% static 'js/session_autosave.js' %}"></script>
+<script src="{% static 'js/session_composing.js' %}"></script>
+<script src="{% static 'js/guest_poll.js' %}"></script>
+<script src="{% static 'js/multimedia_input.js' %}"></script>
+{% endblock %}

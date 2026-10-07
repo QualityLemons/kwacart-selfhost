@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+<body>
+    {% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <header class="catalog-header">
+        <h1>Tool Bank</h1>
+        <p>Select a tool to start a new draft.</p>
+    </header>
+
+    {% for category, tools in categories.items %}
+    <section class="tool-category">
+        <h2 class="category-title">{{ category }}</h2>
+        <div class="tool-grid">
+            {% for tool in tools %}
+            <div class="tool-card">
+                <div class="tool-icon">
+                    <i class="icon-{{ tool.icon }}"></i>
+                </div>
+                <h3>{{ tool.title }}</h3>
+                <p>{{ tool.description|default:"Standard processing tool." }}</p>
+                
+                <div class="card-actions">
+                    <a href="{% url 'tools:draft_new' tool.slug %}" class="btn btn-primary">
+                        Start New
+                    </a>
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </section>
+    {% endfor %}
+</div>
+{% endblock %}
+</body>
+</html>

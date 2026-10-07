@@ -1,0 +1,117 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}My Archive{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/archive_md_preview.css' %}">
+{% endblock %}
+
+{% block content %}
+<h1>My Archive</h1>
+
+<h2 style="margin-top:1.5rem;">Solo submissions</h2>
+{% if records %}
+    <table style="width:100%; border-collapse: collapse; table-layout:fixed;">
+        <caption class="sr-only">Your solo submissions</caption>
+        <colgroup>
+            <col style="width:42%"><col style="width:23%"><col style="width:13%"><col style="width:22%">
+        </colgroup>
+        <thead>
+            <tr style="text-align:left; border-bottom:1px solid #e2e8f0;">
+                <th scope="col">Tool</th><th scope="col">Submitted</th><th scope="col">Version</th><th scope="col"><span class="sr-only">Actions</span></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for r in records %}
+            <tr style="border-bottom:1px solid #f1f5f9;">
+                <td style="word-break:break-word; overflow-wrap:anywhere; padding:0.4rem 0.25rem 0.4rem 0;">{{ r.tool_slug }}</td>
+                <td style="padding:0.4rem 0.25rem;">{{ r.submitted_at|date:"Y-m-d H:i" }}</td>
+                <td style="padding:0.4rem 0.25rem;">{{ r.tool_version }}</td>
+                <td style="padding:0.4rem 0; display:flex; gap:0.75rem; align-items:center; flex-wrap:wrap;">
+                    <a href="{% url 'archive:detail' r.id %}"
+                       aria-label="View {{ r.tool_slug }} submission from {{ r.submitted_at|date:'Y-m-d' }}">View</a>
+                    {% if r.md_file %}
+                    <button type="button" class="mdv-preview-btn"
+                            data-preview-url="{% url 'archive:md_preview' r.id %}"
+                            data-download-url="{% url 'archive:download' r.id 'md' %}"
+                            data-title="{{ r.tool_slug }} &mdash; {{ r.submitted_at|date:'Y-m-d' }}"
+                            aria-label="Preview Markdown for {{ r.tool_slug }} from {{ r.submitted_at|date:'Y-m-d' }}">
+                        Preview
+                    </button>
+                    {% endif %}
+                    <form method="post" action="{% url 'archive:delete' r.id %}"
+                          onsubmit="return confirm('Permanently delete this record?')">
+                        {% csrf_token %}
+                        <button type="submit"
+                                aria-label="Delete {{ r.tool_slug }} submission from {{ r.submitted_at|date:'Y-m-d' }}"
+                                style="background:none; border:none; padding:0; cursor:pointer;
+                                       color:#dc2626; font-size:inherit; font-family:inherit;
+                                       text-decoration:underline;">
+                            Delete
+                        </button>
+                    </form>
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>No solo submissions yet.</p>
+{% endif %}
+
+<h2 style="margin-top:2rem;">Sessions I'm part of</h2>
+{% if sessions %}
+    <table style="width:100%; border-collapse: collapse; table-layout:fixed;">
+        <caption class="sr-only">Sessions you are part of</caption>
+        <colgroup>
+            <col style="width:22%"><col style="width:13%"><col style="width:10%">
+            <col style="width:20%"><col style="width:20%"><col style="width:15%">
+        </colgroup>
+        <thead>
+            <tr style="text-align:left; border-bottom:1px solid #e2e8f0;">
+                <th scope="col">Tool</th><th scope="col">Role</th><th scope="col">Status</th><th scope="col">Started</th><th scope="col">Closed</th><th scope="col"><span class="sr-only">Actions</span></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for s in sessions %}
+            <tr style="border-bottom:1px solid #f1f5f9;">
+                <td style="word-break:break-word; overflow-wrap:anywhere; padding:0.4rem 0.25rem 0.4rem 0;">{{ s.tool_slug }}</td>
+                <td style="padding:0.4rem 0.25rem;">{% if s.host_id == user.id %}Host{% else %}Participant{% endif %}</td>
+                <td style="padding:0.4rem 0.25rem;">
+                    {% if s.status == 'open' %}
+                        <span style="color:#40B0A6;">Open</span>
+                    {% else %}
+                        <span style="color:#64748b;">Closed</span>
+                    {% endif %}
+                </td>
+                <td style="padding:0.4rem 0.25rem;">{{ s.created_at|date:"Y-m-d H:i" }}</td>
+                <td style="padding:0.4rem 0.25rem;">{% if s.closed_at %}{{ s.closed_at|date:"Y-m-d H:i" }}{% else %}—{% endif %}</td>
+                <td style="padding:0.4rem 0; display:flex; gap:0.75rem; align-items:center; flex-wrap:wrap;">
+                    <a href="{% url 'tools:session_detail' s.id %}"
+                       aria-label="Open {{ s.tool_slug }} session from {{ s.created_at|date:'Y-m-d' }}">Open</a>
+                    {% if s.md_file %}
+                    <button type="button" class="mdv-preview-btn"
+                            data-preview-url="{% url 'archive:session_md_preview' s.id %}"
+                            data-download-url="{% url 'archive:session_download' s.id 'md' %}"
+                            data-title="{{ s.tool_slug }} session &mdash; {{ s.closed_at|date:'Y-m-d' }}"
+                            aria-label="Preview Markdown for {{ s.tool_slug }} session from {{ s.closed_at|date:'Y-m-d' }}">
+                        Preview
+                    </button>
+                    {% endif %}
+                </td>
+            </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+{% else %}
+    <p>You aren't part of any sessions yet. Start one from the <a href="{% url 'tools:catalog' %}">tool catalog</a>.</p>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/libraries/marked.min.js' %}"></script>
+<script src="{% static 'js/libraries/purify.min.js' %}"></script>
+<script src="{% static 'js/archive_md_preview.js' %}"></script>
+{% endblock %}

@@ -1,0 +1,260 @@
+/* ── Timer widget ── */
+.timer-widget {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding: 0.6rem 0.9rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    background: #f8fafc;
+    margin: 0.5rem 0 1rem;
+    flex-wrap: wrap;
+}
+
+/* ── Phase info (multi-phase tools) ── */
+.timer-phase-info {
+    display: flex;
+    flex-direction: column;
+    gap: 0.15rem;
+    min-width: 14rem;
+}
+.timer-phase-label {
+    font-weight: 600;
+    color: #1e40af;
+    font-size: 0.95rem;
+    transition: background 0.3s;
+}
+.timer-phase-label.phase-flash {
+    background: #fef9c3;
+    border-radius: 3px;
+    padding: 0 0.2rem;
+}
+.timer-phase-progress { font-size: 0.78rem; color: #64748b; }
+
+/* ── Time display ── */
+.timer-display {
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 1.4rem;
+    min-width: 4ch;
+    color: #2a4d69;
+    font-weight: 600;
+}
+.timer-display.warning { color: #b45309; }
+.timer-display.expired { color: #b91c1c; }
+
+/* ── Controls ── */
+.timer-controls { display: flex; gap: 0.4rem; }
+
+/* ── Phase progress bar ── */
+.phase-progress-bar {
+    display: flex;
+    width: 100%;
+    gap: 3px;
+    margin-top: 0.35rem;
+    border-radius: 4px;
+    overflow: hidden;
+    flex-basis: 100%;
+    min-width: 0;
+}
+.phase-segment {
+    height: 8px;
+    border-radius: 3px;
+    transition: background 0.4s;
+    position: relative;
+    flex-shrink: 0;
+    overflow: hidden;
+}
+.phase-segment.done { background: #3b82f6; }
+.phase-segment.active { background: #bfdbfe; box-shadow: 0 0 0 2px #bfdbfe; }
+.phase-segment.upcoming { background: #94a3b8; }
+.phase-segment-fill {
+    position: absolute;
+    top: 0;
+    left: 0;
+    height: 100%;
+    background: #1d4ed8;
+    border-radius: 3px;
+    transition: width 0.95s linear;
+}
+
+/* ── Screen-reader utility (duplicated here for partial isolation) ── */
+.sr-only {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+}
+
+/* ── Paused badge ── */
+.timer-paused-badge {
+    display: inline-block;
+    font-size: 0.78rem;
+    font-style: italic;
+    color: #475569;
+    background: #f1f5f9;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    padding: 0.15rem 0.5rem;
+    letter-spacing: 0.02em;
+}
+.timer-paused-badge[hidden] { display: none; }
+.timer-paused-badge.long-paused {
+    color: #92400e;
+    background: #fef3c7;
+    border-color: #fcd34d;
+    font-weight: 600;
+}
+
+/* ── Stale/out-of-sync badge ── */
+.timer-stale-badge {
+    display: inline-block;
+    font-size: 0.75rem;
+    color: #92400e;
+    background: #fef3c7;
+    border: 1px solid #fcd34d;
+    border-radius: 4px;
+    padding: 0.15rem 0.5rem;
+    letter-spacing: 0.02em;
+}
+.timer-stale-badge[hidden] { display: none; }
+
+/* ── Reconnect toast ── */
+.timer-reconnect-toast {
+    display: inline-block;
+    font-size: 0.75rem;
+    color: #166534;
+    background: #dcfce7;
+    border: 1px solid #86efac;
+    border-radius: 4px;
+    padding: 0.15rem 0.5rem;
+    letter-spacing: 0.02em;
+    animation: timer-reconnect-fadein 0.3s ease;
+}
+.timer-reconnect-toast[hidden] { display: none; }
+
+@keyframes timer-reconnect-fadein {
+    from { opacity: 0; transform: translateY(-3px); }
+    to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Calm timer block ── */
+/* A large, static colour panel that shifts green → amber → red as time
+   elapses. No ticking numbers. The 20-second CSS transition makes the colour
+   drift gradually so there is no per-second visual jump. The a11y theme
+   overrides this to 0.001ms so zero-motion users see instant discrete steps
+   instead. */
+.calm-block {
+    flex-basis: 100%;
+    width: 100%;
+    min-height: 5rem;
+    border-radius: 6px;
+    background-color: #16a34a;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: background-color 20s linear;
+    margin: 0.1rem 0;
+}
+.calm-block[hidden] { display: none; }
+
+.calm-block__label {
+    margin: 0;
+    color: #fff;
+    font-weight: 700;
+    font-size: 0.85rem;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    text-shadow: 0 1px 3px rgba(0, 0, 0, 0.35);
+    user-select: none;
+}
+
+/* ── Calm timer toggle row ── */
+.calm-timer-toggle-row {
+    flex-basis: 100%;
+    display: flex;
+    align-items: center;
+    padding-top: 0.4rem;
+    margin-top: 0.15rem;
+    border-top: 1px solid #e2e8f0;
+}
+
+.calm-timer-toggle {
+    font-size: 0.78rem;
+    padding: 0.25rem 0.65rem;
+    color: #475569;
+    border-color: #94a3b8;
+    background: #f8fafc;
+    min-height: auto;
+}
+.calm-timer-toggle[aria-pressed="true"] {
+    background: #f0fdf4;
+    border-color: #166534;
+    color: #166534;
+    font-weight: 600;
+}
+
+/* ── Inclusive Pacing / extended personal timer panel ── */
+/* Sits below the timer widget for non-host participants. Hidden until the
+   host enables inclusive pacing; timer.js shows/hides it via the status poll. */
+.ext-timer-panel {
+    border: 1px solid #86efac;
+    border-radius: 6px;
+    background: #f0fdf4;
+    padding: 0.7rem 1rem;
+    margin-top: 0.4rem;
+    color: #166534;
+}
+.ext-timer-panel[hidden] { display: none; }
+
+.ext-timer-panel__intro {
+    margin: 0 0 0.6rem;
+    font-size: 0.875rem;
+    font-weight: 600;
+    line-height: 1.5;
+    color: #15803d;
+}
+
+.ext-timer-activate {
+    font-size: 0.8rem;
+    padding: 0.3rem 0.7rem;
+    background: #f0fdf4;
+    border-color: #166534;
+    color: #166534;
+    min-height: auto;
+}
+.ext-timer-activate[aria-pressed="true"] {
+    background: #166534;
+    color: #fff;
+    border-color: #166534;
+}
+
+.ext-timer-running {
+    margin-top: 0.7rem;
+    padding-top: 0.6rem;
+    border-top: 1px solid #86efac;
+}
+.ext-timer-running[hidden] { display: none; }
+
+.ext-timer-running__label {
+    margin: 0 0 0.25rem;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: #15803d;
+}
+
+.ext-timer-display {
+    font-family: ui-monospace, Menlo, monospace;
+    font-size: 2.2rem;
+    font-weight: 700;
+    color: #166534;
+    letter-spacing: 0.04em;
+    line-height: 1.15;
+}
+.ext-timer-display.ext-expired { color: #92400e; }

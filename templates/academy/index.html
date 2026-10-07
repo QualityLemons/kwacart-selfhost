@@ -1,0 +1,63 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Academy | KwaCart{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/academy.css' %}">{% endblock %}
+{% block content %}
+<div class="academy-shell">
+    <section class="academy-hero" aria-labelledby="academy-title">
+        <p class="academy-kicker">KwaCart Academy</p>
+        {% if authenticated %}
+            <h1 id="academy-title">A little closer to your next confident session.</h1>
+            <p class="academy-intro">This is your practical facilitation pathway: short guidance, a clear action, and room to learn as you go.</p>
+            <div class="academy-progress" aria-label="Your Academy progress">
+                <p>{{ completed_count }} of {{ total_count }} lessons complete</p><p>{{ percent }}% complete</p>
+                <div class="academy-progress-meter" role="progressbar" aria-valuemin="0" aria-valuemax="100" aria-valuenow="{{ percent }}" aria-label="{{ percent }} percent complete"><span style="width: {{ percent }}%"></span></div>
+            </div>
+        {% else %}
+            <h1 id="academy-title">A steadier way to begin facilitating.</h1>
+            <p class="academy-intro">Small, useful steps for the moments before you invite people in. Read a little, try one thing, then come back when you are ready.</p>
+            <div class="academy-hero-actions">
+                <a class="academy-button" href="{% url 'accounts:signup' %}?next={% url 'academy_dashboard' %}">Register to save progress <span aria-hidden="true">→</span></a>
+                <a class="academy-secondary-link" href="{% url 'accounts:login' %}?next={% url 'academy_dashboard' %}">Log in to resume</a>
+                <a class="academy-text-link" href="#pathway">Explore the pathway</a>
+            </div>
+        {% endif %}
+    </section>
+
+    {% if authenticated %}
+    <section class="academy-dashboard-grid" aria-label="Your next Academy step">
+        {% if is_complete %}
+            <div class="academy-current">
+                <p class="academy-overline">Pathway complete</p>
+                <h2>You made the practice your own.</h2>
+                <p>Every completed step is a resource for the next group you bring together. Keep building confidence through manageable practice.</p>
+                <div class="academy-next-actions">
+                    <a class="academy-button" href="{% url 'tools:pathway_finder' %}">Plan your next session <span aria-hidden="true">→</span></a>
+                    <a class="academy-secondary-link" href="{% url 'tools:catalog' %}?mode=solo">Practise another structure</a>
+                </div>
+            </div>
+        {% elif next_lesson %}
+            <div class="academy-current"><p class="academy-overline">Your next small step</p><h2>{{ next_lesson.title }}</h2><p>{{ next_lesson.summary }}</p><p><a class="academy-button" href="{{ next_lesson.url }}">Continue this lesson <span aria-hidden="true">→</span></a></p></div>
+        {% endif %}
+        <aside class="academy-finish"><p class="academy-overline">Keep it practical</p><h2>One thing is enough.</h2><p>There is no test here. Take the next action that feels possible in your real context.</p></aside>
+    </section>
+    {% endif %}
+
+    <section class="academy-section" id="pathway" aria-labelledby="pathway-title">
+        <p class="academy-kicker">The pathway</p>
+        <h2 class="academy-section-title" id="pathway-title">{% if authenticated %}Your lessons{% else %}Start where you are{% endif %}</h2>
+        <p class="academy-section-lede">Each lesson takes a few minutes, then points you towards one practical move in KwaCart.</p>
+        <div class="academy-pathway">
+            {% for item in lessons %}
+            <article class="academy-lesson {% if item.completed %}is-complete{% endif %}">
+                <div class="academy-lesson-number" aria-label="Lesson {{ item.number }}{% if item.completed %}, completed{% endif %}">{% if item.completed %}<span aria-hidden="true">✓</span>{% else %}{{ item.number }}{% endif %}</div>
+                <div><h3>{{ item.title }}</h3><p>{{ item.summary }}</p><span class="academy-lesson-meta">{{ item.duration }} {% if item.completed %}<span class="academy-complete-label">Completed</span>{% endif %}</span></div>
+                <a class="academy-lesson-link" href="{{ item.url }}">{% if item.completed %}Review {{ item.title }}{% else %}Open {{ item.title }}{% endif %} <span aria-hidden="true">→</span></a>
+            </article>
+            {% empty %}
+            <p class="academy-section-lede">The Academy pathway is being prepared. Please check back shortly.</p>
+            {% endfor %}
+        </div>
+    </section>
+</div>
+{% endblock %}

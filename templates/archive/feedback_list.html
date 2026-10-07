@@ -1,0 +1,22 @@
+{% extends "base.html" %}
+{% block title %}Feedback inbox — Staff{% endblock %}
+{% block content %}
+<div class="feedback-shell">
+  <p><a href="{% url 'archive:knowledge_bank' %}">← Knowledge Bank</a></p>
+  <h1>Feedback inbox</h1>
+  <p class="feedback-meta">{{ count }} response{{ count|pluralize }} · private staff view</p>
+  <form class="feedback-filter" method="get" aria-label="Filter feedback">
+    <label>Search <input type="search" name="q" value="{{ query }}" placeholder="Title, description, contact or tool"></label>
+    <label>Type <select name="type"><option value="">All types</option><option value="feature" {% if selected_type == "feature" %}selected{% endif %}>Feature</option><option value="bug" {% if selected_type == "bug" %}selected{% endif %}>Bug</option><option value="experience" {% if selected_type == "experience" %}selected{% endif %}>Experience</option><option value="rating" {% if selected_type == "rating" %}selected{% endif %}>Rating</option></select></label>
+    <label>Status <select name="status"><option value="">All statuses</option><option value="new" {% if selected_status == "new" %}selected{% endif %}>New</option><option value="reviewing" {% if selected_status == "reviewing" %}selected{% endif %}>Reviewing</option><option value="planned" {% if selected_status == "planned" %}selected{% endif %}>Planned</option><option value="resolved" {% if selected_status == "resolved" %}selected{% endif %}>Resolved</option><option value="closed" {% if selected_status == "closed" %}selected{% endif %}>Closed</option></select></label>
+    <label>Source <select name="source"><option value="">All sources</option><option value="portal" {% if selected_source == "portal" %}selected{% endif %}>Portal</option><option value="tool_completion" {% if selected_source == "tool_completion" %}selected{% endif %}>Tool completion</option><option value="session_end" {% if selected_source == "session_end" %}selected{% endif %}>Session end</option><option value="knowledge_bank" {% if selected_source == "knowledge_bank" %}selected{% endif %}>Knowledge Bank</option></select></label>
+    <button class="btn btn-primary" type="submit">Apply</button>
+    {% if query or selected_type or selected_status or selected_source %}<a class="feedback-clear-filter" href="{% url 'archive:feedback_inbox' %}">Clear filters</a>{% endif %}
+  </form>
+  {% if feedbacks %}
+  <div class="feedback-table-wrap"><table class="feedback-table"><caption class="sr-only">Private feedback responses</caption><thead><tr><th>Received</th><th>Feedback</th><th>Type</th><th>Status</th><th>Source</th></tr></thead><tbody>
+  {% for item in feedbacks %}<tr><td><a href="{% url 'archive:feedback_detail' item.pk %}">{{ item.submitted_at|date:"Y-m-d H:i" }}</a></td><td><strong>{{ item.title|default:"Untitled feedback" }}</strong><br><span class="feedback-meta">{{ item.description|truncatewords:18 }}</span></td><td>{{ item.get_feedback_type_display|default:item.feedback_type }}</td><td><span class="feedback-status">{{ item.get_review_status_display|default:item.review_status }}</span></td><td>{{ item.get_source_display|default:item.source }}</td></tr>{% endfor %}
+  </tbody></table></div>
+  {% else %}<div class="feedback-panel"><p>No feedback matches these filters.</p><p class="feedback-meta">Try clearing a filter, or check back after people have had a chance to respond.</p></div>{% endif %}
+</div>
+{% endblock %}

@@ -1,0 +1,14 @@
+{% extends "base.html" %}
+{% block title %}Feedback response — Staff{% endblock %}
+{% block content %}
+<div class="feedback-shell">
+  <p><a href="{% url 'archive:feedback_inbox' %}">← Feedback inbox</a></p>
+  <div class="feedback-hero"><h1>{{ feedback.title|default:"Feedback response" }}</h1><p class="feedback-meta">Received {{ feedback.submitted_at|date:"Y-m-d H:i" }}</p></div>
+  <div class="feedback-detail-grid">
+    <section class="feedback-panel" aria-labelledby="response-heading"><h2 id="response-heading">Response</h2><dl><dt>Type</dt><dd>{{ feedback.get_feedback_type_display|default:feedback.feedback_type }}</dd><dt>Rating</dt><dd>{% if feedback.rating %}{{ feedback.rating }} / 5{% else %}Not provided{% endif %}</dd><dt>Description</dt><dd class="feedback-longtext">{{ feedback.description }}</dd></dl></section>
+    <aside class="feedback-panel" aria-labelledby="context-heading"><h2 id="context-heading">Private context</h2><dl><dt>Submitter</dt><dd>{{ feedback.submitter|default:"Anonymous" }}</dd><dt>Email</dt><dd>{{ feedback.email|default:"Not provided" }}</dd><dt>Source</dt><dd>{{ feedback.get_source_display|default:feedback.source }}</dd><dt>Tool</dt><dd>{{ feedback.tool_slug|default:"Not specified" }}</dd><dt>Interaction mode</dt><dd>{{ feedback.interaction_mode|default:"Not specified" }}</dd><dt>Reviewed</dt><dd>{{ feedback.reviewed_at|date:"Y-m-d H:i"|default:"Not reviewed" }}</dd></dl></aside>
+  </div>
+  <section class="feedback-panel feedback-status-panel" aria-labelledby="status-heading"><h2 id="status-heading">Review status</h2><form method="post" action="{% url 'archive:feedback_status' feedback.pk %}">{% csrf_token %}<label for="review-status">Set status</label><select id="review-status" name="review_status"><option value="new" {% if feedback.review_status == "new" %}selected{% endif %}>New</option><option value="reviewing" {% if feedback.review_status == "reviewing" %}selected{% endif %}>Reviewing</option><option value="planned" {% if feedback.review_status == "planned" %}selected{% endif %}>Planned</option><option value="resolved" {% if feedback.review_status == "resolved" %}selected{% endif %}>Resolved</option><option value="closed" {% if feedback.review_status == "closed" %}selected{% endif %}>Closed</option></select><div class="feedback-actions"><button class="btn btn-primary" type="submit">Save status</button></div></form></section>
+  <div class="feedback-confirm"><details><summary>Delete this response</summary><p class="feedback-meta">This permanently removes the private response.</p><form method="post" action="{% url 'archive:feedback_delete' feedback.pk %}" data-confirm="Delete this feedback response permanently?">{% csrf_token %}<button class="btn" type="submit">Delete permanently</button></form></details></div>
+</div>
+{% endblock %}

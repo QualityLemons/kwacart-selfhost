@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+
+{% block title %}Access denied — KwaCart{% endblock %}
+
+{% block content %}
+<div style="text-align:center; padding:4rem 1rem; max-width:38rem; margin:0 auto;">
+    <p style="font-size:5rem; margin:0; line-height:1; color:#5D3A9B;" aria-hidden="true">403</p>
+    <h1 style="margin:0.5rem 0 1rem;">Access denied</h1>
+    <p style="color:#64748b; margin-bottom:2rem;">
+        You don&rsquo;t have permission to view this page.
+        {% if not request.user.is_authenticated %}
+            Try logging in first.
+        {% endif %}
+    </p>
+    <div style="display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'tools:catalog' %}" class="btn btn-primary">All tools</a>
+            <a href="{% url 'archive:dashboard' %}" class="btn">My archive</a>
+        {% else %}
+            <a href="{% url 'accounts:login' %}" class="btn btn-primary">Log in</a>
+            <a href="{% url 'home' %}" class="btn">Home</a>
+        {% endif %}
+    </div>
+</div>
+{% endblock %}

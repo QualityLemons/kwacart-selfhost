@@ -1,0 +1,229 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}
+    {% if mode == 'solo' %}Work Solo{% elif mode == 'live' %}Facilitate a Group{% else %}Tools{% endif %}
+    &mdash; KwaCart
+{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/catalog_zones.css' %}">
+<link rel="stylesheet" href="{% static 'css/activity_remix.css' %}">
+{% endblock %}
+
+{% block content %}
+
+{% if mode == 'solo' %}
+
+<h1 class="sr-only">Work Solo — tool catalogue</h1>
+<div class="cz-banner cz-banner--solo" role="banner">
+    <span class="cz-banner__icon" aria-hidden="true">🧠</span>
+    <span class="cz-banner__title">Working Solo</span>
+    <span class="cz-banner__sep" aria-hidden="true">&middot;</span>
+    <span class="cz-banner__sub">Personal prep &amp; reflection — no time pressure</span>
+    <nav class="cz-banner__links" aria-label="Zone navigation">
+        <a href="{% url 'tools:catalog' %}?mode=live">Switch to Facilitate &rarr;</a>
+        <a href="{% url 'tools:catalog' %}">All tools</a>
+    </nav>
+</div>
+<p class="activity-guidance">
+    Looking for a different activity or access format?
+    <a href="{% url 'feedback' %}">Share private feedback</a>.
+</p>
+
+<a href="{% url 'tools:pathway_finder' %}" class="cz-pathway-promo">
+    <span class="cz-pathway-promo__icon" aria-hidden="true">🧭</span>
+    <span class="cz-pathway-promo__text">
+        <strong>Blaze your own trail</strong>
+        Get a customised LS pathway matched to your time, group size, and goals.
+    </span>
+    <span class="cz-pathway-promo__cta">Find my pathway &rarr;</span>
+</a>
+
+{% if recent_drafts %}
+<div class="cz-activity" aria-label="Your recent solo work">
+    <span class="cz-activity__label">Recent</span>
+    {% for draft in recent_drafts %}
+    <a href="{% url 'archive:detail' draft.id %}" class="cz-chip"
+       title="{{ draft.tool_slug }} &mdash; {{ draft.submitted_at|date:'j M Y' }}">
+        {{ draft.tool_slug }} &middot; {{ draft.submitted_at|date:"j M" }}
+    </a>
+    {% endfor %}
+    <a href="{% url 'archive:dashboard' %}" class="cz-chip" style="color:#94a3b8;">
+        All archive &rarr;
+    </a>
+</div>
+{% endif %}
+
+{% for category, tools in categories.items %}
+<section style="margin-bottom:2rem;">
+    <h2 style="font-size:1rem; text-transform:uppercase; letter-spacing:0.06em;
+               color:#64748b; font-weight:700; margin-bottom:0.75rem;">
+        {{ category }}
+    </h2>
+    <div class="tool-grid">
+        {% for tool in tools %}
+        <div class="tool-card tool-card--solo">
+            <h3 style="margin-top:0; margin-bottom:0.3rem;">{{ tool.title }}</h3>
+            <p style="font-size:0.85rem; color:#475569; margin:0 0 0.85rem; line-height:1.5;">
+                {{ tool.tagline|default:tool.what }}
+            </p>
+            <a href="{% url 'tools:draft_new' tool.slug %}" class="btn cz-btn-solo">
+                Start solo &rarr;
+            </a>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endfor %}
+
+
+{% elif mode == 'live' %}
+
+<h1 class="sr-only">Facilitate a Group — tool catalogue</h1>
+<div class="cz-banner cz-banner--live" role="banner">
+    <span class="cz-banner__icon" aria-hidden="true">👥</span>
+    <span class="cz-banner__title">Facilitating a Group</span>
+    <span class="cz-banner__sep" aria-hidden="true">&middot;</span>
+    <span class="cz-banner__sub">Start a live session &amp; invite your team</span>
+    <nav class="cz-banner__links" aria-label="Zone navigation">
+        <a href="{% url 'tools:catalog' %}?mode=solo">Switch to Solo &rarr;</a>
+        <a href="{% url 'tools:catalog' %}">All tools</a>
+    </nav>
+</div>
+<p class="activity-guidance">
+    Looking for a different activity or access format?
+    <a href="{% url 'feedback' %}">Share private feedback</a>.
+</p>
+
+<a href="{% url 'tools:pathway_finder' %}" class="cz-pathway-promo">
+    <span class="cz-pathway-promo__icon" aria-hidden="true">🧭</span>
+    <span class="cz-pathway-promo__text">
+        <strong>Blaze your own trail</strong>
+        Get a customised LS pathway matched to your time, group size, and goals.
+    </span>
+    <span class="cz-pathway-promo__cta">Find my pathway &rarr;</span>
+</a>
+
+{% if active_sessions %}
+<div class="cz-activity" aria-label="Your open sessions">
+    <span class="cz-activity__label">Open now</span>
+    {% for s in active_sessions %}
+    <a href="{% url 'tools:session_detail' s.id %}" class="cz-chip cz-chip--live"
+       title="{{ s.tool_slug }} &mdash; started {{ s.created_at|date:'j M H:i' }}">
+        {{ s.tool_slug }} &middot; {{ s.created_at|date:"j M H:i" }}
+    </a>
+    {% endfor %}
+</div>
+{% endif %}
+
+{% for category, tools in categories.items %}
+<section style="margin-bottom:2rem;">
+    <h2 style="font-size:1rem; text-transform:uppercase; letter-spacing:0.06em;
+               color:#64748b; font-weight:700; margin-bottom:0.75rem;">
+        {{ category }}
+    </h2>
+    <div class="tool-grid">
+        {% for tool in tools %}
+        <div class="tool-card tool-card--live">
+            <h3 style="margin-top:0; margin-bottom:0.3rem;">{{ tool.title }}</h3>
+            <p style="font-size:0.85rem; color:#475569; margin:0 0 0.85rem; line-height:1.5;">
+                {{ tool.tagline|default:tool.what }}
+            </p>
+            <form method="post" action="{% url 'tools:session_create' tool.slug %}"
+                  style="margin:0;"
+                  data-loading-text="Creating&hellip;">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-primary">Start session &rarr;</button>
+            </form>
+        </div>
+        {% endfor %}
+    </div>
+</section>
+{% endfor %}
+
+
+{% else %}
+
+<h1 style="margin-bottom:0.2rem;">Tools</h1>
+<p class="cz-intro">What are you here to do today?</p>
+<p class="activity-guidance">Looking for a different activity or access format? <a href="{% url 'feedback' %}">Share private feedback</a>.</p>
+
+<div class="cz-picker" role="group" aria-label="Choose your working mode">
+    <a href="{% url 'tools:catalog' %}?mode=solo" class="cz-pick-card cz-pick-card--solo">
+        <span class="cz-pick-icon" aria-hidden="true">🧠</span>
+        <strong class="cz-pick-title">Work Solo</strong>
+        <p class="cz-pick-body">
+            Use a tool at your own pace &mdash; reflect, prepare, and build personal
+            insights. Save drafts and download your results whenever you&rsquo;re ready.
+        </p>
+        <span class="cz-pick-cta">Enter Solo Zone &rarr;</span>
+    </a>
+    <a href="{% url 'tools:catalog' %}?mode=live" class="cz-pick-card cz-pick-card--live">
+        <span class="cz-pick-icon" aria-hidden="true">👥</span>
+        <strong class="cz-pick-title">Facilitate a Group</strong>
+        <p class="cz-pick-body">
+            Start a live session and invite your team to respond in real time.
+            Close the session when everyone is done to reveal the combined results.
+        </p>
+        <span class="cz-pick-cta">Enter Group Zone &rarr;</span>
+    </a>
+</div>
+
+{% if active_sessions %}
+<div class="cz-activity" style="margin-bottom:1.5rem;" aria-label="Your open sessions">
+    <span class="cz-activity__label">Open sessions</span>
+    {% for s in active_sessions %}
+    <a href="{% url 'tools:session_detail' s.id %}" class="cz-chip cz-chip--live">
+        {{ s.tool_slug }} &middot; {{ s.created_at|date:"j M H:i" }}
+    </a>
+    {% endfor %}
+</div>
+{% endif %}
+
+<a href="{% url 'tools:pathway_finder' %}" class="cz-pathway-promo" style="margin-bottom:1.5rem;">
+    <span class="cz-pathway-promo__icon" aria-hidden="true">🧭</span>
+    <span class="cz-pathway-promo__text">
+        <strong>Blaze your own trail</strong>
+        Get a customised LS pathway matched to your time, group size, and goals.
+    </span>
+    <span class="cz-pathway-promo__cta">Find my pathway &rarr;</span>
+</a>
+
+<details>
+    <summary class="cz-browse-toggle">Browse all tools without choosing a mode</summary>
+    <div style="margin-top:1.25rem;">
+        {% for category, tools in categories.items %}
+        <section style="margin-bottom:2rem;">
+            <h2 style="font-size:1rem; text-transform:uppercase; letter-spacing:0.06em;
+                       color:#64748b; font-weight:700; margin-bottom:0.75rem;">
+                {{ category }}
+            </h2>
+            <div class="tool-grid">
+                {% for tool in tools %}
+                <div class="tool-card">
+                    <h3 style="margin-top:0; margin-bottom:0.3rem;">{{ tool.title }}</h3>
+                    <p style="font-size:0.85rem; color:#475569; margin:0 0 0.85rem; line-height:1.5;">
+                        {{ tool.tagline|default:tool.what }}
+                    </p>
+                    <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                        <a href="{% url 'tools:draft_new' tool.slug %}" class="btn cz-btn-solo">
+                            Solo
+                        </a>
+                        <form method="post" action="{% url 'tools:session_create' tool.slug %}"
+                              style="margin:0;" data-loading-text="Creating&hellip;">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-primary">Session</button>
+                        </form>
+                    </div>
+                </div>
+                {% endfor %}
+            </div>
+        </section>
+        {% endfor %}
+    </div>
+</details>
+
+{% endif %}
+
+{% endblock %}

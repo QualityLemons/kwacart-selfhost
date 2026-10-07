@@ -1,0 +1,113 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Find a Pathway — KwaCart{% endblock %}
+
+{% block extra_css %}
+    <link rel="stylesheet" href="{% static 'css/pathway_finder.css' %}">
+{% endblock %}
+
+{% block content %}
+<div class="pathway-wrap">
+
+    <h1 style="font-size:1.9rem; font-weight:800; color:#1f2937; margin-bottom:0.25rem;">Find your LS pathway</h1>
+    <p style="color:#6b7280; margin-bottom:2rem;">Answer a few questions and we'll recommend the best Liberating Structures for your session.</p>
+
+    <!-- ── Step indicator ── -->
+    <div class="pathway-steps" aria-label="Progress" role="list">
+        <div class="pathway-step-dot active" role="listitem" aria-label="Step 1: Time">1</div>
+        <div class="pathway-step-line"></div>
+        <div class="pathway-step-dot" role="listitem" aria-label="Step 2: People">2</div>
+        <div class="pathway-step-line"></div>
+        <div class="pathway-step-dot" role="listitem" aria-label="Step 3: Format">3</div>
+        <div class="pathway-step-line"></div>
+        <div class="pathway-step-dot" role="listitem" aria-label="Step 4: Goals">4</div>
+        <div class="pathway-step-line"></div>
+        <div class="pathway-step-dot" role="listitem" aria-label="Step 5: Results">5</div>
+    </div>
+
+    <!-- ── Step 1: Time ── -->
+    <div class="pathway-panel active" id="pathway-step-1" aria-labelledby="q1-heading">
+        <h2 class="pathway-question" id="q1-heading">How much time do you have?</h2>
+        <p class="pathway-hint">Choose the total time available for the session.</p>
+        <div class="pathway-options" id="pathway-time-options">
+            <button class="pathway-option" data-value="20"  type="button">Up to 20 minutes</button>
+            <button class="pathway-option" data-value="30"  type="button">20 to 30 minutes</button>
+            <button class="pathway-option" data-value="45"  type="button">30 to 45 minutes</button>
+            <button class="pathway-option" data-value="60"  type="button">45 to 60 minutes</button>
+            <button class="pathway-option" data-value="120" type="button">1 to 2 hours</button>
+            <button class="pathway-option" data-value="240" type="button">Half a day</button>
+            <button class="pathway-option" data-value="480" type="button">A full day</button>
+        </div>
+    </div>
+
+    <!-- ── Step 2: People ── -->
+    <div class="pathway-panel" id="pathway-step-2" aria-labelledby="q2-heading">
+        <h2 class="pathway-question" id="q2-heading">How many people are attending?</h2>
+        <p class="pathway-hint">Include everyone who will take part, including the facilitator.</p>
+        <div class="pathway-options" id="pathway-people-options">
+            <button class="pathway-option" data-value="5"   type="button">2 to 5 people</button>
+            <button class="pathway-option" data-value="15"  type="button">6 to 15 people</button>
+            <button class="pathway-option" data-value="30"  type="button">16 to 30 people</button>
+            <button class="pathway-option" data-value="50"  type="button">31 to 50 people</button>
+            <button class="pathway-option" data-value="100" type="button">More than 50</button>
+        </div>
+    </div>
+
+    <!-- ── Step 3: Modality ── -->
+    <div class="pathway-panel" id="pathway-step-3" aria-labelledby="q3-heading">
+        <h2 class="pathway-question" id="q3-heading">Is the session in-person or virtual?</h2>
+        <p class="pathway-hint">Some structures work better in a room; others are fully remote-friendly.</p>
+        <div class="pathway-options" id="pathway-modality-options">
+            <button class="pathway-option" data-value="in-person" type="button">In-person</button>
+            <button class="pathway-option" data-value="virtual"   type="button">Virtual / online</button>
+            <button class="pathway-option" data-value="hybrid"    type="button">Hybrid</button>
+        </div>
+        <div class="pathway-nav">
+            <button class="pathway-btn pathway-btn-secondary" type="button" onclick="showStep(2)">Back</button>
+            <button class="pathway-btn pathway-btn-primary"   type="button" id="btn-to-goals">Next: pick your goals &rarr;</button>
+        </div>
+    </div>
+
+    <!-- ── Step 4: Goal circles ── -->
+    <div class="pathway-panel" id="pathway-step-4" aria-labelledby="q4-heading">
+        <div class="pathway-circles-intro">
+            <h2 class="pathway-question" id="q4-heading">
+                What do you want to achieve?
+                <span class="pathway-selected-count" id="pathway-circle-count" style="display:none;">0</span>
+            </h2>
+            <p class="pathway-hint">
+                Select as many as apply — tap a circle to choose it, tap the 🔊 button to hear it read aloud.
+            </p>
+        </div>
+
+        <div class="pathway-circles-grid" id="pathway-circles-grid" role="group" aria-label="Session goals"></div>
+
+        <div class="pathway-nav" style="margin-top:1.25rem;">
+            <button class="pathway-btn pathway-btn-secondary" type="button" id="btn-goals-back">Back</button>
+            <button class="pathway-btn pathway-btn-primary"   type="button" id="btn-find-pathway">Find my pathway &rarr;</button>
+        </div>
+    </div>
+
+    <!-- ── Step 5: Results ── -->
+    <div class="pathway-panel" id="pathway-step-5" aria-labelledby="results-heading">
+        <div class="pathway-results-header">
+            <h2 id="results-heading">Your recommended pathway</h2>
+            <p>These structures best match your session goals, time, and group size.</p>
+        </div>
+        <div class="pathway-result-cards" id="pathway-result-cards"></div>
+        <div class="pathway-nav" style="justify-content:space-between;">
+            <button class="pathway-btn pathway-btn-secondary" type="button" id="btn-results-back">Adjust goals</button>
+            <button class="pathway-btn pathway-btn-secondary" type="button" id="btn-start-over">Start over</button>
+        </div>
+    </div>
+
+</div>
+
+{% comment %}json_script encodes the dict safely — no HTML-escaping issues{% endcomment %}
+{{ tools_data|json_script:"pathway-tools-data" }}
+{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'js/pathway_finder.js' %}"></script>
+{% endblock %}

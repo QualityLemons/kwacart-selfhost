@@ -1,0 +1,193 @@
+.case-hero {
+    background: linear-gradient(145deg, #1e1040 0%, #5D3A9B 100%);
+    color: #fff;
+    padding: 4.5rem 1.5rem;
+}
+.case-hero__inner,
+.case-section,
+.case-band__inner,
+.case-cta {
+    max-width: 960px;
+    margin: 0 auto;
+}
+.case-back {
+    display: inline-block;
+    color: #e9d5ff;
+    font-weight: 600;
+    margin-bottom: 2rem;
+    text-underline-offset: 0.2em;
+}
+.case-eyebrow,
+.case-kicker {
+    color: #E1BE6A;
+    font-size: 0.78rem;
+    font-weight: 800;
+    letter-spacing: 0.08em;
+    margin-bottom: 0.65rem;
+    text-transform: uppercase;
+}
+.case-hero h1 {
+    font-size: clamp(2.2rem, 6vw, 4.25rem);
+    letter-spacing: -0.035em;
+    line-height: 1.04;
+    max-width: 850px;
+}
+.case-lead {
+    color: #ede9fe;
+    font-size: clamp(1.05rem, 2.5vw, 1.3rem);
+    line-height: 1.65;
+    margin-top: 1.5rem;
+    max-width: 720px;
+}
+.case-section {
+    padding: 4rem 1.5rem;
+}
+.case-section h2,
+.case-band h2,
+.case-cta h2 {
+    color: #0f172a;
+    font-size: clamp(1.65rem, 4vw, 2.4rem);
+    line-height: 1.2;
+    margin-bottom: 1rem;
+}
+.case-section p,
+.case-cta p {
+    color: #475569;
+    line-height: 1.75;
+}
+.case-summary {
+    display: grid;
+    gap: 3rem;
+    grid-template-columns: minmax(0, 1.5fr) minmax(220px, .7fr);
+}
+.case-facts {
+    background: #f8f5ff;
+    border: 1px solid #ddd6fe;
+    border-radius: 12px;
+    padding: 1.25rem 1.5rem;
+}
+.case-facts div {
+    border-bottom: 1px solid #e9e0ff;
+    padding: 0.85rem 0;
+}
+.case-facts div:last-child { border-bottom: 0; }
+.case-facts dt {
+    color: #64748b;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: .06em;
+    text-transform: uppercase;
+}
+.case-facts dd {
+    color: #1e293b;
+    font-weight: 700;
+    margin-top: .15rem;
+}
+.case-intro { max-width: 700px; }
+.perspective-grid {
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    margin-top: 2rem;
+}
+.perspective-grid article {
+    background: #f8fafc;
+    border-left: 4px solid #5D3A9B;
+    border-radius: 0 8px 8px 0;
+    padding: 1.25rem;
+}
+.perspective-grid h3 {
+    color: #1e293b;
+    font-size: 1rem;
+    margin-bottom: .4rem;
+}
+.perspective-grid p { font-size: .9rem; line-height: 1.6; }
+.case-band {
+    background: #f4effb;
+    padding: 4rem 1.5rem;
+}
+.case-band .case-kicker { color: #5D3A9B; }
+.theme-list {
+    display: grid;
+    gap: .75rem;
+    list-style: none;
+    margin-top: 1.75rem;
+    max-width: 760px;
+}
+.theme-list li {
+    color: #334155;
+    font-size: 1.02rem;
+    padding-left: 2rem;
+    position: relative;
+}
+.theme-list li::before {
+    color: #E66100;
+    content: "✓";
+    font-weight: 900;
+    left: 0;
+    position: absolute;
+}
+.case-outcome {
+    display: grid;
+    gap: 3rem;
+    grid-template-columns: minmax(0, 1.25fr) minmax(260px, .75fr);
+}
+.action-list { list-style: none; margin-top: 1.5rem; }
+.action-list li {
+    align-items: start;
+    border-top: 1px solid #e2e8f0;
+    display: grid;
+    gap: 1rem;
+    grid-template-columns: 2.4rem 1fr;
+    padding: 1rem 0;
+}
+.action-list span {
+    color: #5D3A9B;
+    font-size: .8rem;
+    font-weight: 800;
+}
+.case-outcome blockquote {
+    align-self: center;
+    background: #1e1040;
+    border-radius: 12px;
+    color: #fff;
+    padding: 2rem;
+}
+.case-outcome blockquote p {
+    color: #fff;
+    font-family: Georgia, "Times New Roman", serif;
+    font-size: 1.35rem;
+    line-height: 1.55;
+}
+.case-outcome blockquote footer {
+    color: #c4b5fd;
+    font-size: .85rem;
+    margin-top: 1.25rem;
+}
+.case-cta {
+    align-items: center;
+    display: flex;
+    gap: 2rem;
+    justify-content: space-between;
+    padding: 4rem 1.5rem;
+}
+.case-cta > div:first-child { max-width: 600px; }
+.case-cta__actions {
+    display: flex;
+    flex: 0 0 auto;
+    flex-wrap: wrap;
+    gap: .75rem;
+}
+@media (max-width: 760px) {
+    .case-summary,
+    .case-outcome { grid-template-columns: 1fr; }
+    .perspective-grid { grid-template-columns: 1fr 1fr; }
+    .case-cta { align-items: flex-start; flex-direction: column; }
+}
+@media (max-width: 520px) {
+    .case-hero { padding: 3rem 1.25rem; }
+    .case-section,
+    .case-band,
+    .case-cta { padding: 3rem 1.25rem; }
+    .perspective-grid { grid-template-columns: 1fr; }
+}

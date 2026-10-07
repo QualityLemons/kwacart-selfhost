@@ -1,0 +1,161 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>About — KwaCart</title>
+    <link rel="stylesheet" href="{% static 'css/about.css' %}">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+<header>
+    <nav class="nav" aria-label="Main navigation">
+        <a href="{% url 'home' %}" class="nav-brand kwacart-wordmark" aria-label="KwaCart home">KwaCart</a>
+        <span class="nav-spacer"></span>
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'tools:catalog' %}">All Tools</a>
+            <a href="{% url 'archive:dashboard' %}">My Archive</a>
+            <a href="{% url 'about' %}" style="font-weight:600;">About</a>
+            <a href="{% url 'accounts:logout' %}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+            <form id="logout-form" method="post" action="{% url 'accounts:logout' %}" style="display:none;">{% csrf_token %}</form>
+        {% else %}
+            <a href="{% url 'about' %}" style="font-weight:600;">About</a>
+            <a href="{% url 'accessibility' %}">Accessibility</a>
+            <a href="{% url 'self_hosting' %}">Self-host</a>
+            <a href="{% url 'accounts:login' %}">Log in</a>
+        {% endif %}
+    </nav>
+</header>
+
+<main id="main-content">
+
+<!-- ── Page hero ── -->
+<section class="page-hero">
+    <div class="page-hero-inner">
+        <h1>About <span>KwaCart</span></h1>
+        <p>A browser-based facilitation platform built around Liberating Structures — the participatory methods that help groups do their best thinking together.</p>
+    </div>
+</section>
+
+<!-- ── What is KwaCart ── -->
+<section class="section">
+    <h2>What is KwaCart?</h2>
+    <p>
+        KwaCart brings 23 Liberating Structures techniques to your browser. Whether you are running a retrospective, a strategy session, or a one-hour team check-in, each tool gives a room full of people a clear structure: who speaks when, for how long, and what happens with what they say.
+    </p>
+    <p>
+        The host shares a single link (or a QR code) with the room. Participants join from their own devices. A built-in timer moves the group through each phase, contributions are saved as people type, and when the session closes the host can download a structured Markdown or RTF summary.
+    </p>
+
+    <div class="stat-row">
+        <div class="stat">
+            <span class="stat-num">23</span>
+            <span class="stat-label">Liberating Structures tools</span>
+        </div>
+        <div class="stat">
+            <span class="stat-num">&#8734;</span>
+            <span class="stat-label">participants per session</span>
+        </div>
+        <div class="stat">
+            <span class="stat-num">2</span>
+            <span class="stat-label">tools free, no account needed</span>
+        </div>
+    </div>
+</section>
+
+<hr class="divider">
+
+<!-- ── What are Liberating Structures ── -->
+<section class="section">
+    <h2>What are <span>Liberating Structures</span>?</h2>
+    <p>
+        Liberating Structures are a set of 33 facilitation methods created by Henri Lipmanowicz and Keith McCandless. They are designed to replace the conventional meeting formats that concentrate participation — presentations, managed discussions, open brainstorms — with approaches that distribute it.
+    </p>
+
+    <div class="accent-block">
+        <p>"Liberating Structures include and unleash everyone." — Lipmanowicz &amp; McCandless</p>
+    </div>
+
+    <p>
+        Each structure specifies a precise sequence of moves: solo reflection, small-group exchange, full-group harvest. That sequence is what makes them reliable. A facilitator does not need to manage who speaks or steer the conversation toward a conclusion — the structure does that, and the group fills it with their own knowledge.
+    </p>
+
+    <div class="principle-grid">
+        <div class="principle-card">
+            <span class="icon" aria-hidden="true">🔵</span>
+            <h3>Structured, not controlled</h3>
+            <p>Clear constraints free participants to contribute fully — no one dominates, no one hides.</p>
+        </div>
+        <div class="principle-card">
+            <span class="icon" aria-hidden="true">🟡</span>
+            <h3>Small then large</h3>
+            <p>Ideas are formed in pairs or trios before being shared with the room, so every voice has been heard at least once.</p>
+        </div>
+        <div class="principle-card">
+            <span class="icon" aria-hidden="true">🟠</span>
+            <h3>Time-bounded</h3>
+            <p>Strict timing stops the session from collapsing into the longest monologue. Everyone knows how long they have.</p>
+        </div>
+        <div class="principle-card">
+            <span class="icon" aria-hidden="true">🟣</span>
+            <h3>Emergent output</h3>
+            <p>The facilitator does not decide the outcome. The content comes entirely from the participants.</p>
+        </div>
+    </div>
+</section>
+
+<hr class="divider">
+
+<!-- ── The tools ── -->
+<section class="section">
+    <h2>The <span>23 tools</span> on KwaCart</h2>
+    <p>
+        KwaCart implements 23 of the 33 Liberating Structures, chosen to cover the full range of facilitation needs: opening a session, generating ideas, setting priorities, making decisions, closing with action. Examples include:
+    </p>
+    <ul style="margin: 0.75rem 0 1rem 1.25rem; color: #334155; display: flex; flex-direction: column; gap: 0.4rem;">
+        <li><strong>1-2-4-All</strong> — the classic structure for rapidly surfacing ideas from the whole room</li>
+        <li><strong>TRIZ</strong> — use anti-goals to reveal what is actually blocking progress</li>
+        <li><strong>What, So What, Now What?</strong> — structured group reflection on shared experience</li>
+        <li><strong>Troika Consulting</strong> — peer coaching in rotating trios</li>
+        <li><strong>15% Solutions</strong> — find what each person can start doing right now (free to try below)</li>
+        <li><strong>Min Specs</strong> — distil a complex rule set down to the essential minimum (free to try below)</li>
+    </ul>
+    <p>
+        Every tool includes phase-by-phase timing, a shared input space for participants, and an archive entry that captures the full session output.
+    </p>
+</section>
+
+<hr class="divider">
+
+<!-- ── Project context ── -->
+<section class="section">
+    <h2>Project <span>background</span></h2>
+    <p>
+        KwaCart was built as Milestone Project 3 for a Level&nbsp;5 Diploma in Full Stack Software Development. It is a real-world Django application: a multi-user platform with session management, role-based access, a QR-code share feature, and a searchable per-user archive.
+    </p>
+    <p>
+        The project uses Python 3.12 and Django 6.0.4, deployed with Gunicorn and WhiteNoise on Replit.
+    </p>
+</section>
+
+<!-- ── CTA band ── -->
+<section class="cta-band">
+    <h2>Ready to try it?</h2>
+    <p>Try two tools without an account, or run the complete toolkit on your own computer or server for free.</p>
+    <div style="display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
+        <a href="/#free-tools" class="btn btn-primary-inv">Try a free tool</a>
+        <a href="{% url 'self_hosting' %}" class="btn">Self-host KwaCart</a>
+    </div>
+</section>
+
+</main>
+
+<footer class="footer">
+    KwaCart &mdash; a Liberating Structures facilitation platform.
+    Built as part of a Level&nbsp;5 Diploma project.
+</footer>
+
+</body>
+</html>

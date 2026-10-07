@@ -1,0 +1,142 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Synthesis Review &mdash; {{ tool_meta.title }}{% endblock %}
+
+{% block content %}
+<h1 style="margin-bottom:0.25rem;">Synthesis Review</h1>
+<p style="margin:0 0 0.5rem; font-size:1.05rem; color:#475569;">
+    {{ tool_meta.title }} &mdash; live session
+</p>
+
+<div style="background:#eff6ff; border:1px solid #bfdbfe; border-radius:8px;
+            padding:0.9rem 1.1rem; margin-bottom:1.75rem;">
+    <p style="margin:0 0 0.4rem; font-weight:700; color:#1e40af; font-size:0.95rem;">
+        &#128221; Facilitator Synthesis Workspace
+    </p>
+    <p style="margin:0; font-size:0.875rem; color:#1e3a8a; line-height:1.6;">
+        One or more participants used the Multimedia Input Bridge to add a symbol board
+        screenshot or audio clip. Type an inline transcription for each item below so
+        the contribution is woven into the combined Markdown export as full text.
+        Transcriptions are optional &mdash; untranscribed attachments will appear as
+        links in the export.
+    </p>
+</div>
+
+<form method="post">
+{% csrf_token %}
+
+{% for row in review_instances %}
+<section style="margin-bottom:2rem; padding:1.1rem 1.25rem;
+                border:1px solid {% if row.is_host %}#c7d2fe{% else %}#e2e8f0{% endif %};
+                border-radius:8px;
+                background:{% if row.is_host %}#f5f3ff{% else %}#fff{% endif %};">
+
+    <h2 style="margin:0 0 0.6rem; font-size:1rem; color:#1e293b;">
+        {{ row.display }}{% if row.is_host %} <span style="font-size:0.8rem; color:#64748b; font-weight:400;">(host)</span>{% endif %}
+    </h2>
+
+    {% if row.instance.payload_output %}
+    <div style="margin-bottom:0.75rem;">
+        {% for key, value in row.instance.payload_output.items %}
+        <div style="margin-bottom:0.5rem;">
+            <span style="font-size:0.78rem; font-weight:700; text-transform:uppercase;
+                         letter-spacing:0.04em; color:#64748b;">
+                {{ key|cut:"_"|title }}
+            </span>
+            <p style="margin:0.15rem 0 0; font-size:0.9rem; color:#334155;
+                      white-space:pre-wrap; line-height:1.55;">{{ value }}</p>
+        </div>
+        {% endfor %}
+    </div>
+    {% else %}
+    <p style="font-size:0.875rem; color:#94a3b8; font-style:italic; margin:0 0 0.75rem;">
+        No text response submitted.
+    </p>
+    {% endif %}
+
+    {% if row.instance.attachments %}
+    <div style="border-top:1px solid #e2e8f0; padding-top:0.85rem; margin-top:0.5rem;">
+        <p style="margin:0 0 0.75rem; font-size:0.8rem; font-weight:700;
+                  text-transform:uppercase; letter-spacing:0.04em; color:#7c3aed;">
+            &#128247; Multimedia contributions
+        </p>
+        {% for att in row.instance.attachments %}
+        <div style="margin-bottom:1.25rem; padding:0.8rem 1rem;
+                    background:#fafafa; border:1px solid #e2e8f0; border-radius:6px;">
+
+            {% if att.type == "image" %}
+            <p style="margin:0 0 0.5rem; font-size:0.8rem; font-weight:600; color:#374151;">
+                &#128444;&nbsp;Symbol board / image
+                <span style="font-weight:400; color:#94a3b8;">&mdash; {{ att.name }}</span>
+            </p>
+            <a href="{{ att.url }}" target="_blank" rel="noopener noreferrer"
+               style="display:inline-block; margin-bottom:0.6rem;">
+                <img src="{{ att.url }}"
+                     alt="Symbol board uploaded by {{ row.display }}"
+                     loading="lazy"
+                     style="max-width:min(22rem, 100%); max-height:14rem;
+                            border-radius:4px; border:1px solid #d1d5db;
+                            object-fit:contain; background:#f1f5f9; display:block;">
+            </a>
+            {% else %}
+            <p style="margin:0 0 0.5rem; font-size:0.8rem; font-weight:600; color:#374151;">
+                &#127908;&nbsp;Audio clip
+                <span style="font-weight:400; color:#94a3b8;">&mdash; {{ att.name }}</span>
+            </p>
+            <audio controls preload="metadata" src="{{ att.url }}"
+                   style="display:block; width:100%; max-width:26rem;
+                          margin-bottom:0.6rem;"></audio>
+            {% endif %}
+
+            <label for="tr_{{ row.instance.id }}_{{ forloop.counter0 }}"
+                   style="display:block; font-size:0.82rem; font-weight:600;
+                          color:#1e293b; margin-bottom:0.3rem;">
+                Transcription
+                <span style="font-weight:400; color:#64748b;">(optional)</span>
+            </label>
+            <textarea
+                id="tr_{{ row.instance.id }}_{{ forloop.counter0 }}"
+                name="transcript_{{ row.instance.id }}_{{ forloop.counter0 }}"
+                rows="3"
+                placeholder="Type what the participant communicated&#8230;"
+                style="width:100%; box-sizing:border-box; padding:0.5rem 0.65rem;
+                       border:1px solid #cbd5e1; border-radius:5px;
+                       font-size:0.9rem; font-family:inherit; resize:vertical;
+                       line-height:1.5; color:#1e293b;"
+                aria-label="Transcription for {{ att.name }} submitted by {{ row.display }}"
+            >{% if att.transcription %}{{ att.transcription }}{% endif %}</textarea>
+
+        </div>
+        {% endfor %}
+    </div>
+    {% endif %}
+
+</section>
+{% endfor %}
+
+<div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;
+            padding-top:0.5rem; border-top:1px solid #e2e8f0; margin-top:0.5rem;">
+    <button type="submit" class="btn btn-primary"
+            style="font-size:1rem; padding:0.6rem 1.4rem;">
+        Save transcriptions &amp; generate export
+    </button>
+    <span style="font-size:0.85rem; color:#64748b;">
+        or
+        <button type="submit" class="btn"
+                style="font-size:0.85rem; padding:0.3rem 0.75rem;
+                       border-color:#cbd5e1; color:#475569; background:#fff;">
+            Generate export without transcriptions
+        </button>
+    </span>
+</div>
+</form>
+
+<p style="margin-top:1.5rem;">
+    <a href="{% url 'tools:session_detail' session.id %}"
+       style="color:#64748b; font-size:0.875rem;">
+        &larr; Back to session results (export will not be generated)
+    </a>
+</p>
+
+{% endblock %}

@@ -1,0 +1,108 @@
+/* ── Canvas wrapper ── */
+.drawing-canvas-wrapper {
+    margin: 0.5rem 0 1.25rem;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    overflow: hidden;
+    background: #fffdf9;
+    box-shadow: 0 4px 0 #f0e4d5;
+}
+.canvas-context { display:flex; gap:.6rem; flex-wrap:wrap; padding:.75rem 1rem; background:#fff3e5; color:#52636b; line-height:1.45; }
+.canvas-context strong { color:#5D3A9B; }
+.canvas-context span { flex:1; min-width:14rem; }
+
+/* ── Drawing toolbar ── */
+.drawing-toolbar {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.35rem;
+    padding: 0.5rem 0.75rem;
+    background: #fbf2e6;
+    border-bottom: 1px solid #e2e8f0;
+}
+.toolbar-label {
+    font-size: 0.78rem;
+    color: #64748b;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+.toolbar-divider { width: 1px; height: 1.4rem; background: #e2e8f0; margin: 0 0.2rem; }
+
+/* ── Colour swatches ── */
+.color-swatch {
+    width: 28px;
+    height: 28px;
+    border-radius: 50%;
+    border: 2px solid transparent;
+    cursor: pointer;
+    padding: 0;
+    flex-shrink: 0;
+    transition: transform 0.1s;
+}
+.color-swatch.active,
+.color-swatch:focus {
+    border-color: #1e40af;
+    transform: scale(1.18);
+    outline: 2px solid #1e40af;
+    outline-offset: 1px;
+}
+
+/* ── Toolbar buttons ── */
+.size-btn,
+.eraser-btn,
+.undo-btn,
+.clear-btn {
+    padding: 0.2rem 0.55rem;
+    border: 1px solid #cbd5e1;
+    border-radius: 4px;
+    background: #fffdf9;
+    cursor: pointer;
+    font-size: 0.85rem;
+    transition: background 0.1s;
+}
+.size-btn.active,
+.eraser-btn.active,
+.size-btn:focus,
+.eraser-btn:focus,
+.undo-btn:focus,
+.clear-btn:focus {
+    background: #dbeafe;
+    border-color: #1e40af;
+    outline: 2px solid #1e40af;
+}
+.undo-btn:hover,
+.clear-btn:hover { background: #f1f5f9; }
+
+/* ── Canvas element ── */
+#drawing-canvas {
+    display: block;
+    width: 100%;
+    max-width: 100%;
+    cursor: crosshair;
+    background: #fffdf9;
+}
+
+/* ── Symbol hint bar ── */
+.drawing-hint {
+    font-size: 0.78rem;
+    color: #64748b;
+    padding: 0.4rem 0.75rem;
+    background: #fbf2e6;
+    border-top: 1px solid #e2e8f0;
+    margin: 0;
+}
+
+/* ── Screen-reader announcer (visually hidden) ── */
+#canvas-announcer {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    margin: -1px;
+    overflow: hidden;
+    clip: rect(0,0,0,0);
+    white-space: nowrap;
+    border: 0;
+}

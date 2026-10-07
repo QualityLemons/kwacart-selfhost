@@ -1,0 +1,99 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Draft &mdash; {{ tool_meta.title }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/timer.css' %}">
+<link rel="stylesheet" href="{% static 'css/activity_remix.css' %}">
+{% if tool_meta.show_canvas %}<link rel="stylesheet" href="{% static 'css/drawing_canvas.css' %}">{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="activity-frame">
+<h1>{{ tool_meta.title }}</h1>
+<div class="activity-intro">
+    <strong>Take this at your pace.</strong>
+    Your draft stays available in the archive, so you can return to it, revisit it, or use it as a starting point for a future session.
+</div>
+{% include "tools/info_box.html" %}
+
+{% include "tools/_timer.html" %}
+
+{% if form %}
+<form method="post"
+      data-disable-on-submit
+      data-loading-text="Saving&hellip;">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+    <p class="non-field-errors">{{ form.non_field_errors|join:" " }}</p>
+    {% endif %}
+    {% if tool_meta.show_canvas %}
+        {% for field in form %}
+            {% if field.name == 'canvas_data' %}
+                {% include "tools/_drawing_canvas.html" %}
+                {{ field }}
+            {% elif field.is_hidden %}
+                {{ field }}
+            {% elif field.name == 'mood' %}
+                <fieldset class="expressive-fieldset">
+                    <legend>{{ field.label }}</legend>
+                    {{ field }}
+                    {% if field.errors %}<span id="{{ field.auto_id }}-error" class="field-error">{{ field.errors|join:", " }}</span>{% endif %}
+                </fieldset>
+            {% else %}
+                <p>{{ field.label_tag }} {{ field }}
+                {% if field.errors %}<span id="{{ field.auto_id }}-error" class="field-error">{{ field.errors|join:", " }}</span>{% endif %}
+                </p>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        {% for field in form %}
+            {% if field.is_hidden %}
+                {{ field }}
+            {% else %}
+                <div style="margin-bottom:1.25rem;">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.errors %}<p id="{{ field.auto_id }}-error" class="field-error">{{ field.errors|join:", " }}</p>{% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    <button type="submit" class="btn btn-primary">Save draft</button>
+</form>
+{% else %}
+<p><em>This tool has no input form configured yet.</em></p>
+{% endif %}
+
+{% if instance %}
+<form method="post" action="{% url 'tools:submit' instance.id %}" style="margin-top:1rem;"
+      data-disable-on-submit
+      data-loading-text="Archiving&hellip;">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">Submit and archive</button>
+</form>
+{% endif %}
+
+<p style="margin-top:1.5rem;"><a href="{% url 'tools:catalog' %}">&larr; Back to catalog</a></p>
+
+{% if form %}
+<p style="font-size:0.85rem;color:#64748b;margin-top:0.5rem;">
+    <span id="save-status" aria-live="polite" aria-atomic="true"></span>
+</p>
+<input type="hidden" id="instance-id" value="{{ instance.id|default:'' }}">
+<input type="hidden" id="tool-slug" value="{{ tool_slug }}">
+{% endif %}
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/timer.js' %}"></script>
+<script src="{% static 'js/activity_feedback.js' %}"></script>
+{% if tool_meta.show_canvas %}<script src="{% static 'js/drawing_canvas.js' %}"></script>{% endif %}
+{% if form %}
+<script src="{% static 'js/draft_init.js' %}"></script>
+<script src="{% static 'js/autosave.js' %}"></script>
+{% endif %}
+{% endblock %}

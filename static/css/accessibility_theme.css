@@ -1,0 +1,295 @@
+/* ── Accessibility Theme ─────────────────────────────────────────────────────
+   Applied when <html class="a11y-theme"> is set.  Targets three goals:
+   1. Zero motion  — kills every transition and animation site-wide so that
+      eye-gaze cameras and head-trackers are not triggered by moving pixels.
+   2. Large targets — all interactive elements grow to a minimum size that
+      accommodates eye-gaze, head-tracking, or hand-tremor users.
+   3. High contrast — removes subtle greys and low-contrast decorative colours.
+──────────────────────────────────────────────────────────────────────────── */
+
+/* ── 1. ZERO MOTION ─────────────────────────────────────────────────────── */
+
+.a11y-theme *,
+.a11y-theme *::before,
+.a11y-theme *::after {
+    animation-duration:       0.001ms !important;
+    animation-iteration-count: 1      !important;
+    animation-delay:          0ms     !important;
+    transition-duration:      0.001ms !important;
+    transition-delay:         0ms     !important;
+    scroll-behavior:          auto    !important;
+}
+
+/* Remove phase-flash highlight entirely (was a yellow background flash) */
+.a11y-theme .timer-phase-label.phase-flash {
+    background: transparent !important;
+    padding: 0 !important;
+}
+
+/* Remove the animated progress bars — the digit readout is enough */
+.a11y-theme .phase-progress-bar,
+.a11y-theme .phase-segment-fill,
+.a11y-theme .try-timer__bar-track {
+    display: none !important;
+}
+
+/* Remove box-shadow focus rings (they pulse on some browsers) and replace
+   with a solid high-contrast outline instead */
+.a11y-theme *:focus {
+    outline:        3px solid #000 !important;
+    outline-offset: 3px            !important;
+    box-shadow:     none           !important;
+}
+
+
+/* ── 2. LARGE TARGETS ───────────────────────────────────────────────────── */
+/* WCAG 2.5.8 recommends 24×24px; eye-gaze best-practice is ≥ 44×44px.
+   We target ≥ 3rem (≈ 48px) height for all interactive controls. */
+
+.a11y-theme .btn,
+.a11y-theme button:not([hidden]):not(.sr-only),
+.a11y-theme input[type="submit"],
+.a11y-theme input[type="button"],
+.a11y-theme input[type="reset"] {
+    min-height:    3rem       !important;
+    padding:       0.75rem 1.5rem !important;
+    font-size:     1.1rem     !important;
+    border-radius: 6px        !important;
+    line-height:   1.4        !important;
+}
+
+/* Ensure close-together buttons have enough breathing room */
+.a11y-theme .timer-controls,
+.a11y-theme .try-timer__buttons {
+    gap:       0.85rem !important;
+    flex-wrap: wrap    !important;
+}
+
+/* Form inputs */
+.a11y-theme textarea,
+.a11y-theme input[type="text"],
+.a11y-theme input[type="email"],
+.a11y-theme input[type="password"],
+.a11y-theme input[type="number"],
+.a11y-theme input[type="search"],
+.a11y-theme input[type="url"],
+.a11y-theme select {
+    padding:   0.85rem 1rem !important;
+    font-size: 1.05rem      !important;
+    min-height: 2.85rem     !important;
+    border:    2px solid #1e293b !important;
+    border-radius: 5px      !important;
+}
+
+.a11y-theme label {
+    font-size:     1.1rem  !important;
+    margin-bottom: 0.6rem  !important;
+    font-weight:   700     !important;
+}
+
+.a11y-theme .form-group {
+    margin-bottom: 2rem !important;
+}
+
+/* Nav links — needs a minimum tap/gaze target */
+.a11y-theme nav a,
+.a11y-theme nav .a11y-toggle-btn {
+    display:    inline-block  !important;
+    min-height: 2.5rem        !important;
+    padding:    0.5rem 0.6rem !important;
+    font-size:  1rem          !important;
+    line-height: 1.4          !important;
+}
+
+.a11y-theme nav {
+    gap:            1.5rem !important;
+    padding-bottom: 1.5rem !important;
+    flex-wrap:      wrap   !important;
+    align-items:    center !important;
+}
+
+/* Participant list items — enough spacing so adjacent items don't merge */
+.a11y-theme #participant-list li {
+    padding:       0.55rem 0      !important;
+    font-size:     1.05rem        !important;
+    border-bottom: 1px solid #e2e8f0 !important;
+    line-height:   1.6            !important;
+}
+
+/* Buffer-status line — always takes up space, never jumps */
+.a11y-theme #buffer-status,
+.a11y-theme #aac-composing-status {
+    display:     block     !important;
+    min-height:  1.4em     !important;
+    font-size:   0.95rem   !important;
+    font-weight: 600       !important;
+}
+
+/* AAC composing button */
+.a11y-theme #aac-composing-btn {
+    min-height: 3rem      !important;
+    padding:    0.75rem 1.5rem !important;
+    font-size:  1rem      !important;
+}
+
+/* Sandbox download button */
+.a11y-theme .try-download__btn {
+    min-height: 3rem      !important;
+    padding:    0.75rem 1.5rem !important;
+    font-size:  1rem      !important;
+}
+
+/* Timer display — larger so the number is readable without precise tracking */
+.a11y-theme .timer-display {
+    font-size: 2.4rem !important;
+    min-width: 5.5ch  !important;
+}
+
+.a11y-theme .timer-widget {
+    padding: 1rem 1.25rem !important;
+    gap:     1.25rem      !important;
+    border:  2px solid #1e293b !important;
+    flex-wrap: wrap       !important;
+}
+
+/* Nickname / pairing entry screens (dark cards) */
+.a11y-theme .ns-input,
+.a11y-theme .ps-input {
+    padding:   1rem       !important;
+    font-size: 1.15rem    !important;
+    border:    3px solid #f59e0b !important;
+}
+
+.a11y-theme .ns-btn,
+.a11y-theme .ps-btn {
+    padding:   1.1rem     !important;
+    font-size: 1.15rem    !important;
+    min-height: 3.25rem   !important;
+}
+
+/* Sandbox CTA signup button */
+.a11y-theme .sandbox-cta__signup {
+    padding:    0.85rem 1.5rem !important;
+    font-size:  1rem           !important;
+    min-height: 3rem           !important;
+}
+
+/* Pairing code display in session panel — already large digits, fine as-is */
+
+
+/* ── 3. HIGH CONTRAST ───────────────────────────────────────────────────── */
+
+.a11y-theme body {
+    color: #000 !important;
+}
+
+/* Subtle nav/footer greys → black */
+.a11y-theme .page-footer,
+.a11y-theme .breadcrumb,
+.a11y-theme small {
+    color: #000 !important;
+}
+
+/* Base buttons: solid black outline on white */
+.a11y-theme .btn {
+    border:     2px solid #000 !important;
+    color:      #000           !important;
+    background: #fff           !important;
+}
+.a11y-theme .btn:hover,
+.a11y-theme .btn:focus {
+    background: #f5f5f5 !important;
+}
+.a11y-theme .btn-primary {
+    background: #000 !important;
+    color:      #fff !important;
+    border:     2px solid #000 !important;
+}
+.a11y-theme .btn-primary:hover,
+.a11y-theme .btn-primary:focus {
+    background: #333 !important;
+}
+
+/* Input borders — darker than the default #cbd5e1 */
+.a11y-theme input,
+.a11y-theme textarea,
+.a11y-theme select {
+    border-color: #1e293b !important;
+    color: #000           !important;
+}
+
+/* Flash messages */
+.a11y-theme .messages li {
+    background:   #fff           !important;
+    border:       2px solid #000 !important;
+    color:        #000           !important;
+    font-weight:  600            !important;
+}
+
+/* Timer warning/expired colours — keep red/amber as those ARE semantic */
+
+/* Result panel borders */
+.a11y-theme .try-result {
+    border: 2px solid #0d6b66 !important;
+}
+.a11y-theme .try-result__value {
+    border: 2px solid #1e293b !important;
+}
+
+/* Tool catalog cards */
+.a11y-theme .tool-card {
+    border: 2px solid #1e293b !important;
+}
+
+/* Timer paused badge — high contrast */
+.a11y-theme .timer-paused-badge {
+    color:        #000           !important;
+    background:   #fef3c7        !important;
+    border:       2px solid #000 !important;
+    font-weight:  700            !important;
+}
+
+/* Guest share blocks — keep colours but darken borders */
+.a11y-theme [style*="background:#eef6ff"],
+.a11y-theme [style*="background:#f0fdf4"] {
+    border-width: 2px !important;
+}
+
+
+/* ── Toggle button default styles (outside theme) ───────────────────────── */
+/* Defined here so the file is self-contained; applies globally */
+
+.a11y-toggle-btn {
+    padding:     0.35rem 0.75rem;
+    background:  transparent;
+    border:      1px solid #94a3b8;
+    border-radius: 4px;
+    font-size:   0.8rem;
+    color:       #64748b;
+    cursor:      pointer;
+    font-family: inherit;
+    white-space: nowrap;
+    line-height: 1.4;
+}
+
+.a11y-toggle-btn[aria-pressed="true"] {
+    background:  #f0fdf4;
+    border:      1px solid #15803d;
+    color:       #166534;
+    font-weight: 600;
+}
+
+/* When the theme is active the toggle button itself grows with everything else */
+.a11y-theme .a11y-toggle-btn {
+    min-height:  2.75rem       !important;
+    padding:     0.65rem 1rem  !important;
+    font-size:   1rem          !important;
+    border:      2px solid #000 !important;
+    border-radius: 6px         !important;
+}
+
+.a11y-theme .a11y-toggle-btn[aria-pressed="true"] {
+    background:  #dcfce7 !important;
+    border-color: #166534 !important;
+    color:        #14532d !important;
+}

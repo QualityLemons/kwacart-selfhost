@@ -1,0 +1,52 @@
+{% if tool_meta.what or tool_meta.how or tool_meta.how_to or tool_meta.why %}
+<div style="background:#f8fafc; border:1px solid #e2e8f0; border-radius:6px;
+            padding:0.85rem 1rem; margin:0.75rem 0 1.25rem; line-height:1.6;">
+
+    {% if tool_meta.what %}
+    <p style="margin:0 0 0.5rem;"><strong>What:</strong> {{ tool_meta.what }}</p>
+    {% endif %}
+
+    {% if tool_meta.how or tool_meta.how_to %}
+    <p style="margin:0 0 0.5rem;"><strong>How:</strong> {{ tool_meta.how|default:tool_meta.how_to }}</p>
+    {% endif %}
+
+    {% if tool_meta.agreements %}
+    <div style="margin:0.5rem 0;">
+        <strong>Agreements</strong> <span style="font-size:0.85em; color:#64748b;">(read aloud before Round 1)</span>
+        <ol style="margin:0.35rem 0 0 1.25rem; padding:0; line-height:1.7;">
+            {% for agreement in tool_meta.agreements %}
+            <li>{{ agreement }}</li>
+            {% endfor %}
+        </ol>
+    </div>
+    {% endif %}
+
+    {% if tool_meta.why %}
+    <p style="margin:0 0 0.5rem;"><strong>Why:</strong> {{ tool_meta.why }}</p>
+    {% endif %}
+
+    {% if tool_meta.example_input %}
+    <div style="margin-top:0.6rem;">
+        {{ tool_meta.example_input|json_script:"example-json" }}
+        <button type="button" onclick="loadExample()" class="btn"
+                style="font-size:0.85rem; padding:0.25rem 0.7rem;">
+            Load example data
+        </button>
+    </div>
+    <script>
+    function loadExample() {
+        const example = JSON.parse(document.getElementById('example-json').textContent);
+        for (const [key, value] of Object.entries(example)) {
+            const input = document.querySelector('[name="' + key + '"]');
+            if (input) input.value = value;
+        }
+    }
+    </script>
+    {% endif %}
+
+    <p style="margin:0.7rem 0 0; padding-top:0.7rem; border-top:1px solid #eadcc8; color:#52636b;">
+        You can save a draft and return later. When you submit, it moves to your archive so you can reuse the activity as a reference or starting point.
+    </p>
+
+</div>
+{% endif %}

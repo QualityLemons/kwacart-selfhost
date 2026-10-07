@@ -1,0 +1,436 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Session &mdash; {{ tool_meta.title }}{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/timer.css' %}">
+<link rel="stylesheet" href="{% static 'css/activity_remix.css' %}">
+<link rel="stylesheet" href="{% static 'css/multimedia_input.css' %}">
+<link rel="stylesheet" href="{% static 'css/session_waiting.css' %}">
+{% if tool_meta.show_canvas %}<link rel="stylesheet" href="{% static 'css/drawing_canvas.css' %}">{% endif %}
+{% endblock %}
+
+{% block content %}
+<div class="activity-frame">
+<h1>{{ tool_meta.title }} <small style="color:#64748b;">— live session</small></h1>
+<p class="activity-guidance">
+    Respond in the way that works for you. <a href="{% url 'feedback' %}">Need a different way to participate? Share private feedback.</a>
+</p>
+
+<!-- ── Signed-in participant share link ── -->
+<div style="background:#eef6ff; border:1px solid #cfe2ff; padding:0.8rem 1rem;
+            border-radius:6px; margin: 0.5rem 0 0.75rem;">
+    <strong>Share with signed-in participants:</strong>
+    <input type="text" readonly value="{{ share_url }}"
+           aria-label="Session invite link"
+           onclick="this.select()"
+           style="width:100%; padding:0.4rem; margin-top:0.4rem;
+                  font-family: ui-monospace, Menlo, monospace; box-sizing:border-box;">
+    <p style="margin:0.4rem 0 0;"><small>Anyone already signed in who opens this link can join.</small></p>
+</div>
+
+<!-- ── Guest share link, QR code, and companion pairing code ── -->
+<div style="background:#f0fdf4; border:1px solid #86efac; padding:0.8rem 1rem;
+            border-radius:6px; margin: 0 0 1rem;">
+    <strong>Guest link (no account needed):</strong>
+    <input type="text" readonly value="{{ guest_join_url }}"
+           aria-label="Guest join link — no login required"
+           onclick="this.select()"
+           style="width:100%; padding:0.4rem; margin-top:0.4rem;
+                  font-family: ui-monospace, Menlo, monospace; box-sizing:border-box;">
+    <details style="margin-top:0.6rem; display:inline-block;" id="guest-qr-details"
+             data-guest-url="{{ guest_join_url|escapejs }}">
+        <summary style="cursor:pointer; color:#15803d; font-size:0.875rem; list-style:none;">
+            &#9654; Show guest QR code
+        </summary>
+        <div id="guest-qrcode" role="img" aria-label="QR code for the guest join link"
+             style="margin-top:0.5rem; line-height:0;"></div>
+    </details>
+    <p style="margin:0.5rem 0 0;"><small>Participants who scan this QR code can join by entering their name — no account required.</small></p>
+
+    {% if session.pairing_code %}
+    <!-- ── Companion pairing code (secondary device entry) ── -->
+    <div style="margin-top:0.9rem; padding:0.75rem 1rem;
+                background:#052e16; border-radius:8px; display:flex;
+                align-items:center; gap:1rem; flex-wrap:wrap;">
+        <div>
+            <p style="margin:0 0 0.2rem; font-size:0.72rem; letter-spacing:0.07em;
+                      text-transform:uppercase; color:#86efac; font-weight:600;">
+                Companion pairing code
+            </p>
+            <p style="margin:0; font-size:2.4rem; font-weight:700; letter-spacing:0.45em;
+                      color:#4ade80; font-family:ui-monospace,Menlo,monospace;
+                      line-height:1;">
+                {{ session.pairing_code }}
+            </p>
+        </div>
+        <p style="margin:0; font-size:0.78rem; color:#86efac; line-height:1.55; flex:1; min-width:160px;">
+            On a second device, go to
+            <strong style="font-family:ui-monospace,Menlo,monospace;">
+                {{ request.get_host }}/join/
+            </strong>
+            and type this code. No URL needed.
+        </p>
+    </div>
+    {% endif %}
+</div>
+
+{% include "tools/info_box.html" %}
+{% include "tools/_timer.html" with timer_session_id=session.id is_host=is_host timer_started_at=timer_started_at timer_paused_at=timer_paused_at pause_reminder_threshold_sec=pause_reminder_threshold_sec pause_reminder_threshold_js=pause_reminder_threshold_js inclusive_pacing=inclusive_pacing inclusive_pacing_multiplier=inclusive_pacing_multiplier %}
+
+{% if not is_host %}
+<!-- ── Hybrid Pacing banners (participant-only) ──
+     All three start as display:none. session_poll.js shows/hides them based on
+     inclusive_pacing, timer_started_at, and verbal_breakout in each poll
+     response. Placed above the form so they are immediately visible. -->
+<div id="ip-early-preview"
+     style="display:none; background:#f0fdf4; border:1px solid #86efac; border-radius:6px;
+            padding:0.75rem 1rem; margin-bottom:0.75rem;"
+     aria-live="polite">
+    <strong>&#128221; Inclusive Pacing active</strong> &mdash;
+    You can start composing your response now, before the group timer begins.
+    Take the time you need.
+</div>
+<div id="vb-aac-banner"
+     style="display:none; background:#fffbeb; border:1px solid #fcd34d; border-radius:6px;
+            padding:0.75rem 1rem; margin-bottom:0.75rem;"
+     aria-live="polite">
+    <strong>&#128483;&#65039; Verbal discussion in progress</strong> &mdash;
+    The group has moved to a spoken conversation. Take your time &mdash;
+    your digital submission window is still open.
+    Continue composing and save when you&rsquo;re ready.
+</div>
+<div id="vb-group-banner"
+     style="display:none; background:#eff6ff; border:1px solid #93c5fd; border-radius:6px;
+            padding:0.75rem 1rem; margin-bottom:0.75rem;"
+     aria-live="polite">
+    <strong>&#128172; Verbal discussion in progress</strong> &mdash;
+    Join the spoken conversation with your group.
+    AAC participants are still composing their digital responses.
+</div>
+{% endif %}
+
+<!-- ── Participant response form ── -->
+<h2>Your response</h2>
+
+<!-- Buffer autosave anchor — session_autosave.js reads data-buffer-url to
+     know where to POST in-progress form state every few seconds. -->
+<div id="session-buffer"
+     data-buffer-url="{% url 'tools:session_buffer_save' session.id %}"></div>
+
+{% if form %}
+<form method="post"
+      data-disable-on-submit
+      data-loading-text="Saving&hellip;">
+    {% csrf_token %}
+    {% if form.non_field_errors %}
+    <p class="non-field-errors">{{ form.non_field_errors|join:" " }}</p>
+    {% endif %}
+    {% if tool_meta.show_canvas %}
+        {% for field in form %}
+            {% if field.name == 'canvas_data' %}
+                {% include "tools/_drawing_canvas.html" %}
+                {{ field }}
+            {% elif field.is_hidden %}
+                {{ field }}
+            {% elif field.name == 'mood' %}
+                <fieldset class="expressive-fieldset">
+                    <legend>{{ field.label }}</legend>
+                    {{ field }}
+                    {% if field.errors %}<span id="{{ field.auto_id }}-error" class="field-error">{{ field.errors|join:", " }}</span>{% endif %}
+                </fieldset>
+            {% else %}
+                <p>{{ field.label_tag }} {{ field }}
+                {% if field.errors %}<span id="{{ field.auto_id }}-error" class="field-error">{{ field.errors|join:", " }}</span>{% endif %}
+                </p>
+            {% endif %}
+        {% endfor %}
+    {% else %}
+        {% for field in form %}
+            {% if field.is_hidden %}
+                {{ field }}
+            {% else %}
+                <div style="margin-bottom:1.25rem;">
+                    {{ field.label_tag }}
+                    {{ field }}
+                    {% if field.errors %}<p id="{{ field.auto_id }}-error" class="field-error">{{ field.errors|join:", " }}</p>{% endif %}
+                </div>
+            {% endif %}
+        {% endfor %}
+    {% endif %}
+    <div style="display:flex; align-items:center; gap:1rem; flex-wrap:wrap;">
+        <button type="submit" class="btn btn-primary">Save my response</button>
+        <span id="buffer-status"
+              style="font-size:0.8rem; color:#64748b;"
+              aria-live="polite"></span>
+    </div>
+</form>
+{% else %}
+<p><em>This tool has no input form configured yet.</em></p>
+{% endif %}
+
+<!-- ── Multimedia Input Bridge ── -->
+<!-- Participants add audio clips or symbol-board images alongside their text
+     response. Files go via Django to Cloudinary; nothing is stored on
+     Heroku's ephemeral disk. -->
+{{ instance.attachments|json_script:"mmi-existing-attachments" }}
+<div class="mmi-panel"
+     data-upload-url="{% url 'tools:session_attachment_upload' session.id %}"
+     data-remove-url="{% url 'tools:session_attachment_remove' session.id %}">
+    <p class="mmi-panel__heading">Add to your response</p>
+    <div class="mmi-mode-row" role="group" aria-label="Input method">
+        <button type="button" class="btn mmi-mode-btn" aria-pressed="true" data-mode="text">
+            &#128221;&nbsp;Text
+        </button>
+        <button type="button" class="btn mmi-mode-btn" aria-pressed="false" data-mode="audio">
+            &#127908;&nbsp;Audio
+        </button>
+        <button type="button" class="btn mmi-mode-btn" aria-pressed="false" data-mode="image">
+            &#128444;&nbsp;Image
+        </button>
+    </div>
+    <div class="mmi-audio-controls" hidden>
+        <button type="button" class="btn mmi-record-btn">&#9679;&nbsp;Start Recording</button>
+        <span class="mmi-record-timer" hidden>0:00</span>
+        <p class="mmi-audio-hint">Speak, or play your speech-generating device close to the microphone.</p>
+    </div>
+    <div class="mmi-image-controls" hidden>
+        <label class="mmi-image-label" for="mmi-image-input">Choose image or screenshot</label>
+        <input type="file" id="mmi-image-input" class="mmi-image-input"
+               accept="image/*"
+               aria-label="Upload a symbol board screenshot or photograph">
+        <p class="mmi-image-hint">Accepted: PNG, JPG, WebP, GIF &mdash; max 10&nbsp;MB</p>
+    </div>
+    <div class="mmi-uploading" hidden aria-live="polite">Uploading&hellip;</div>
+    <p class="mmi-error" hidden role="alert"></p>
+    <ul class="mmi-attachments" aria-label="Uploaded attachments"></ul>
+</div>
+
+<!-- ── Screen-reader live region for poll announcements ── -->
+<div class="sr-only" aria-live="polite" aria-atomic="true" id="session-announcer"
+     data-status-url="{% url 'tools:session_status' session.id %}"
+     data-is-host="{{ is_host|yesno:'true,false' }}"></div>
+{{ initial_responder_names|json_script:"initial-responders-data" }}
+
+<!-- ── Participants list ── -->
+<h2 style="margin-top:2rem;">
+    Participants
+    (<span id="participant-count">{{ participants|length }}</span>)
+    <small style="color:#64748b; font-weight:normal;">
+        — <span id="poll-status">live</span>
+    </small>
+</h2>
+<ul id="participant-list">
+    {% for p in participants %}
+    <li>
+        {% if p.user_id %}{{ p.user.email }}{% else %}{{ p.guest_name|default:"Guest" }} <span style="color:#64748b;">(guest)</span>{% endif %}
+        {% if p.user_id == session.host_id %}<span style="color:#64748b;">(host)</span>{% endif %}
+        {% if p.payload_input %} &mdash; <span style="color:#15803d;">response saved</span>{% endif %}
+    </li>
+    {% endfor %}
+</ul>
+
+{% if is_host %}
+<!-- ── Pause reminder settings (host only) ── -->
+<details id="pause-reminder-settings"
+         style="margin-top:1.5rem; padding-top:1rem; border-top:1px solid #e2e8f0;">
+    <summary style="cursor:pointer; font-size:0.9rem; color:#5D3A9B; font-weight:600;">
+        Pause reminder settings
+    </summary>
+    <div style="margin-top:0.75rem;">
+        <p style="font-size:0.875rem; color:#475569; margin:0 0 0.6rem;">
+            The timer shows a visual reminder to the host when the session has been
+            paused for too long. Adjust or disable it for this session.
+        </p>
+        <label for="pause-reminder-select"
+               style="font-size:0.875rem; font-weight:600; color:#1e293b;">
+            Remind me after:
+        </label>
+        <div style="display:flex; align-items:center; gap:0.75rem; margin-top:0.4rem; flex-wrap:wrap;">
+            <select id="pause-reminder-select"
+                    style="padding:0.4rem 0.6rem; border:1px solid #cbd5e1; border-radius:5px;
+                           font-size:0.9rem; font-family:inherit; background:#fff;">
+                <option value="">Disabled</option>
+                <option value="60">1 minute</option>
+                <option value="120">2 minutes</option>
+                <option value="180">3 minutes</option>
+                <option value="300">5 minutes (default)</option>
+                <option value="600">10 minutes</option>
+            </select>
+            <button type="button" id="pause-reminder-save"
+                    style="padding:0.4rem 0.9rem; background:#5D3A9B; color:#fff;
+                           border:none; border-radius:5px; font-size:0.875rem;
+                           cursor:pointer; font-family:inherit;"
+                    data-save-url="{% url 'tools:session_set_pause_reminder' session.id %}"
+                    data-current-threshold="{{ pause_reminder_threshold_sec|default:'' }}">
+                Save
+            </button>
+            <span id="pause-reminder-status"
+                  aria-live="polite"
+                  style="font-size:0.85rem; color:#15803d; display:none;">Saved.</span>
+        </div>
+    </div>
+</details>
+
+<!-- ── Inclusive Pacing (host only) ── -->
+<details id="inclusive-pacing-settings"
+         style="margin-top:1rem; padding-top:1rem; border-top:1px solid #e2e8f0;">
+    <summary style="cursor:pointer; font-size:0.9rem; color:#5D3A9B; font-weight:600;">
+        Inclusive Pacing
+    </summary>
+    <div style="margin-top:0.75rem;">
+        <p style="font-size:0.875rem; color:#475569; margin:0 0 0.6rem;">
+            Give AAC and slow-input participants extra time. When active, each participant
+            sees a personal countdown that continues beyond the group&rsquo;s timer at
+            the multiplier you choose. The group timer and session pacing are unaffected.
+        </p>
+        <div style="display:flex; align-items:center; gap:0.75rem; flex-wrap:wrap;">
+            <label style="display:flex; align-items:center; gap:0.4rem;
+                          font-size:0.875rem; font-weight:600; color:#1e293b; cursor:pointer;">
+                <input type="checkbox" id="inclusive-pacing-toggle"
+                       {% if inclusive_pacing %}checked{% endif %}
+                       style="width:1rem; height:1rem; cursor:pointer;">
+                Enable Inclusive Pacing
+            </label>
+            <select id="inclusive-pacing-multiplier"
+                    aria-label="Time multiplier for extended personal timer"
+                    style="padding:0.35rem 0.6rem; border:1px solid #cbd5e1; border-radius:5px;
+                           font-size:0.875rem; font-family:inherit; background:#fff; cursor:pointer;">
+                <option value="3" {% if inclusive_pacing_multiplier == 3 %}selected{% endif %}>3&times; &mdash; 3 min for every 1</option>
+                <option value="5" {% if inclusive_pacing_multiplier == 5 %}selected{% endif %}>5&times; &mdash; 5 min for every 1</option>
+            </select>
+            <button type="button" id="inclusive-pacing-save"
+                    style="padding:0.4rem 0.9rem; background:#5D3A9B; color:#fff;
+                           border:none; border-radius:5px; font-size:0.875rem;
+                           cursor:pointer; font-family:inherit;"
+                    data-save-url="{% url 'tools:session_set_inclusive_pacing' session.id %}">
+                Save
+            </button>
+            <span id="inclusive-pacing-status"
+                  aria-live="polite"
+                  style="font-size:0.85rem; color:#15803d; display:none;"></span>
+        </div>
+        <!-- ── Verbal Breakout sub-section ──
+             Sub-feature of Inclusive Pacing: lets the host signal the room to
+             start a verbal discussion while AAC participants continue composing.
+             verbal_breakout.js drives the toggle; the panel is shown/hidden
+             when the Inclusive Pacing checkbox changes. -->
+        <div id="verbal-breakout-panel"
+             style="margin-top:0.85rem; padding-top:0.85rem; border-top:1px solid #e2e8f0;"
+             {% if not inclusive_pacing %}hidden{% endif %}>
+            <p style="font-size:0.875rem; color:#475569; margin:0 0 0.6rem;">
+                When the group timer ends, move participants to a verbal discussion
+                while AAC participants continue composing digitally. Those who have
+                pressed &ldquo;I&rsquo;m Composing&rdquo; will be reassured their
+                submission window is still open.
+            </p>
+            <button type="button" id="verbal-breakout-btn"
+                    data-activate-url="{% url 'tools:session_set_verbal_breakout' session.id %}"
+                    class="btn{% if session.verbal_breakout_active %} btn-primary{% endif %}"
+                    aria-pressed="{{ session.verbal_breakout_active|yesno:'true,false' }}">
+                {% if session.verbal_breakout_active %}&#9646;&#9646; End verbal discussion{% else %}&#128172; Start verbal discussion{% endif %}
+            </button>
+            <span id="verbal-breakout-status" aria-live="polite"
+                  style="font-size:0.85rem; margin-left:0.75rem; display:none;"></span>
+        </div>
+    </div>
+</details>
+
+<!-- ── Close session form ── -->
+<form method="post" action="{% url 'tools:session_close' session.id %}"
+      style="margin-top:1.5rem; padding-top:1rem; border-top:1px solid #e2e8f0;"
+      data-confirm="Close the session? Participants will no longer be able to edit, and the combined results will be revealed to everyone with the link."
+      data-loading-text="Closing&hellip;">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-primary">Close session and reveal results</button>
+</form>
+
+{% else %}
+<p style="margin-top:2rem; color:#64748b;">
+    The host will close the session when everyone is done.
+    The page will refresh automatically once that happens.
+</p>
+{% endif %}
+
+<!-- ── AAC Composition Presence Flag ── -->
+<!-- Participants composing in external AAC software can signal the host
+     so they are not cut off before they have had a chance to contribute. -->
+<div id="aac-presence"
+     data-composing-url="{% url 'tools:session_mark_composing' session.id %}"
+     style="margin-top:1.5rem; padding:1rem 1.25rem;
+            background:#fffbeb; border:1px solid #fcd34d; border-radius:6px;">
+    <p style="margin:0 0 0.3rem; font-size:0.9rem; font-weight:600; color:#92400e;">
+        Using external composition software? (AAC, Grid&nbsp;3, etc.)
+    </p>
+    <p style="margin:0 0 0.75rem; font-size:0.82rem; color:#78350f; line-height:1.5;">
+        If you compose your response in a separate app, press the button so
+        the host knows you are working and will wait for you.
+    </p>
+    <button type="button"
+            id="aac-composing-btn"
+            aria-pressed="false"
+            style="padding:0.55rem 1.1rem; background:#d97706; color:#fff;
+                   border:none; border-radius:5px; font-size:0.9rem;
+                   cursor:pointer; font-family:inherit; font-weight:600;">
+        &#128483;&#65039; I&rsquo;m Composing
+    </button>
+    <span id="aac-composing-status"
+          aria-live="polite"
+          style="display:inline-block; margin-left:0.75rem;
+                 font-size:0.82rem; color:#92400e;"></span>
+</div>
+
+<p style="margin-top:1.5rem;"><a href="{% url 'tools:catalog' %}">&larr; Back to catalog</a></p>
+
+{% if not is_host %}
+<!-- ── Session-closed waiting overlay (non-host participants only) ──
+     Hidden until session_poll.js detects data.status === 'closed'.
+     Shown instead of an abrupt page reload so participants see a calm
+     holding state while the facilitator prepares the next steps. -->
+<div id="session-waiting-overlay"
+     class="session-waiting-overlay"
+     hidden
+     role="status"
+     aria-live="assertive"
+     aria-label="Session closed — waiting for host to share results">
+    <div class="swl-card">
+        <div class="swl-dots" aria-hidden="true">
+            <span></span><span></span><span></span>
+        </div>
+        <p class="swl-saved-badge" aria-hidden="true">
+            &#10003;&nbsp;Response saved
+        </p>
+        <h2 class="swl-heading">Session closed</h2>
+        <p class="swl-body">
+            The host is reviewing your results.<br>
+            They&rsquo;ll be shared with you in a moment.
+        </p>
+        <a id="swl-view-btn" href="#" class="btn btn-primary swl-btn" hidden>
+            View results &rarr;
+        </a>
+        <p class="swl-hint">This page will update automatically.</p>
+    </div>
+</div>
+{% endif %}
+
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/libraries/qrcode.min.js' %}"></script>
+<script src="{% static 'js/qrcode_init.js' %}"></script>
+<script src="{% static 'js/timer.js' %}"></script>
+<script src="{% static 'js/activity_feedback.js' %}"></script>
+{% if tool_meta.show_canvas %}<script src="{% static 'js/drawing_canvas.js' %}"></script>{% endif %}
+{% if is_host %}<script src="{% static 'js/pause_reminder.js' %}"></script>{% endif %}
+{% if is_host %}<script src="{% static 'js/inclusive_pacing.js' %}"></script>{% endif %}
+{% if is_host %}<script src="{% static 'js/verbal_breakout.js' %}"></script>{% endif %}
+<script src="{% static 'js/multimedia_input.js' %}"></script>
+<!-- draft_init.js provides getCookie() and adds .tool-input to form fields,
+     both required by session_autosave.js. Load before the autosave script. -->
+<script src="{% static 'js/draft_init.js' %}"></script>
+<script src="{% static 'js/session_autosave.js' %}"></script>
+<script src="{% static 'js/session_composing.js' %}"></script>
+<script src="{% static 'js/session_poll.js' %}"></script>
+{% endblock %}

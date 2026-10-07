@@ -1,0 +1,241 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Try {{ tool_meta.title }} free — KwaCart{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/tool_try.css' %}">
+{% endblock %}
+
+{% block content %}
+
+<nav class="breadcrumb" aria-label="Breadcrumb">
+    <a href="{% url 'home' %}">Home</a>
+    &rsaquo; Try {{ tool_meta.title }}
+</nav>
+
+<!-- ── Header ── -->
+<div class="try-header">
+    <span class="try-badge">Free — no account needed</span>
+    <h1>{{ tool_meta.title }}</h1>
+    <p class="try-tagline">{{ tool_meta.tagline }}</p>
+    <p class="try-what">{{ tool_meta.what }}</p>
+</div>
+
+{% if result and not result.error %}
+<!-- ── Results ── -->
+<div class="try-result" role="region" aria-label="Your results">
+    <h2>&#10003; Your results</h2>
+    {% for label, value in result_fields %}
+        <div class="try-result__field">
+            <p class="try-result__label">{{ label }}</p>
+            <p class="try-result__value">{{ value }}</p>
+        </div>
+    {% endfor %}
+
+    <!-- Download bar — client-side Blob, no account needed -->
+    <div class="try-download">
+        <button type="button" id="sandbox-download-btn" class="try-download__btn">
+            &#8595; Download as Markdown
+        </button>
+        <p class="try-download__hint">Raw .md file &mdash; no account needed, yours to keep.</p>
+    </div>
+</div>
+
+<!-- Result data for the client-side download (not rendered to user) -->
+{% include "feedback_prompt.html" with source="tool_completion" tool_slug=tool_slug interaction_mode="try" %}
+<script id="sandbox-result-data" type="application/json">{{ result_json }}</script>
+
+<!-- ── Soft post-download CTA — hidden until download fires ── -->
+<div id="sandbox-cta" class="sandbox-cta" hidden>
+    <div class="sandbox-cta__text">
+        <strong>That file is yours to keep.</strong>
+        <p>
+            Want a permanent, searchable archive for every session you run?
+            A KwaCart account unlocks all&nbsp;23 tools and live group sessions.
+        </p>
+    </div>
+    <div class="sandbox-cta__actions">
+        <a href="{% url 'accounts:signup' %}" class="sandbox-cta__signup">
+            Register &rarr;
+        </a>
+        <a href="{% url 'self_hosting' %}" class="sandbox-cta__secondary">
+            Self-host KwaCart
+        </a>
+    </div>
+</div>
+
+<!-- ── Sign-up nudge (after result) ── -->
+<div class="try-nudge">
+    <div class="try-nudge__text">
+        <strong>Want to save this and run live group sessions?</strong>
+        <p>
+            An account gives you all 23 Liberating Structures tools, a personal archive,
+            and the ability to share a session link (or QR code) with a whole room.
+        </p>
+    </div>
+    <a href="{% url 'self_hosting' %}" class="try-nudge__link">
+        Self-host KwaCart &rarr;
+    </a>
+</div>
+
+<hr class="try-divider">
+<h2 class="try-again-heading">Try again with different input</h2>
+{% endif %}
+
+{% if result.error %}
+<div class="try-error">
+    Something went wrong: {{ result.error }}
+</div>
+{% endif %}
+
+<!-- ── Countdown timer ── -->
+{% if try_timer_seconds %}
+<div id="try-timer" class="try-timer"
+     data-duration="{{ try_timer_seconds }}"
+     role="region" aria-label="Countdown timer">
+
+    <div class="try-timer__header">
+        <div>
+            <p class="try-timer__label">Suggested time</p>
+            <p class="try-timer__label-value">{{ try_timer_label }}</p>
+        </div>
+        <div class="try-timer__controls">
+            <span id="try-timer-display"
+                  class="try-timer__display"
+                  aria-label="{{ try_timer_seconds|floatformat:0 }} seconds remaining"
+                  role="timer"></span>
+            <div class="try-timer__buttons">
+                <button id="try-timer-btn" type="button" class="try-timer__start-btn">
+                    Start
+                </button>
+                <button id="try-timer-reset" type="button" class="try-timer__reset-btn">
+                    Reset
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="try-timer__bar-track" aria-hidden="true">
+        <div id="try-timer-bar" class="try-timer__bar-fill"></div>
+    </div>
+
+    <!-- Time's up message -->
+    <p id="try-timer-complete" class="try-timer__complete">
+        Time's up — complete your answer and submit whenever you're ready.
+    </p>
+
+    <!-- Screen-reader announcements -->
+    <div id="try-timer-announcer" aria-live="polite" aria-atomic="true"
+         class="sr-only"></div>
+</div>
+{% endif %}
+
+<!-- ── How to use ── -->
+<details class="how-to-use">
+    <summary>How to use {{ tool_meta.title }}</summary>
+    <p>{{ tool_meta.how }}</p>
+</details>
+
+<!-- ── Form ── -->
+<form method="post" novalidate
+      data-disable-on-submit
+      data-loading-text="Processing&hellip;">
+    {% csrf_token %}
+    {% for field in form %}
+        <div class="form-group">
+            {{ field.label_tag }}
+            {% if field.help_text %}
+                <p class="field-help">{{ field.help_text }}</p>
+            {% endif %}
+            {{ field }}
+            {% if field.errors %}
+                <p id="{{ field.auto_id }}-error" class="field-error">
+                    {{ field.errors|join:", " }}
+                </p>
+            {% endif %}
+        </div>
+    {% endfor %}
+    <button type="submit" class="btn btn-primary btn-submit">
+        See my results &rarr;
+    </button>
+</form>
+
+<!-- ── Footer nudge (before result) ── -->
+{% if not result %}
+<div class="try-upsell">
+    <strong>Going further?</strong>
+    <p>
+        <a href="{% url 'self_hosting' %}">Run KwaCart yourself</a>
+        to use all 23 Liberating Structures tools, run live group sessions, and keep a
+        searchable archive of every session you host.
+    </p>
+</div>
+{% endif %}
+
+{% endblock %}
+
+{% block extra_js %}
+{% if try_timer_seconds %}
+<script src="{% static 'js/tool_try_timer.js' %}"></script>
+{% endif %}
+{% if result_json %}
+<script>
+/* ── Sandbox download: client-side Blob + soft CTA reveal ─────────────────
+   Builds a Markdown file from the embedded result JSON and triggers a
+   browser download without any server round-trip or account requirement.
+   Reveals the signup CTA after the download fires.
+*/
+(function () {
+    var btn = document.getElementById('sandbox-download-btn');
+    var cta = document.getElementById('sandbox-cta');
+    var dataEl = document.getElementById('sandbox-result-data');
+    if (!btn || !dataEl) return;
+
+    var data;
+    try {
+        data = JSON.parse(dataEl.textContent);
+    } catch (_) { return; }
+
+    btn.addEventListener('click', function () {
+        var lines = [
+            '# ' + data.tool_title + ' \u2014 Try-It Results',
+            '**Date:** ' + data.date,
+            '',
+            '---',
+            '',
+            '## Results',
+            '',
+        ];
+        data.result_fields.forEach(function (pair) {
+            lines.push('### ' + pair[0]);
+            lines.push(pair[1]);
+            lines.push('');
+        });
+
+        var md = lines.join('\n');
+        var blob = new Blob([md], { type: 'text/markdown; charset=utf-8' });
+        var url = URL.createObjectURL(blob);
+        var a = document.createElement('a');
+        a.href = url;
+        a.download = data.filename;
+        document.body.appendChild(a);
+        a.click();
+        setTimeout(function () {
+            document.body.removeChild(a);
+            URL.revokeObjectURL(url);
+        }, 150);
+
+        btn.textContent = '\u2713 Downloaded';
+        btn.disabled = true;
+
+        if (cta) {
+            cta.hidden = false;
+            cta.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+        }
+    });
+}());
+</script>
+{% endif %}
+{% endblock %}

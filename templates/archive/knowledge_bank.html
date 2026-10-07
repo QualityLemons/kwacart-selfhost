@@ -1,0 +1,76 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Knowledge Bank{% endblock %}
+
+{% block content %}
+<div style="display:flex; align-items:baseline; gap:1rem; flex-wrap:wrap; margin-bottom:0.25rem;">
+    <h1 style="margin:0;">Knowledge Bank</h1>
+    <span style="color:#94a3b8; font-size:0.95rem;">{{ tools_used|length }} tool{{ tools_used|length|pluralize }} used</span>
+</div>
+<p style="color:#64748b; margin-top:0.25rem; margin-bottom:2rem;">
+    Every tool you've run — click one to see your submissions and sessions.
+</p>
+
+{% if tools_used %}
+<div style="display:grid; grid-template-columns:repeat(auto-fill,minmax(280px,1fr)); gap:1rem;">
+    {% for tool in tools_used %}
+    <a href="{% url 'archive:knowledge_bank_tool' tool.slug %}"
+       style="display:block; text-decoration:none; color:inherit;
+              border:1px solid #e2e8f0; border-radius:10px;
+              padding:1.1rem 1.25rem; background:#fff;
+              transition:border-color 0.15s, box-shadow 0.15s;"
+       onmouseover="this.style.borderColor='#7c3aed';this.style.boxShadow='0 2px 8px rgba(124,58,237,0.10)'"
+       onmouseout="this.style.borderColor='#e2e8f0';this.style.boxShadow='none'">
+
+        <div style="font-weight:600; font-size:1rem; color:#1e293b; margin-bottom:0.3rem;">
+            {{ tool.title }}
+        </div>
+
+        {% if tool.tagline %}
+        <div style="font-size:0.82rem; color:#64748b; margin-bottom:0.75rem;
+                    line-height:1.4; min-height:2.4em;">
+            {{ tool.tagline }}
+        </div>
+        {% endif %}
+
+        <div style="display:flex; gap:0.6rem; flex-wrap:wrap; align-items:center;">
+            {% if tool.solo_count %}
+            <span style="font-size:0.78rem; background:#f1f5f9; color:#475569;
+                         padding:0.2rem 0.55rem; border-radius:20px;">
+                {{ tool.solo_count }} solo submission{{ tool.solo_count|pluralize }}
+            </span>
+            {% endif %}
+            {% if tool.session_count %}
+            <span style="font-size:0.78rem; background:#ede9fe; color:#5b21b6;
+                         padding:0.2rem 0.55rem; border-radius:20px;">
+                {{ tool.session_count }} session{{ tool.session_count|pluralize }}
+            </span>
+            {% endif %}
+        </div>
+
+        <div style="margin-top:0.65rem; font-size:0.78rem; color:#94a3b8;">
+            Last used {{ tool.last_used|date:"Y-m-d" }}
+        </div>
+    </a>
+    {% endfor %}
+</div>
+
+{% else %}
+<div style="text-align:center; padding:3rem 1rem; color:#64748b;">
+    <p style="font-size:1.1rem; margin-bottom:0.75rem;">No activity yet.</p>
+    <p>Head to the <a href="{% url 'tools:catalog' %}">tool catalog</a> to run your first session.</p>
+</div>
+{% endif %}
+
+{% include "feedback_prompt.html" with source="knowledge_bank" %}
+
+{% if request.user.is_staff %}
+<p style="margin-top:3rem;">
+    <a href="{% url 'archive:feedback_inbox' %}"
+       style="color:#0d9488; font-size:0.9rem;">
+        View feedback inbox &rarr;
+    </a>
+</p>
+{% endif %}
+{% endblock %}

@@ -1,0 +1,163 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="See how Conversation Café helped an apprentice, support network and workplace build a strengths-led person-centred development plan.">
+    <title>Building a person-centred plan with Conversation Café — KwaCart case study</title>
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+    <link rel="stylesheet" href="{% static 'css/case-study.css' %}">
+</head>
+<body>
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+<header>
+    <nav class="nav" aria-label="Main navigation">
+        <a href="{% url 'home' %}" class="nav-brand kwacart-wordmark" aria-label="KwaCart home">KwaCart</a>
+        <span class="nav-spacer"></span>
+        <a href="{% url 'home' %}#when-to-use">Examples</a>
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'tools:catalog' %}">All Tools</a>
+            <a href="{% url 'archive:knowledge_bank' %}">Knowledge Bank</a>
+        {% else %}
+            <a href="{% url 'self_hosting' %}">Self-host</a>
+            <a href="{% url 'accounts:login' %}">Log in</a>
+            <a href="{% url 'accounts:signup' %}">Register</a>
+        {% endif %}
+    </nav>
+</header>
+
+<main id="main-content">
+    <header class="case-hero">
+        <div class="case-hero__inner">
+            <a class="case-back" href="{% url 'home' %}#when-to-use">&larr; Back to examples</a>
+            <p class="case-eyebrow">Case study · Person-centred planning</p>
+            <h1>Designing an apprenticeship around strengths, growth and belonging</h1>
+            <p class="case-lead">
+                An engineering apprentice, their support worker and workplace colleagues
+                used Conversation Café to create a plan that combined technical ambition
+                with clear support for communication, adaptability and resilience.
+            </p>
+        </div>
+    </header>
+
+    <section class="case-section case-summary" aria-labelledby="plan-summary-heading">
+        <div>
+            <p class="case-kicker">The starting point</p>
+            <h2 id="plan-summary-heading">Ask what success should feel like to the person—not only what support they need</h2>
+            <p>
+                The apprentice arrived with an engineering qualification, clear technical
+                strengths and a desire to become more confident working with people and
+                handling change. The challenge was to provide meaningful opportunities to
+                grow without compromising wellbeing, confidence or inclusion.
+            </p>
+        </div>
+        <dl class="case-facts">
+            <div><dt>Structure</dt><dd>Conversation Café</dd></div>
+            <div><dt>Voices</dt><dd>Apprentice and support network</dd></div>
+            <div><dt>Horizon</dt><dd>The first apprenticeship year</dd></div>
+        </dl>
+    </section>
+
+    <section class="case-section" aria-labelledby="shift-heading">
+        <p class="case-kicker">What shifted through listening</p>
+        <h2 id="shift-heading">The conversation moved from accommodation to supported growth</h2>
+        <p class="case-intro">
+            After everyone spoke and listened without interruption, the group’s framing
+            changed in five important ways.
+        </p>
+        <div class="perspective-grid">
+            <article><h3>Strengths before barriers</h3><p>Start with technical capability, persistence and professional ambition rather than defining the person by difficulty.</p></article>
+            <article><h3>Growth, not protection</h3><p>Provide manageable challenges with preparation and reflection instead of removing every unfamiliar situation.</p></article>
+            <article><h3>Explicit expectations</h3><p>Make schedules, feedback and workplace norms clear rather than relying on assumptions or unwritten rules.</p></article>
+            <article><h3>Practice through real work</h3><p>Develop communication and adaptability inside meaningful engineering projects, not only through classroom training.</p></article>
+            <article><h3>A workplace that adapts too</h3><p>Help colleagues communicate clearly, allow processing time and avoid interpreting a pause as disengagement.</p></article>
+            <article><h3>Shared responsibility</h3><p>Coordinate the apprentice, manager, mentor and support worker around one plan and a consistent set of goals.</p></article>
+        </div>
+    </section>
+
+    <section class="case-band" aria-labelledby="principles-heading">
+        <div class="case-band__inner">
+            <p class="case-kicker">The shared principles</p>
+            <h2 id="principles-heading">Inclusion is a shared responsibility</h2>
+            <ul class="theme-list">
+                <li>The apprenticeship should build on capability, not attempt to “fix” the person.</li>
+                <li>Communication, adaptability and resilience deserve goals, feedback and recognition alongside technical competence.</li>
+                <li>Challenges should increase gradually, with coaching and reflection afterwards.</li>
+                <li>Clear explanations—including why something changed—can reduce uncertainty.</li>
+                <li>No single manager, mentor or support worker should carry responsibility for success alone.</li>
+            </ul>
+        </div>
+    </section>
+
+    <section class="case-section" aria-labelledby="pathway-heading">
+        <p class="case-kicker">Development in real work</p>
+        <h2 id="pathway-heading">A three-stage communication pathway</h2>
+        <p class="case-intro">
+            The group designed progression that made expectations predictable while
+            increasing complexity over time.
+        </p>
+        <div class="perspective-grid">
+            <article><h3>Months 1–3 · Build safety</h3><p>Use daily mentor check-ins, small-team discussions, structured introductions and supported practice asking questions.</p></article>
+            <article><h3>Months 4–6 · Increase participation</h3><p>Present progress on a small task, contribute to team meetings and take part in toolbox talks with advance notice.</p></article>
+            <article><h3>Months 7–12 · Share expertise</h3><p>Explain technical work, support external visits and lead part of a project review with coaching available.</p></article>
+        </div>
+    </section>
+
+    <section class="case-section case-outcome" aria-labelledby="plan-outcome-heading">
+        <div>
+            <p class="case-kicker">The outcome</p>
+            <h2 id="plan-outcome-heading">Four goals shaped around the apprentice</h2>
+            <p>
+                The conversation produced a draft person-centred plan in which personal
+                aspirations, workplace responsibilities and practical support reinforced
+                one another.
+            </p>
+            <ol class="action-list">
+                <li><span>01</span><p>Become a capable electrical engineering apprentice by completing milestones and applying existing knowledge.</p></li>
+                <li><span>02</span><p>Build communication confidence through progressively greater participation and technical explanation.</p></li>
+                <li><span>03</span><p>Develop adaptability through controlled changes, clear reasons and reflection on useful strategies.</p></li>
+                <li><span>04</span><p>Strengthen resilience by learning from setbacks, seeking help and recognising successful recovery.</p></li>
+            </ol>
+        </div>
+        <blockquote>
+            <p>“I want to contribute and be part of the team.”</p>
+            <footer>— The apprentice</footer>
+        </blockquote>
+    </section>
+
+    <section class="case-section" aria-labelledby="commitments-heading">
+        <p class="case-kicker">The support commitments</p>
+        <h2 id="commitments-heading">Turn the plan into a coordinated working agreement</h2>
+        <ul class="theme-list">
+            <li>Assign a trusted workplace mentor and hold regular one-to-one reviews.</li>
+            <li>Agree first-year goals with the apprentice and support worker.</li>
+            <li>Brief colleagues on clear, patient and respectful communication.</li>
+            <li>Create graduated opportunities to participate in meetings, presentations and projects.</li>
+            <li>Review the plan regularly and celebrate personal growth as actively as technical achievement.</li>
+        </ul>
+    </section>
+
+    <section class="case-cta" aria-labelledby="plan-cta-heading">
+        <div>
+            <p class="case-kicker">Use the pattern</p>
+            <h2 id="plan-cta-heading">Build plans with people, not for them</h2>
+            <p>Use Conversation Café to hear the person’s aspirations alongside the perspectives of those who can help turn them into consistent, practical support.</p>
+        </div>
+        <div class="case-cta__actions">
+            {% if request.user.is_authenticated %}
+                <a class="btn btn-primary btn-large" href="{% url 'tools:catalog' %}">Find Conversation Café</a>
+            {% else %}
+                <a class="btn btn-primary btn-large" href="{% url 'accounts:signup' %}">Register to get started</a>
+                <a class="btn btn-large" href="{% url 'self_hosting' %}">Self-host KwaCart</a>
+            {% endif %}
+        </div>
+    </section>
+</main>
+
+<footer class="footer">
+    KwaCart &mdash; a Liberating Structures facilitation platform.
+</footer>
+</body>
+</html>

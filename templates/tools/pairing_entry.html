@@ -1,0 +1,169 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}Join a session &mdash; KwaCart{% endblock %}
+
+{% block extra_css %}
+<style>
+/* ── Companion pairing entry screen ──────────────────────────────────────── */
+#pairing-screen {
+    min-height: calc(100vh - 9rem);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 2rem 1rem;
+}
+
+.ps-card {
+    background: #1e293b;
+    color: #f8fafc;
+    border-radius: 14px;
+    padding: 2.5rem 2rem;
+    width: 100%;
+    max-width: 380px;
+    box-shadow: 0 8px 40px rgba(0, 0, 0, 0.2);
+    text-align: center;
+}
+
+.ps-eyebrow {
+    font-size: 0.75rem;
+    letter-spacing: 0.09em;
+    text-transform: uppercase;
+    color: #94a3b8;
+    margin: 0 0 1rem;
+}
+
+.ps-question {
+    display: block;
+    font-size: 1.35rem;
+    font-weight: 700;
+    color: #f8fafc;
+    margin: 0 0 1.75rem;
+    line-height: 1.3;
+}
+
+.ps-input {
+    display: block;
+    width: 100%;
+    padding: 1rem;
+    border: 2px solid #475569;
+    border-radius: 8px;
+    font-size: 2rem;
+    font-weight: 700;
+    font-family: ui-monospace, Menlo, monospace;
+    background: #0f172a;
+    color: #f8fafc;
+    box-sizing: border-box;
+    text-align: center;
+    letter-spacing: 0.4em;
+    transition: border-color 0.15s;
+}
+
+.ps-input:focus {
+    outline: none;
+    border-color: #f59e0b;
+    box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.25);
+}
+
+.ps-input::placeholder {
+    color: #334155;
+    letter-spacing: 0.2em;
+}
+
+.ps-error {
+    color: #fca5a5;
+    font-size: 0.875rem;
+    margin: 0.6rem 0 0;
+}
+
+.ps-btn {
+    display: block;
+    width: 100%;
+    margin-top: 1.25rem;
+    padding: 0.9rem;
+    background: #f59e0b;
+    color: #1c1917;
+    border: none;
+    border-radius: 8px;
+    font-size: 1.05rem;
+    font-weight: 700;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s;
+}
+
+.ps-btn:hover,
+.ps-btn:focus-visible {
+    background: #d97706;
+    outline: 2px solid #f8fafc;
+    outline-offset: 2px;
+}
+
+.ps-hint {
+    font-size: 0.78rem;
+    color: #64748b;
+    margin: 1.25rem 0 0;
+    line-height: 1.55;
+}
+</style>
+{% endblock %}
+
+{% block content %}
+<div id="pairing-screen">
+    <div class="ps-card">
+
+        <p class="ps-eyebrow">Companion device pairing</p>
+
+        <label class="ps-question" for="pairing-code">
+            Enter the 3-digit<br>session code
+        </label>
+
+        <form method="post"
+              data-disable-on-submit
+              data-loading-text="Finding session&hellip;">
+            {% csrf_token %}
+            <input type="text"
+                   id="pairing-code"
+                   name="code"
+                   class="ps-input"
+                   autofocus
+                   autocomplete="off"
+                   inputmode="numeric"
+                   enterkeyhint="go"
+                   maxlength="3"
+                   pattern="[0-9]{1,3}"
+                   placeholder="0 0 0"
+                   aria-describedby="pairing-code-hint{% if error %} pairing-code-error{% endif %}">
+            {% if error %}
+            <p class="ps-error" id="pairing-code-error" role="alert">{{ error }}</p>
+            {% endif %}
+            <button type="submit" class="ps-btn">Join session &rarr;</button>
+        </form>
+
+        <p class="ps-hint" id="pairing-code-hint">
+            Ask your host or support worker for the 3-digit code shown
+            next to the QR code on their screen.
+        </p>
+
+    </div>
+</div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+/* Auto-submit once 3 digits are entered, so users don't need to press Join. */
+(function () {
+    var input = document.getElementById('pairing-code');
+    var form = input && input.closest('form');
+    if (!input || !form) return;
+
+    input.addEventListener('input', function () {
+        var digits = input.value.replace(/\D/g, '').slice(0, 3);
+        input.value = digits;
+        if (digits.length === 3) {
+            form.submit();
+        }
+    });
+}());
+</script>
+{% endblock %}

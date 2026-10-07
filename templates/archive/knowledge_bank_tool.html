@@ -1,0 +1,159 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block title %}{{ tool_title }} — Knowledge Bank{% endblock %}
+
+{% block extra_css %}
+<link rel="stylesheet" href="{% static 'css/archive_md_preview.css' %}">
+{% endblock %}
+
+{% block content %}
+<p style="margin-bottom:0.5rem;">
+    <a href="{% url 'archive:knowledge_bank' %}" style="color:#7c3aed; font-size:0.9rem;">
+        &larr; Knowledge Bank
+    </a>
+</p>
+
+<h1 style="margin-bottom:0.15rem;">{{ tool_title }}</h1>
+{% if tool_tagline %}
+<p style="color:#64748b; margin-top:0; margin-bottom:2rem;">{{ tool_tagline }}</p>
+{% endif %}
+
+{# ── Solo submissions ───────────────────────────────────────────────────── #}
+<h2 style="margin-top:1.5rem; margin-bottom:0.75rem;">Solo submissions</h2>
+{% if records %}
+<table style="width:100%; border-collapse:collapse; table-layout:fixed;">
+    <colgroup>
+        <col style="width:44%"><col style="width:20%"><col style="width:12%"><col style="width:24%">
+    </colgroup>
+    <thead>
+        <tr style="text-align:left; border-bottom:1px solid #e2e8f0;">
+            <th style="padding:0.4rem 0.25rem 0.4rem 0;">Submitted</th>
+            <th style="padding:0.4rem 0.25rem;">Version</th>
+            <th></th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for r in records %}
+        <tr style="border-bottom:1px solid #f1f5f9;">
+            <td style="padding:0.4rem 0.25rem 0.4rem 0; color:#475569;">
+                {{ r.submitted_at|date:"Y-m-d H:i" }}
+            </td>
+            <td style="padding:0.4rem 0.25rem; color:#94a3b8; font-size:0.85rem;">
+                {{ r.tool_version }}
+            </td>
+            <td style="padding:0.4rem 0.25rem;">
+                <a href="{% url 'archive:detail' r.id %}">View</a>
+            </td>
+            <td style="padding:0.4rem 0; display:flex; gap:0.75rem; align-items:center; flex-wrap:wrap;">
+                {% if r.md_file %}
+                <button type="button" class="mdv-preview-btn"
+                        data-preview-url="{% url 'archive:md_preview' r.id %}"
+                        data-download-url="{% url 'archive:download' r.id 'md' %}"
+                        data-title="{{ tool_title }} &mdash; {{ r.submitted_at|date:'Y-m-d' }}">
+                    Preview
+                </button>
+                {% endif %}
+                {% if not r.data_owner_id or r.data_owner_id == user.id %}
+                <form method="post" action="{% url 'archive:delete' r.id %}"
+                      onsubmit="return confirm('Permanently delete this record?')">
+                    {% csrf_token %}
+                    <button type="submit"
+                            style="background:none; border:none; padding:0; cursor:pointer;
+                                   color:#dc2626; font-size:inherit; font-family:inherit;
+                                   text-decoration:underline;">
+                        Delete
+                    </button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p style="color:#94a3b8;">No solo submissions for this tool yet.</p>
+{% endif %}
+
+{# ── Sessions ───────────────────────────────────────────────────────────── #}
+<h2 style="margin-top:2.5rem; margin-bottom:0.75rem;">Sessions</h2>
+{% if sessions %}
+<table style="width:100%; border-collapse:collapse; table-layout:fixed;">
+    <colgroup>
+        <col style="width:12%"><col style="width:10%">
+        <col style="width:22%"><col style="width:22%"><col style="width:34%">
+    </colgroup>
+    <thead>
+        <tr style="text-align:left; border-bottom:1px solid #e2e8f0;">
+            <th style="padding:0.4rem 0.25rem 0.4rem 0;">Role</th>
+            <th style="padding:0.4rem 0.25rem;">Status</th>
+            <th style="padding:0.4rem 0.25rem;">Started</th>
+            <th style="padding:0.4rem 0.25rem;">Closed</th>
+            <th style="padding:0.4rem 0;"></th>
+        </tr>
+    </thead>
+    <tbody>
+        {% for s in sessions %}
+        <tr style="border-bottom:1px solid #f1f5f9;">
+            <td style="padding:0.4rem 0.25rem 0.4rem 0; color:#475569;">
+                {% if s.data_owner_id == user.id or not s.data_owner_id and s.host_id == user.id %}
+                    Host
+                {% elif s.data_owner_id == user.id %}
+                    Organisation owner
+                {% else %}
+                    Participant
+                {% endif %}
+            </td>
+            <td style="padding:0.4rem 0.25rem;">
+                {% if s.status == 'open' %}
+                    <span style="color:#40B0A6;">Open</span>
+                {% else %}
+                    <span style="color:#94a3b8;">Closed</span>
+                {% endif %}
+            </td>
+            <td style="padding:0.4rem 0.25rem; color:#64748b; font-size:0.9rem;">
+                {{ s.created_at|date:"Y-m-d H:i" }}
+            </td>
+            <td style="padding:0.4rem 0.25rem; color:#64748b; font-size:0.9rem;">
+                {% if s.closed_at %}{{ s.closed_at|date:"Y-m-d H:i" }}{% else %}—{% endif %}
+            </td>
+            <td style="padding:0.4rem 0; display:flex; gap:0.75rem; align-items:center; flex-wrap:wrap;">
+                <a href="{% url 'tools:session_detail' s.id %}">Open</a>
+                {% if s.md_file %}
+                <button type="button" class="mdv-preview-btn"
+                        data-preview-url="{% url 'archive:session_md_preview' s.id %}"
+                        data-download-url="{% url 'archive:session_download' s.id 'md' %}"
+                        data-title="{{ tool_title }} session &mdash; {{ s.closed_at|date:'Y-m-d' }}">
+                    Preview
+                </button>
+                {% endif %}
+                {% if s.host_id == user.id %}
+                <form method="post"
+                      action="{% url 'tools:session_delete' s.id %}"
+                      onsubmit="return confirm('Permanently delete this session and all its data?')">
+                    {% csrf_token %}
+                    <button type="submit"
+                            style="background:none; border:none; padding:0; cursor:pointer;
+                                   color:#dc2626; font-size:inherit; font-family:inherit;
+                                   text-decoration:underline;">
+                        Delete
+                    </button>
+                </form>
+                {% endif %}
+            </td>
+        </tr>
+        {% endfor %}
+    </tbody>
+</table>
+{% else %}
+<p style="color:#94a3b8;">No sessions for this tool yet.</p>
+{% endif %}
+{% include "feedback_prompt.html" with source="knowledge_bank" tool_slug=tool_slug interaction_mode="solo" %}
+{% endblock %}
+
+{% block extra_js %}
+<script src="{% static 'js/libraries/marked.min.js' %}"></script>
+<script src="{% static 'js/libraries/purify.min.js' %}"></script>
+<script src="{% static 'js/archive_md_preview.js' %}"></script>
+{% endblock %}

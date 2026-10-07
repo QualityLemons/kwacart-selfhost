@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Data on this instance | KwaCart{% endblock %}
+{% block meta %}
+<meta name="description" content="How a self-hosted KwaCart instance stores session and account information, and what to ask its operator.">
+<meta property="og:title" content="Data on this KwaCart instance">
+<meta property="og:description" content="Information for participants using self-hosted KwaCart.">
+<meta property="og:type" content="website">
+{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/privacy.css' %}">{% endblock %}
+{% block content %}
+<div class="privacy-page">
+    <h1>Data on this KwaCart instance</h1>
+    <p>KwaCart is self-hosted software. The person or organisation operating this instance controls its storage, access and retention settings. This page explains the software’s defaults; it is not a formal privacy notice for that operator.</p>
+    <h2>What is stored</h2>
+    <p>Accounts include an email address and a securely hashed password. Session responses, facilitator notes, recordings, images, drawings and exports may be stored when you use those features. The default self-hosted configuration uses the operator’s database and local media directory, rather than Stripe or Cloudinary.</p>
+    <h2>Who can access session work</h2>
+    <p>Facilitators, session participants and authorised organisation members can access work according to the relevant session and retention permissions. Instance administrators can manage the system. Media delivery needs to be configured by the operator; shared media URLs should not be treated as private documents protected by a password.</p>
+    <h2>Your choices</h2>
+    <p>You can update your account details in your profile and use the available work and account deletion controls. Organisation-retained work can prevent account deletion. Scheduled retention, server logs and backups depend on how this instance is operated.</p>
+    <h2>Ask the operator</h2>
+    <p>Before entering personal or sensitive information, ask the instance operator about their contact details, hosting location, backups, retention periods and applicable notices. Free self-hosted software does not remove their responsibilities for participant information.</p>
+    <a href="{% url 'self_hosting' %}">Read the self-hosting overview</a>
+</div>
+{% endblock %}

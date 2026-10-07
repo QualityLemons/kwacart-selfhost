@@ -1,0 +1,15 @@
+KwaCart — self-hosted facilitation software
+Copyright (C) 2026 KwaCart contributors
+SPDX-License-Identifier: AGPL-3.0-only
+
+KwaCart's software is free software: you can redistribute it and/or modify it
+under the terms of the GNU Affero General Public License, version 3, as
+published by the Free Software Foundation.
+
+This program is distributed in the hope that it will be useful, but WITHOUT
+ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS
+FOR A PARTICULAR PURPOSE. See LICENSE for the full terms.
+
+Third-party libraries and attributed facilitation/learning resources retain
+their respective rights and licences. This notice does not relicense them.
+Retain their existing copyright and attribution notices when redistributing.

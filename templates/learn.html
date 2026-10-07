@@ -1,0 +1,1280 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Learn how to use KwaCart</title>
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+    <style>
+        /* ── Page-level layout ─────────────────────────────────── */
+        .learn-hero {
+            background: linear-gradient(135deg, #3a1a6b 0%, #0d9488 100%);
+            color: #fff;
+            padding: 4rem 1.5rem 3rem;
+            text-align: center;
+        }
+        .learn-hero h1 {
+            font-size: clamp(1.9rem, 4vw, 2.8rem);
+            font-weight: 800;
+            margin: 0 0 0.75rem;
+        }
+        .learn-hero h1 span { color: #E1BE6A; }
+        .learn-hero p {
+            font-size: 1.15rem;
+            opacity: 0.9;
+            max-width: 600px;
+            margin: 0 auto 1.5rem;
+            line-height: 1.6;
+        }
+        .learn-back {
+            display: inline-block;
+            color: #E1BE6A;
+            font-size: 0.9rem;
+            text-decoration: none;
+            margin-bottom: 1.25rem;
+        }
+        .learn-back:hover { text-decoration: underline; }
+
+        /* ── Chapter nav ───────────────────────────────────────── */
+        .chapter-nav {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            justify-content: center;
+            padding: 1.5rem 1.5rem 0;
+            max-width: 860px;
+            margin: 0 auto;
+        }
+        .chapter-nav a {
+            padding: 0.4rem 1rem;
+            border-radius: 20px;
+            background: #f1f5f9;
+            color: #334155;
+            text-decoration: none;
+            font-size: 0.875rem;
+            font-weight: 500;
+            border: 1px solid #e2e8f0;
+            transition: background 0.15s, color 0.15s;
+        }
+        .chapter-nav a:hover {
+            background: #3a1a6b;
+            color: #fff;
+            border-color: #3a1a6b;
+        }
+
+        /* ── Section wrapper ───────────────────────────────────── */
+        .learn-section {
+            max-width: 860px;
+            margin: 0 auto;
+            padding: 3.5rem 1.5rem;
+        }
+        .learn-section + .learn-section {
+            border-top: 2px solid #f1f5f9;
+        }
+
+        /* ── Chapter header ────────────────────────────────────── */
+        .chapter-label {
+            display: inline-flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.8rem;
+            font-weight: 700;
+            letter-spacing: 0.08em;
+            text-transform: uppercase;
+            color: #fff;
+            padding: 0.3rem 0.85rem;
+            border-radius: 20px;
+            margin-bottom: 0.75rem;
+        }
+        .chapter-label.purple  { background: #3a1a6b; }
+        .chapter-label.teal    { background: #0d9488; }
+        .chapter-label.amber   { background: #b45309; }
+        .chapter-label.blue    { background: #1d4ed8; }
+        .chapter-label.green   { background: #15803d; }
+        .chapter-label.rose    { background: #9d174d; }
+
+        .chapter-icon {
+            font-size: 2.5rem;
+            display: block;
+            margin-bottom: 0.5rem;
+        }
+        .chapter-title {
+            font-size: clamp(1.5rem, 3vw, 2rem);
+            font-weight: 800;
+            color: #1e1b4b;
+            margin: 0 0 0.6rem;
+        }
+        .chapter-intro {
+            font-size: 1.05rem;
+            color: #475569;
+            line-height: 1.7;
+            max-width: 640px;
+            margin: 0 0 2rem;
+        }
+
+        /* ── Numbered steps ────────────────────────────────────── */
+        .steps-list {
+            display: grid;
+            gap: 1.1rem;
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+        .step-item {
+            display: flex;
+            gap: 1rem;
+            align-items: flex-start;
+            background: #f8fafc;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 1rem 1.25rem;
+        }
+        .step-num {
+            flex-shrink: 0;
+            width: 2.2rem;
+            height: 2.2rem;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 800;
+            font-size: 1rem;
+            color: #fff;
+        }
+        .step-num.purple  { background: #3a1a6b; }
+        .step-num.teal    { background: #0d9488; }
+        .step-num.amber   { background: #b45309; }
+        .step-num.blue    { background: #1d4ed8; }
+        .step-num.green   { background: #15803d; }
+        .step-num.rose    { background: #9d174d; }
+
+        .step-body strong {
+            display: block;
+            font-size: 1rem;
+            color: #1e293b;
+            margin-bottom: 0.2rem;
+        }
+        .step-body p {
+            margin: 0;
+            font-size: 0.9rem;
+            color: #64748b;
+            line-height: 1.55;
+        }
+
+        /* ── Info callout boxes ────────────────────────────────── */
+        .callout {
+            border-radius: 0.75rem;
+            padding: 1.1rem 1.4rem;
+            margin-top: 1.75rem;
+            display: flex;
+            gap: 0.9rem;
+            align-items: flex-start;
+        }
+        .callout.purple { background: #f5f3ff; border-left: 4px solid #3a1a6b; }
+        .callout.teal   { background: #f0fdfa; border-left: 4px solid #0d9488; }
+        .callout.amber  { background: #fffbeb; border-left: 4px solid #b45309; }
+        .callout.blue   { background: #eff6ff; border-left: 4px solid #1d4ed8; }
+        .callout.green  { background: #f0fdf4; border-left: 4px solid #15803d; }
+        .callout.rose   { background: #fff1f2; border-left: 4px solid #9d174d; }
+
+        /* ── AAC equipment table ───────────────────────────────── */
+        .equip-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1.25rem;
+            font-size: 0.875rem;
+        }
+        .equip-table th {
+            text-align: left;
+            padding: 0.5rem 0.75rem;
+            background: #fff1f2;
+            color: #9d174d;
+            font-weight: 700;
+            border-bottom: 2px solid #fecdd3;
+        }
+        .equip-table td {
+            padding: 0.55rem 0.75rem;
+            color: #475569;
+            border-bottom: 1px solid #f1f5f9;
+            vertical-align: top;
+            line-height: 1.45;
+        }
+        .equip-table tr:last-child td { border-bottom: none; }
+        .equip-table td:first-child { font-weight: 600; color: #1e293b; white-space: nowrap; }
+        @media (max-width: 580px) {
+            .equip-table, .equip-table thead, .equip-table tbody,
+            .equip-table th, .equip-table td, .equip-table tr { display: block; }
+            .equip-table thead { display: none; }
+            .equip-table td { padding: 0.35rem 0; border-bottom: none; }
+            .equip-table td:first-child { color: #9d174d; margin-top: 0.75rem; }
+            .equip-table tr { border-bottom: 1px solid #f1f5f9; padding-bottom: 0.5rem; }
+        }
+        .callout-icon { font-size: 1.5rem; flex-shrink: 0; }
+        .callout-text strong {
+            display: block;
+            font-size: 0.95rem;
+            color: #1e293b;
+            margin-bottom: 0.25rem;
+        }
+        .callout-text p {
+            margin: 0;
+            font-size: 0.875rem;
+            color: #475569;
+            line-height: 1.55;
+        }
+
+        /* ── Use-cards grid (for solo / facilitation tools) ────── */
+        .mini-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+            gap: 1rem;
+            margin-top: 1.5rem;
+        }
+        .mini-card {
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 1.1rem 1.2rem;
+        }
+        .mini-card-icon { font-size: 1.6rem; margin-bottom: 0.4rem; }
+        .mini-card h4 {
+            margin: 0 0 0.35rem;
+            font-size: 0.95rem;
+            color: #1e293b;
+        }
+        .mini-card p {
+            margin: 0;
+            font-size: 0.85rem;
+            color: #64748b;
+            line-height: 1.5;
+        }
+
+        /* ── Download options ──────────────────────────────────── */
+        .download-pair {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 1rem;
+            margin-top: 1.25rem;
+        }
+        @media (max-width: 520px) { .download-pair { grid-template-columns: 1fr; } }
+        .dl-card {
+            background: #f8fafc;
+            border: 2px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 1.1rem 1.25rem;
+            text-align: center;
+        }
+        .dl-card .dl-ext {
+            display: inline-block;
+            font-size: 1.6rem;
+            font-weight: 900;
+            font-family: ui-monospace, monospace;
+            color: #3a1a6b;
+            background: #ede9fe;
+            padding: 0.2rem 0.6rem;
+            border-radius: 0.4rem;
+            margin-bottom: 0.5rem;
+        }
+        .dl-card h4 { margin: 0 0 0.3rem; font-size: 0.95rem; color: #1e293b; }
+        .dl-card p { margin: 0; font-size: 0.8rem; color: #64748b; line-height: 1.5; }
+
+        /* ── "What to do next" use list ───────────────────────── */
+        .use-list {
+            display: grid;
+            gap: 0.85rem;
+            margin-top: 1.5rem;
+        }
+        .use-row {
+            display: flex;
+            gap: 0.85rem;
+            align-items: flex-start;
+            background: #fff;
+            border: 1px solid #e2e8f0;
+            border-radius: 0.75rem;
+            padding: 1rem 1.2rem;
+        }
+        .use-row-icon { font-size: 1.6rem; flex-shrink: 0; }
+        .use-row h4 { margin: 0 0 0.2rem; font-size: 0.95rem; color: #1e293b; }
+        .use-row p { margin: 0; font-size: 0.85rem; color: #64748b; line-height: 1.5; }
+
+        /* ── CTA at bottom ─────────────────────────────────────── */
+        .learn-cta {
+            background: linear-gradient(135deg, #3a1a6b 0%, #0d9488 100%);
+            padding: 3.5rem 1.5rem;
+            text-align: center;
+            color: #fff;
+        }
+        .learn-cta h2 { font-size: 1.8rem; font-weight: 800; margin: 0 0 0.75rem; }
+        .learn-cta p { font-size: 1.05rem; opacity: 0.9; margin: 0 0 1.75rem; }
+        .learn-cta-btns { display: flex; gap: 0.75rem; justify-content: center; flex-wrap: wrap; }
+        .btn-inv {
+            background: #fff;
+            color: #3a1a6b;
+            padding: 0.7rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+        .btn-inv:hover { background: #ede9fe; }
+        .btn-ghost {
+            background: transparent;
+            color: #fff;
+            border: 2px solid rgba(255,255,255,0.5);
+            padding: 0.7rem 1.5rem;
+            border-radius: 0.5rem;
+            font-weight: 700;
+            text-decoration: none;
+            font-size: 1rem;
+        }
+        .btn-ghost:hover { border-color: #fff; background: rgba(255,255,255,0.08); }
+
+        @media (max-width: 600px) {
+            .learn-section { padding: 2.5rem 1rem; }
+        }
+    </style>
+</head>
+<body>
+
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+<header>
+    <nav class="nav" aria-label="Main navigation">
+        <a href="{% url 'home' %}" class="nav-brand kwacart-wordmark" aria-label="KwaCart home">KwaCart</a>
+        <span class="nav-spacer"></span>
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'tools:catalog' %}">All Tools</a>
+            <a href="{% url 'archive:knowledge_bank' %}">Knowledge Bank</a>
+            <a href="{% url 'accounts:logout' %}"
+               onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+            <form id="logout-form" method="post" action="{% url 'accounts:logout' %}" style="display:none;">
+                {% csrf_token %}
+            </form>
+        {% else %}
+            <a href="{% url 'about' %}">About</a>
+            <a href="{% url 'learn' %}" style="font-weight:600;">How to use</a>
+            <a href="{% url 'self_hosting' %}">Self-host</a>
+            <a href="{% url 'accounts:login' %}">Log in</a>
+            <a href="{% url 'accounts:signup' %}">Register</a>
+        {% endif %}
+    </nav>
+</header>
+
+<main id="main-content">
+
+<!-- ── Hero ── -->
+<section class="learn-hero">
+    <a href="{% url 'home' %}" class="learn-back">&larr; Back to KwaCart</a>
+    <h1>Learn how to use <span>KwaCart</span></h1>
+    <p>
+        A step-by-step guide to everything the platform can do —
+        from creating your account to downloading and sharing your results.
+    </p>
+</section>
+
+<!-- ── Jump-to nav ── -->
+<nav class="chapter-nav" aria-label="Jump to section">
+    <a href="#register">1 · Register</a>
+    <a href="#pathway">2 · Find a Pathway</a>
+    <a href="#solo">3 · Work Solo</a>
+    <a href="#facilitate">4 · Facilitate a Group</a>
+    <a href="#aac">5 · AAC Features</a>
+    <a href="#knowledge-bank">6 · Knowledge Bank</a>
+</nav>
+
+<!-- ════════════════════════════════════════════════════════════════
+     CHAPTER 1 — REGISTER
+     ════════════════════════════════════════════════════════════════ -->
+<section class="learn-section" id="register">
+
+    <span class="chapter-label purple">Chapter 1</span>
+    <span class="chapter-icon">🔐</span>
+    <h2 class="chapter-title">Register — create your free account</h2>
+    <p class="chapter-intro">
+        Creating an account takes less than a minute.
+        All you need is an email address and a password you choose yourself.
+        No credit card required here. Just register and start.
+    </p>
+
+    <ol class="steps-list" aria-label="Registration steps">
+        <li class="step-item">
+            <span class="step-num purple" aria-hidden="true">1</span>
+            <div class="step-body">
+                <strong>Go to the KwaCart home page</strong>
+                <p>Open your browser and go to the KwaCart website. You will see the home page with a big "Register now" button.</p>
+            </div>
+        </li>
+        <li class="step-item">
+            <span class="step-num purple" aria-hidden="true">2</span>
+            <div class="step-body">
+                <strong>Click "Register now"</strong>
+                <p>This takes you to the registration form. It is a short form — just two fields.</p>
+            </div>
+        </li>
+        <li class="step-item">
+            <span class="step-num purple" aria-hidden="true">3</span>
+            <div class="step-body">
+                <strong>Enter your email address</strong>
+                <p>Type the email address you want to use for your account. This is how you will log in every time.</p>
+            </div>
+        </li>
+        <li class="step-item">
+            <span class="step-num purple" aria-hidden="true">4</span>
+            <div class="step-body">
+                <strong>Choose a password</strong>
+                <p>Create a password you will remember. Type it once, then type it again in the second box to confirm it.</p>
+            </div>
+        </li>
+        <li class="step-item">
+            <span class="step-num purple" aria-hidden="true">5</span>
+            <div class="step-body">
+                <strong>Click "Register" — you are in</strong>
+                <p>Your account is created immediately. You will be taken to the log-in page. Enter your email and password, and you can start using KwaCart straight away.</p>
+            </div>
+        </li>
+    </ol>
+
+    <div class="callout purple">
+        <span class="callout-icon" aria-hidden="true">💡</span>
+        <div class="callout-text">
+            <strong>Already have an account?</strong>
+            <p>
+                Click "Log in" at the top of any page. Enter your email and password.
+                You can update your email address or change your password at any time
+                from your Profile page (the "Profile" link in the top navigation when you are logged in).
+            </p>
+        </div>
+    </div>
+
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     CHAPTER 2 — PATHWAY FINDER
+     ════════════════════════════════════════════════════════════════ -->
+<section class="learn-section" id="pathway">
+
+    <span class="chapter-label teal">Chapter 2</span>
+    <span class="chapter-icon">🗺️</span>
+    <h2 class="chapter-title">Blaze your own trail — find your pathway</h2>
+    <p class="chapter-intro">
+        KwaCart has 23 Liberating Structures tools. Not sure where to start?
+        The <strong>Pathway Finder</strong> asks you three quick questions and
+        matches you to the right tools for your situation — your time, your group,
+        and your goals.
+    </p>
+
+    <ol class="steps-list" aria-label="Pathway Finder steps">
+        <li class="step-item">
+            <span class="step-num teal" aria-hidden="true">1</span>
+            <div class="step-body">
+                <strong>Go to "Find a Pathway"</strong>
+                <p>Click "Find a Pathway" in the top navigation. You can also reach it from the tool catalog.</p>
+            </div>
+        </li>
+        <li class="step-item">
+            <span class="step-num teal" aria-hidden="true">2</span>
+            <div class="step-body">
+                <strong>How much time do you have?</strong>
+                <p>Choose how long your session will be — for example, 15 minutes, 30 minutes, or an hour. The Pathway Finder will only suggest tools that fit your time.</p>
+            </div>
+        </li>
+        <li class="step-item">
+            <span class="step-num teal" aria-hidden="true">3</span>
+            <div class="step-body">
+                <strong>How big is your group?</strong>
+                <p>Tell the tool how many people will be taking part. Some tools are designed for pairs; others work best with larger groups.</p>
+            </div>
+        </li>
+        <li class="step-item">
+            <span class="step-num teal" aria-hidden="true">4</span>
+            <div class="step-body">
+                <strong>What are your goals?</strong>
+                <p>Choose what you want to achieve — for example, understanding a problem, making a decision, sharing knowledge, or planning actions.</p>
+            </div>
+        </li>
+        <li class="step-item">
+            <span class="step-num teal" aria-hidden="true">5</span>
+            <div class="step-body">
+                <strong>See your matched tools</strong>
+                <p>KwaCart shows you the tools that best match your answers. Each result includes a short description, the time needed, and a button to launch it straight away.</p>
+            </div>
+        </li>
+    </ol>
+
+    <div class="callout teal">
+        <span class="callout-icon" aria-hidden="true">🎯</span>
+        <div class="callout-text">
+            <strong>Why use the Pathway Finder?</strong>
+            <p>
+                It takes the guesswork out of choosing. Rather than reading through all 23 tools,
+                you answer three questions and get a personalised shortlist.
+                It is especially helpful if you are new to Liberating Structures or
+                if you are preparing a session at short notice.
+            </p>
+        </div>
+    </div>
+
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     CHAPTER 3 — WORK SOLO
+     ════════════════════════════════════════════════════════════════ -->
+<section class="learn-section" id="solo">
+
+    <span class="chapter-label amber">Chapter 3</span>
+    <span class="chapter-icon">✍️</span>
+    <h2 class="chapter-title">Work Solo — use tools at your own pace</h2>
+    <p class="chapter-intro">
+        Every tool in KwaCart can be used completely on your own.
+        Solo mode lets you think through a structured exercise in your own time,
+        without a group or a timer pressing you. Your draft is saved automatically
+        as you type, so you can come back to it whenever you are ready.
+    </p>
+
+    <ol class="steps-list" aria-label="Solo working steps">
+        <li class="step-item">
+            <span class="step-num amber" aria-hidden="true">1</span>
+            <div class="step-body">
+                <strong>Open the Tool Catalog</strong>
+                <p>Click "Work Solo" in the top navigation, or go to All Tools and filter by "Solo". You will see all the tools available to you.</p>
+            </div>
+        </li>
+        <li class="step-item">
+            <span class="step-num amber" aria-hidden="true">2</span>
+            <div class="step-body">
+                <strong>Choose your tool</strong>
+                <p>Each tool card shows a short tagline. Click on a tool to read a full description, then click "Work Solo" to open the drafting editor.</p>
+            </div>
+        </li>
+        <li class="step-item">
+            <span class="step-num amber" aria-hidden="true">3</span>
+            <div class="step-body">
+                <strong>Fill in your responses</strong>
+                <p>The tool guides you through each question or prompt. Type your answers in the text boxes provided. Your work is saved automatically — you will not lose anything if you close the tab.</p>
+            </div>
+        </li>
+        <li class="step-item">
+            <span class="step-num amber" aria-hidden="true">4</span>
+            <div class="step-body">
+                <strong>Submit your work</strong>
+                <p>When you are finished, click "Submit". KwaCart generates a formatted summary of your responses and saves it to your Knowledge Bank.</p>
+            </div>
+        </li>
+        <li class="step-item">
+            <span class="step-num amber" aria-hidden="true">5</span>
+            <div class="step-body">
+                <strong>Download or continue later</strong>
+                <p>Your submission appears in your Knowledge Bank. You can download it as a Markdown or RTF file at any time.</p>
+            </div>
+        </li>
+    </ol>
+
+    <div class="callout amber">
+        <span class="callout-icon" aria-hidden="true">🧠</span>
+        <div class="callout-text">
+            <strong>Why working solo matters</strong>
+            <p>
+                Solo mode is not just a fallback for when you have no group.
+                It is a powerful practice in its own right.
+                Working through a structured tool by yourself builds
+                <strong>discipline</strong> — the habit of thinking carefully before speaking.
+                It builds <strong>self-awareness</strong> — you discover what you actually
+                think, not what you say in the moment under social pressure.
+                It builds <strong>control</strong> — you develop the skill of structuring
+                your ideas clearly, which makes you more effective when you do work with others.
+                Many experienced facilitators complete tools solo before running them
+                with a group, so they fully understand what they are asking others to do.
+            </p>
+        </div>
+    </div>
+
+    <div class="mini-grid" aria-label="Things you can do solo">
+        <div class="mini-card">
+            <div class="mini-card-icon">🏋️</div>
+            <h4>Build a thinking habit</h4>
+            <p>Use a tool once a week to reflect on your work and strengthen your thinking skills over time.</p>
+        </div>
+        <div class="mini-card">
+            <div class="mini-card-icon">📝</div>
+            <h4>Prepare for a meeting</h4>
+            <p>Work through a tool before a group session so your contributions are clear, concrete, and ready to share.</p>
+        </div>
+        <div class="mini-card">
+            <div class="mini-card-icon">🔍</div>
+            <h4>Explore a problem</h4>
+            <p>Use a structured prompt to think around a challenge from every angle — by yourself, without distraction.</p>
+        </div>
+        <div class="mini-card">
+            <div class="mini-card-icon">🗂️</div>
+            <h4>Build an archive</h4>
+            <p>Each solo submission is saved automatically. Over time your Knowledge Bank becomes a record of your thinking and growth.</p>
+        </div>
+    </div>
+
+    <div class="callout rose" style="margin-top:1.75rem;">
+        <span class="callout-icon" aria-hidden="true">♿</span>
+        <div class="callout-text">
+            <strong>Using AAC equipment in Solo mode</strong>
+            <p>
+                All text boxes in solo tools are standard browser inputs, which means they work
+                with any AAC software that produces keyboard output — including Grid&nbsp;3,
+                Snap Core First, Proloquo2Go, and Clicker&nbsp;8.
+                There is no time pressure in solo mode, so you can compose at whatever pace suits you.
+                See <a href="#aac" style="color:#9d174d;">Chapter&nbsp;5</a> for the full guide to AAC features.
+            </p>
+        </div>
+    </div>
+
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     CHAPTER 4 — FACILITATE A GROUP
+     ════════════════════════════════════════════════════════════════ -->
+<section class="learn-section" id="facilitate">
+
+    <span class="chapter-label blue">Chapter 4</span>
+    <span class="chapter-icon">👥</span>
+    <h2 class="chapter-title">Facilitate a group — live sessions with your team</h2>
+    <p class="chapter-intro">
+        Live sessions are where KwaCart really shines.
+        You start a session as the <strong>host</strong>, share a code with your participants,
+        and everyone works through the tool together in their browser —
+        no app to download, no account needed for participants.
+    </p>
+
+    <ol class="steps-list" aria-label="Facilitation steps">
+        <li class="step-item">
+            <span class="step-num blue" aria-hidden="true">1</span>
+            <div class="step-body">
+                <strong>Choose a tool and click "Facilitate"</strong>
+                <p>From the Tool Catalog, find the tool you want to use and click the "Facilitate" button. You will be taken to the session set-up page.</p>
+            </div>
+        </li>
+        <li class="step-item">
+            <span class="step-num blue" aria-hidden="true">2</span>
+            <div class="step-body">
+                <strong>Share the pairing code with your participants</strong>
+                <p>
+                    A short code appears on your screen.
+                    Tell participants to go to <strong>kwacart.com/join</strong> and type the code,
+                    or share the direct link shown on the session page.
+                    Participants can join from any device with a browser — no sign-up needed.
+                </p>
+            </div>
+        </li>
+        <li class="step-item">
+            <span class="step-num blue" aria-hidden="true">3</span>
+            <div class="step-body">
+                <strong>Watch participants join</strong>
+                <p>As each person joins, you can see them appear on your host screen. Wait until everyone is in before starting the timer.</p>
+            </div>
+        </li>
+        <li class="step-item">
+            <span class="step-num blue" aria-hidden="true">4</span>
+            <div class="step-body">
+                <strong>Start the timer and let people work</strong>
+                <p>Click "Start timer" to begin the session. A built-in timer counts down for each phase of the tool. Participants type their responses in their own browser. Their work is saved automatically as they type.</p>
+            </div>
+        </li>
+        <li class="step-item">
+            <span class="step-num blue" aria-hidden="true">5</span>
+            <div class="step-body">
+                <strong>Close the session when everyone is done</strong>
+                <p>When the time is up (or when you are ready), click "Close session". This locks all contributions and generates the combined results. Participants can no longer add or change their responses after this point.</p>
+            </div>
+        </li>
+        <li class="step-item">
+            <span class="step-num blue" aria-hidden="true">6</span>
+            <div class="step-body">
+                <strong>Review the combined results</strong>
+                <p>You are taken to the session summary page where all contributions are shown together. From here you can preview the formatted output and download the combined summary file.</p>
+            </div>
+        </li>
+    </ol>
+
+    <div class="callout blue">
+        <span class="callout-icon" aria-hidden="true">⏱️</span>
+        <div class="callout-text">
+            <strong>Timer and pacing controls</strong>
+            <p>
+                As the host, you control the timer. You can start it, reset it, and adjust the pace.
+                KwaCart also supports <strong>Inclusive Pacing</strong> — a personal time multiplier
+                for participants who use AAC devices or need extra time to compose their responses.
+                A <strong>Verbal Breakout</strong> signal lets you tell the room to move to spoken
+                discussion while AAC users continue typing digitally.
+                See <a href="#aac" style="color:#1d4ed8;">Chapter&nbsp;5</a> for a full guide to all AAC features available during live sessions.
+            </p>
+        </div>
+    </div>
+
+    <h3 style="margin-top:2rem; margin-bottom:0.75rem; font-size:1.1rem; color:#1e293b;">
+        Session tools available to hosts
+    </h3>
+    <div class="mini-grid">
+        <div class="mini-card">
+            <div class="mini-card-icon">🔢</div>
+            <h4>Pairing code</h4>
+            <p>A short code so guests can join at kwacart.com/join — no account needed.</p>
+        </div>
+        <div class="mini-card">
+            <div class="mini-card-icon">⏳</div>
+            <h4>Built-in timer</h4>
+            <p>A calm countdown timer with colour phases — green, amber, red — so everyone knows how much time is left.</p>
+        </div>
+        <div class="mini-card">
+            <div class="mini-card-icon">✏️</div>
+            <h4>Live composition flag</h4>
+            <p>A subtle indicator appears next to a participant when they are actively typing, even before they save — so you know not to close the session too early.</p>
+        </div>
+        <div class="mini-card">
+            <div class="mini-card-icon">🖼️</div>
+            <h4>Multimedia input</h4>
+            <p>Participants who use symbol boards or AAC apps can upload an image or audio clip as their response alongside written text.</p>
+        </div>
+        <div class="mini-card">
+            <div class="mini-card-icon">📥</div>
+            <h4>Instant download</h4>
+            <p>After closing, download the combined session output as a Markdown or RTF file immediately.</p>
+        </div>
+        <div class="mini-card">
+            <div class="mini-card-icon">🗄️</div>
+            <h4>Session archive</h4>
+            <p>Every closed session is saved to your Knowledge Bank. You can reopen and download at any time.</p>
+        </div>
+    </div>
+
+    <div class="callout blue" style="margin-top:1.75rem;">
+        <span class="callout-icon" aria-hidden="true">🛑</span>
+        <div class="callout-text">
+            <strong>Ending vs deleting a session</strong>
+            <p>
+                <strong>Closing</strong> a session locks contributions and generates the summary — participants cannot change their responses after this.
+                The session stays in your Knowledge Bank permanently unless you choose to delete it.
+                <strong>Deleting</strong> a session removes it and all its data permanently. This cannot be undone.
+                Only the host can close or delete a session.
+            </p>
+        </div>
+    </div>
+
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     CHAPTER 5 — AAC FEATURES
+     ════════════════════════════════════════════════════════════════ -->
+<section class="learn-section" id="aac">
+
+    <span class="chapter-label rose">Chapter 5</span>
+    <span class="chapter-icon">♿</span>
+    <h2 class="chapter-title">AAC features — built for every voice</h2>
+    <p class="chapter-intro">
+        KwaCart is designed to work with Augmentative and Alternative Communication (AAC) devices
+        and software. Whether you communicate using eye gaze, switch scanning, symbol boards,
+        or a voice-output app, the platform includes dedicated features to make participation
+        equal, comfortable, and pressure-free.
+    </p>
+
+    {# ── Input methods ── #}
+    <h3 style="margin-top:0; margin-bottom:0.85rem; font-size:1.1rem; color:#1e293b;">
+        Ways to add your response
+    </h3>
+    <div class="use-list">
+
+        <div class="use-row">
+            <span class="use-row-icon" aria-hidden="true">⌨️</span>
+            <div>
+                <h4>Typed text — via any keyboard or AAC software</h4>
+                <p>
+                    Every response field in KwaCart is a standard browser text area.
+                    Any AAC software that generates keyboard output will work with it automatically —
+                    including <strong>Grid&nbsp;3</strong>, <strong>Snap Core First</strong>,
+                    <strong>Proloquo2Go</strong>, <strong>TouchChat</strong>,
+                    <strong>Communicator&nbsp;5</strong>, and <strong>Clicker&nbsp;8</strong>.
+                    You do not need to set anything up. Open the session page, focus the text box,
+                    and your AAC software will type into it as normal.
+                    On-screen keyboards (including the built-in Windows and iOS keyboards)
+                    also work without any configuration.
+                </p>
+            </div>
+        </div>
+
+        <div class="use-row">
+            <span class="use-row-icon" aria-hidden="true">🎙️</span>
+            <div>
+                <h4>Audio clip — record or upload a voice message</h4>
+                <p>
+                    During a <strong>live group session</strong>, participants can attach an audio clip
+                    alongside their written text.
+                    This is useful when a person uses voice output from their AAC device
+                    and wants to capture the spoken message as part of their contribution.
+                    To attach audio: find the attachment section on your participant page,
+                    click <strong>"Upload audio"</strong>, and select an audio file from your device
+                    (MP3, WAV, M4A, and OGG are supported).
+                    The audio is stored with your response and included in the session archive
+                    for the facilitator to review in the Synthesis Workspace.
+                </p>
+            </div>
+        </div>
+
+        <div class="use-row">
+            <span class="use-row-icon" aria-hidden="true">🖼️</span>
+            <div>
+                <h4>Image — upload a symbol board or photograph</h4>
+                <p>
+                    Participants who communicate using symbol boards, Picture Exchange
+                    Communication Systems (PECS), or drawn images can upload a photo or screenshot
+                    of their board as part of their session response.
+                    To attach an image: find the attachment section on your participant page,
+                    click <strong>"Upload image"</strong>, and select a JPG, PNG, or WebP file.
+                    The image is saved with your response and shown to the facilitator in
+                    the Synthesis Workspace, where they can add a text transcription before
+                    generating the final combined summary.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    {# ── Timer features ── #}
+    <h3 style="margin-top:2rem; margin-bottom:0.85rem; font-size:1.1rem; color:#1e293b;">
+        Timer features designed for AAC users
+    </h3>
+    <div class="mini-grid">
+
+        <div class="mini-card" style="border-color:#fecdd3;">
+            <div class="mini-card-icon">🟢</div>
+            <h4>Calm Timer</h4>
+            <p>
+                Instead of flashing digits counting down, the Calm Timer shows a
+                slow, gentle colour drift — <strong>green</strong> means plenty of time,
+                <strong>amber</strong> means it is getting shorter,
+                <strong>red</strong> means nearly done.
+                No sudden changes. No alarming ticking. Just a quiet, readable signal
+                that works for people who find rapidly changing numbers distracting or anxiety-inducing.
+            </p>
+        </div>
+
+        <div class="mini-card" style="border-color:#fecdd3;">
+            <div class="mini-card-icon">✏️</div>
+            <h4>Composition Presence Flag</h4>
+            <p>
+                When you are typing — even if your text box is currently empty —
+                a small <strong>"I'm composing…"</strong> signal appears next to your name
+                on the host's screen. This tells the facilitator that you are still working,
+                so they will not close the session before you have finished.
+                AAC users often take longer to compose a message, and this flag
+                protects your time without you having to ask.
+            </p>
+        </div>
+
+        <div class="mini-card" style="border-color:#fecdd3;">
+            <div class="mini-card-icon">⏳</div>
+            <h4>Inclusive Pacing</h4>
+            <p>
+                The host can switch on <strong>Inclusive Pacing</strong> for any participant.
+                This gives that person a personal time multiplier — for example, double time —
+                so the session timer does not feel like a barrier.
+                The rest of the group sees the normal timer; only the paced participant
+                sees the adjusted countdown.
+            </p>
+        </div>
+
+        <div class="mini-card" style="border-color:#fecdd3;">
+            <div class="mini-card-icon">🗣️</div>
+            <h4>Verbal Breakout</h4>
+            <p>
+                When the host signals a <strong>Verbal Breakout</strong>,
+                the room moves to spoken discussion — but AAC participants
+                see a clear on-screen message telling them they can
+                continue composing digitally for as long as they need.
+                Their written contributions will be included in the final summary
+                alongside the spoken discussion notes.
+            </p>
+        </div>
+
+    </div>
+
+    {# ── Accessibility Mode ── #}
+    <h3 style="margin-top:2rem; margin-bottom:0.85rem; font-size:1.1rem; color:#1e293b;">
+        Accessibility Mode
+    </h3>
+    <div class="callout rose">
+        <span class="callout-icon" aria-hidden="true">🔆</span>
+        <div class="callout-text">
+            <strong>How to turn it on</strong>
+            <p>
+                Click the <strong>"Accessibility Mode"</strong> button in the top navigation bar
+                (visible on every page, including the session page).
+                When it is on, KwaCart switches to a layout optimised for switch scanning,
+                eye gaze, and AAC users:
+            </p>
+        </div>
+    </div>
+    <div class="mini-grid" style="margin-top:1rem;">
+        <div class="mini-card" style="border-color:#fecdd3;">
+            <div class="mini-card-icon">🎯</div>
+            <h4>Large targets</h4>
+            <p>All buttons and interactive elements become larger and further apart — easier to select with eye gaze, a head pointer, or a switch.</p>
+        </div>
+        <div class="mini-card" style="border-color:#fecdd3;">
+            <div class="mini-card-icon">🧊</div>
+            <h4>Frozen layout</h4>
+            <p>Nothing moves or shifts unexpectedly. The page layout is locked so that scanning grids stay in the positions your device expects.</p>
+        </div>
+        <div class="mini-card" style="border-color:#fecdd3;">
+            <div class="mini-card-icon">⏸️</div>
+            <h4>No animations</h4>
+            <p>All transitions, fades, and motion effects are disabled. The interface is completely still — better for people who find motion distracting or distressing.</p>
+        </div>
+        <div class="mini-card" style="border-color:#fecdd3;">
+            <div class="mini-card-icon">💾</div>
+            <h4>Remembered between visits</h4>
+            <p>Your preference is saved in your browser. Accessibility Mode stays on until you turn it off — you do not have to set it again each visit.</p>
+        </div>
+    </div>
+
+    {# ── Connecting AAC equipment ── #}
+    <h3 style="margin-top:2rem; margin-bottom:0.85rem; font-size:1.1rem; color:#1e293b;">
+        Connecting your AAC equipment
+    </h3>
+    <p style="color:#475569; font-size:0.95rem; line-height:1.7; margin:0 0 1rem;">
+        KwaCart runs entirely in a web browser, so it works with any AAC hardware or software
+        that can control a browser on a computer, tablet, or phone.
+        You do not need to install a special app or configure KwaCart — just set up your
+        equipment to control the browser as you normally would, open KwaCart, and it works.
+    </p>
+    <ol class="steps-list" aria-label="Steps to connect AAC equipment">
+        <li class="step-item">
+            <span class="step-num rose" aria-hidden="true">1</span>
+            <div class="step-body">
+                <strong>Set up your AAC device or software as usual</strong>
+                <p>Configure your eye gaze system, switch scanner, or AAC app on your device exactly as you would for any other browser-based activity. No special settings for KwaCart are needed.</p>
+            </div>
+        </li>
+        <li class="step-item">
+            <span class="step-num rose" aria-hidden="true">2</span>
+            <div class="step-body">
+                <strong>Open a browser and go to KwaCart</strong>
+                <p>Use whatever input method you use to control your browser — eye gaze cursor, switch scanning to the address bar, or your AAC app's browser control feature.</p>
+            </div>
+        </li>
+        <li class="step-item">
+            <span class="step-num rose" aria-hidden="true">3</span>
+            <div class="step-body">
+                <strong>Turn on Accessibility Mode</strong>
+                <p>Press the "Accessibility Mode" button in the navigation bar. This makes all targets larger and removes all animations, which makes switch scanning and eye gaze selection much easier.</p>
+            </div>
+        </li>
+        <li class="step-item">
+            <span class="step-num rose" aria-hidden="true">4</span>
+            <div class="step-body">
+                <strong>Focus a text box and start composing</strong>
+                <p>Select a response field with your input method. Your AAC software will type into it exactly as it would in any other text box. Your work is saved automatically as you go.</p>
+            </div>
+        </li>
+        <li class="step-item">
+            <span class="step-num rose" aria-hidden="true">5</span>
+            <div class="step-body">
+                <strong>Tell your facilitator if you need more time</strong>
+                <p>Ask your facilitator to switch on Inclusive Pacing for you at the start of the session. This gives you a personal time extension so the session timer does not cut you off before you are done.</p>
+            </div>
+        </li>
+    </ol>
+
+    {# ── Compatible AAC equipment list ── #}
+    <h3 style="margin-top:2rem; margin-bottom:0.5rem; font-size:1.1rem; color:#1e293b;">
+        Potentially compatible AAC equipment and software
+    </h3>
+    <p style="color:#64748b; font-size:0.85rem; line-height:1.6; margin:0 0 0.25rem;">
+        This is a reference list, not a guarantee of compatibility.
+        KwaCart has been designed to follow web accessibility standards so that it works
+        with any device that can control a browser. If you encounter a problem with a specific
+        device, please contact us via the feature request page and we will investigate.
+    </p>
+    <table class="equip-table" aria-label="AAC equipment compatibility reference">
+        <thead>
+            <tr>
+                <th>Category</th>
+                <th>Product / Software</th>
+                <th>How it connects to KwaCart</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>AAC software<br><span style="font-weight:400; color:#94a3b8; font-size:0.8rem;">(text output apps)</span></td>
+                <td>
+                    Grid&nbsp;3 (Smartbox) &nbsp;·&nbsp;
+                    Snap Core First (Tobii Dynavox) &nbsp;·&nbsp;
+                    Proloquo2Go (AssistiveWare) &nbsp;·&nbsp;
+                    TouchChat (PRC-Saltillo) &nbsp;·&nbsp;
+                    Communicator&nbsp;5 (Tobii Dynavox) &nbsp;·&nbsp;
+                    Clicker&nbsp;8 (Crick Software) &nbsp;·&nbsp;
+                    CoughDrop (MyCoughDrop)
+                </td>
+                <td>Any app that outputs text to the OS keyboard will type directly into KwaCart's text boxes. No setup needed.</td>
+            </tr>
+            <tr>
+                <td>Eye gaze systems</td>
+                <td>
+                    Tobii Dynavox PCEye&nbsp;5 &nbsp;·&nbsp;
+                    Tobii Dynavox I-Series+ &nbsp;·&nbsp;
+                    EyeTech TM5 Mini &nbsp;·&nbsp;
+                    Irisbond Duo &nbsp;·&nbsp;
+                    myTobii P10 &nbsp;·&nbsp;
+                    EyeGaze Edge (LC Technologies)
+                </td>
+                <td>Used to control the mouse cursor or a browser-based gaze interface. Accessibility Mode's large targets make selection easier for gaze systems with lower precision.</td>
+            </tr>
+            <tr>
+                <td>Switch access &amp; scanning</td>
+                <td>
+                    Blue2 Bluetooth Switch (AbleNet) &nbsp;·&nbsp;
+                    Clic Switch (Pretorian Technologies) &nbsp;·&nbsp;
+                    iSwitch (Pretorian) &nbsp;·&nbsp;
+                    PowerLink&nbsp;4 (AbleNet) &nbsp;·&nbsp;
+                    Pal Pad Switches (AbleNet) &nbsp;·&nbsp;
+                    Buddy Button (AbleNet)
+                </td>
+                <td>Works with browser-based switch scanning (built into iOS and Android, or via Grid 3). Accessibility Mode's frozen layout ensures scan targets stay in predictable positions.</td>
+            </tr>
+            <tr>
+                <td>Head &amp; mouth control</td>
+                <td>
+                    HeadMouse Nano (Origin Instruments) &nbsp;·&nbsp;
+                    Jouse3 (Compusult) &nbsp;·&nbsp;
+                    QuadJoy mouth joystick &nbsp;·&nbsp;
+                    SmyleMouse (SmyleMouse Ltd) &nbsp;·&nbsp;
+                    Camera Mouse (Boston College, free)
+                </td>
+                <td>Controls the browser mouse pointer. Works with standard browser click-and-type interaction on any KwaCart page.</td>
+            </tr>
+            <tr>
+                <td>On-screen keyboards</td>
+                <td>
+                    Windows On-Screen Keyboard (built-in) &nbsp;·&nbsp;
+                    iOS/iPadOS Software Keyboard (built-in) &nbsp;·&nbsp;
+                    Android On-Screen Keyboard (built-in) &nbsp;·&nbsp;
+                    Clicker&nbsp;8 keyboard view &nbsp;·&nbsp;
+                    Grid&nbsp;3 keyboard page
+                </td>
+                <td>All on-screen keyboards type directly into KwaCart text fields. No configuration needed.</td>
+            </tr>
+            <tr>
+                <td>Voice control</td>
+                <td>
+                    Dragon NaturallySpeaking / Dragon Professional (Nuance) &nbsp;·&nbsp;
+                    Windows Speech Recognition (built-in) &nbsp;·&nbsp;
+                    Voice Control on macOS / iOS (built-in) &nbsp;·&nbsp;
+                    Google Voice Typing (Android, built-in)
+                </td>
+                <td>Dictates text directly into any KwaCart text field. Voice commands for clicking buttons also work. No setup needed.</td>
+            </tr>
+        </tbody>
+    </table>
+
+    <div class="callout rose" style="margin-top:1.75rem;">
+        <span class="callout-icon" aria-hidden="true">💬</span>
+        <div class="callout-text">
+            <strong>Not sure if your device will work?</strong>
+            <p>
+                If your AAC hardware or software is not listed above, it may still work perfectly —
+                especially if it can control a web browser.
+                The best way to check is to open KwaCart on a free try-it tool (no account needed)
+                and test your equipment there. No data will be saved and there is no time pressure.
+                If something does not work, please use the
+                <a href="{% url 'feedback' %}" style="color:#9d174d;">private feedback page</a>
+                to tell us what you were trying to do and what happened.
+            </p>
+        </div>
+    </div>
+
+</section>
+
+<!-- ════════════════════════════════════════════════════════════════
+     CHAPTER 6 — KNOWLEDGE BANK
+     ════════════════════════════════════════════════════════════════ -->
+<section class="learn-section" id="knowledge-bank">
+
+    <span class="chapter-label green">Chapter 6</span>
+    <span class="chapter-icon">🏦</span>
+    <h2 class="chapter-title">The Knowledge Bank — your archive of everything</h2>
+    <p class="chapter-intro">
+        Every solo submission and every closed group session is saved automatically
+        to your <strong>Knowledge Bank</strong>.
+        Think of it as your personal library of structured thinking — organised by tool,
+        searchable, and always available to download.
+    </p>
+
+    <ol class="steps-list" aria-label="Knowledge Bank steps">
+        <li class="step-item">
+            <span class="step-num green" aria-hidden="true">1</span>
+            <div class="step-body">
+                <strong>Click "Knowledge Bank" in the top navigation</strong>
+                <p>This takes you to your personal archive. You will see a list of all the tools you have used, with a count of how many submissions or sessions you have saved for each one.</p>
+            </div>
+        </li>
+        <li class="step-item">
+            <span class="step-num green" aria-hidden="true">2</span>
+            <div class="step-body">
+                <strong>Click on a tool to see your activity</strong>
+                <p>You will see two tables — one for solo submissions and one for group sessions. Each row shows the date, the status, and a set of action buttons.</p>
+            </div>
+        </li>
+        <li class="step-item">
+            <span class="step-num green" aria-hidden="true">3</span>
+            <div class="step-body">
+                <strong>Preview a summary in the browser</strong>
+                <p>Click "Preview" next to any submission or session. A formatted preview opens in a panel on the same page — you can read through the full output before downloading.</p>
+            </div>
+        </li>
+        <li class="step-item">
+            <span class="step-num green" aria-hidden="true">4</span>
+            <div class="step-body">
+                <strong>Download your file</strong>
+                <p>From the preview panel, click "Download" to save the file to your device. You can choose Markdown (.md) or RTF format depending on what you want to do with it next.</p>
+            </div>
+        </li>
+    </ol>
+
+    <h3 style="margin-top:2rem; margin-bottom:0.85rem; font-size:1.1rem; color:#1e293b;">
+        Two download formats — what is the difference?
+    </h3>
+    <div class="download-pair">
+        <div class="dl-card">
+            <span class="dl-ext">.md</span>
+            <h4>Markdown</h4>
+            <p>
+                Plain text with simple formatting marks (# for headings, ** for bold).
+                Readable in any text editor. Best for uploading to AI tools,
+                version control systems, or static site generators.
+            </p>
+        </div>
+        <div class="dl-card">
+            <span class="dl-ext" style="background:#dcfce7; color:#15803d;">.rtf</span>
+            <h4>Rich Text Format</h4>
+            <p>
+                A formatted document with headings, bold, and layout already applied.
+                Opens directly in Microsoft Word, Apple Pages, LibreOffice, and
+                most desktop publishing tools — ready to edit immediately.
+            </p>
+        </div>
+    </div>
+
+    <h3 style="margin-top:2.25rem; margin-bottom:0.85rem; font-size:1.1rem; color:#1e293b;">
+        What can you do with your files once you have downloaded them?
+    </h3>
+    <div class="use-list">
+
+        <div class="use-row">
+            <span class="use-row-icon" aria-hidden="true">🤖</span>
+            <div>
+                <h4>Upload to an AI tool for knowledge development</h4>
+                <p>
+                    Paste your Markdown file into <strong>ChatGPT</strong>, <strong>Claude</strong>,
+                    <strong>Gemini</strong>, or any other AI assistant.
+                    Ask it to summarise your session, identify themes across multiple submissions,
+                    suggest follow-up actions, draft a report from the raw data,
+                    or turn the group's ideas into a formatted action plan.
+                    The structured output from KwaCart is ideal for AI input — it is already
+                    organised and labelled, so the AI can understand it quickly.
+                </p>
+            </div>
+        </div>
+
+        <div class="use-row">
+            <span class="use-row-icon" aria-hidden="true">🖥️</span>
+            <div>
+                <h4>Use with desktop publishing software</h4>
+                <p>
+                    Import your RTF file into <strong>Microsoft Publisher</strong>,
+                    <strong>Adobe InDesign</strong>, <strong>Affinity Publisher</strong>,
+                    or <strong>Canva</strong>.
+                    Use the content to build newsletters, reports, handouts, training materials,
+                    or grant applications — with professional layout and design.
+                    The structured headings and bullet points from KwaCart map cleanly
+                    to most publishing templates.
+                </p>
+            </div>
+        </div>
+
+        <div class="use-row">
+            <span class="use-row-icon" aria-hidden="true">📄</span>
+            <div>
+                <h4>Further develop with word processing software</h4>
+                <p>
+                    Open your RTF file in <strong>Microsoft Word</strong>,
+                    <strong>Apple Pages</strong>, <strong>Google Docs</strong>,
+                    or <strong>LibreOffice Writer</strong>.
+                    Edit the text, add context, combine multiple session summaries
+                    into a longer document, or use it as the basis of a report or proposal.
+                    Everything you need to add narrative, commentary, and recommendations
+                    around your group's structured output.
+                </p>
+            </div>
+        </div>
+
+        <div class="use-row">
+            <span class="use-row-icon" aria-hidden="true">📊</span>
+            <div>
+                <h4>Build a learning or development portfolio</h4>
+                <p>
+                    Save and organise your Knowledge Bank downloads in a folder on your device.
+                    Over time they become a portfolio of evidence — showing how your thinking,
+                    your team's practice, or your organisation's knowledge has grown.
+                    Useful for CPD records, supervision reports, grant applications,
+                    and staff appraisals.
+                </p>
+            </div>
+        </div>
+
+        <div class="use-row">
+            <span class="use-row-icon" aria-hidden="true">🤝</span>
+            <div>
+                <h4>Share with your team or stakeholders</h4>
+                <p>
+                    Send the RTF or Markdown file by email, upload it to a shared drive
+                    (Google Drive, SharePoint, Dropbox), or paste the content into a
+                    team workspace (Notion, Confluence, Slack).
+                    Your group's structured output is immediately readable and useful
+                    to anyone who receives it — no KwaCart account required.
+                </p>
+            </div>
+        </div>
+
+    </div>
+
+    <div class="callout green" style="margin-top:1.75rem;">
+        <span class="callout-icon" aria-hidden="true">🔒</span>
+        <div class="callout-text">
+            <strong>Your data is private to you</strong>
+            <p>
+                Only you can see your solo submissions and the sessions you hosted.
+                Nobody else's data appears in your Knowledge Bank.
+                Staff members can see account-level information for support purposes,
+                but your session content is visible only to the people in your session.
+            </p>
+        </div>
+    </div>
+
+</section>
+
+</main>
+
+<!-- ── Bottom CTA ── -->
+<section class="learn-cta">
+    <h2>Ready to get started?</h2>
+    <p>Create your free account and start your first session in under two minutes.</p>
+    <div class="learn-cta-btns">
+        <a href="{% url 'accounts:signup' %}" class="btn-inv">Register now — it is free</a>
+        <a href="{% url 'tools:catalog' %}" class="btn-ghost">Browse all tools</a>
+        <a href="{% url 'tools:pathway_finder' %}" class="btn-ghost">Find my pathway</a>
+    </div>
+</section>
+
+<footer class="footer">
+    KwaCart &mdash; a Liberating Structures facilitation platform.
+    Built as part of a Level&nbsp;5 Diploma project.
+</footer>
+
+</body>
+</html>

@@ -1,0 +1,853 @@
+{% load static %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Accessibility &amp; AAC — KwaCart</title>
+    <link rel="stylesheet" href="{% static 'css/landing.css' %}">
+    <link rel="stylesheet" href="{% static 'css/accessibility_page.css' %}">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.2/css/all.min.css" crossorigin="anonymous" referrerpolicy="no-referrer">
+</head>
+<body>
+
+<header>
+    <nav class="nav">
+        <a href="{% url 'home' %}" class="nav-brand kwacart-wordmark" aria-label="KwaCart home">KwaCart</a>
+        <span class="nav-spacer"></span>
+        {% if request.user.is_authenticated %}
+            <a href="{% url 'tools:catalog' %}">All Tools</a>
+            <a href="{% url 'archive:dashboard' %}">My Archive</a>
+            <a href="{% url 'accounts:logout' %}" onclick="event.preventDefault(); document.getElementById('logout-form').submit();">Logout</a>
+            <form id="logout-form" method="post" action="{% url 'accounts:logout' %}" style="display:none;">{% csrf_token %}</form>
+        {% else %}
+            <a href="{% url 'about' %}">About</a>
+            <a href="{% url 'accessibility' %}" style="font-weight:600;">Accessibility</a>
+            <a href="{% url 'self_hosting' %}">Self-host</a>
+            <a href="{% url 'accounts:login' %}">Log in</a>
+            <a href="{% url 'accounts:signup' %}">Register</a>
+        {% endif %}
+    </nav>
+</header>
+
+<!-- ── Skip to content ── -->
+<a class="skip-link" href="#main-content">Skip to main content</a>
+
+<!-- ── Easy-read toggle ── -->
+<div class="easy-read-bar" role="region" aria-label="Display options">
+    <div class="easy-read-bar-inner">
+        <span class="easy-read-bar-label">Display options:</span>
+        <button type="button" id="easy-read-toggle" class="btn btn-primary" aria-pressed="false">
+            <i class="fa-solid fa-text-height" aria-hidden="true"></i>
+            Easy-read version
+        </button>
+        <button type="button" id="aac-mode-toggle" class="btn" aria-pressed="false">
+            <i class="fa-solid fa-universal-access" aria-hidden="true"></i>
+            Accessibility Mode
+        </button>
+    </div>
+</div>
+
+<main id="main-content">
+
+<!-- ── Page hero ── -->
+<section class="a-hero" aria-labelledby="page-title">
+    <div class="a-hero-inner">
+        <div class="a-hero-icon" aria-hidden="true">
+            <i class="fa-solid fa-universal-access"></i>
+        </div>
+        <h1 id="page-title">KwaCart works for everyone</h1>
+        <p class="a-hero-sub">
+            KwaCart is built so that people who use eye-gaze trackers, switch-scanning
+            systems, or AAC communication apps can take a full and equal part in every
+            session — not just listen.
+        </p>
+        <nav class="a-hero-nav" aria-label="Page sections">
+            <a href="#aac-features" class="btn btn-primary btn-large">AAC features &darr;</a>
+            <a href="#blind-access" class="btn btn-large">Blind &amp; screen-reader access &darr;</a>
+            <a href="#all-tools" class="btn btn-large">All tools &darr;</a>
+        </nav>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════
+     SECTION 1 — AAC FEATURES
+     ════════════════════════════════════════ -->
+<section class="a-section" id="aac-features" aria-labelledby="aac-features-heading">
+    <div class="a-section-inner">
+
+        <h2 id="aac-features-heading" class="a-section-title">
+            <i class="fa-solid fa-universal-access" aria-hidden="true"></i>
+            Built-in AAC accessibility features
+        </h2>
+        <p class="a-section-sub">
+            Three features work together. You can use any one of them, or all three at once.
+        </p>
+
+        <!-- ── Feature 1: Calm Timer ── -->
+        <div class="feature-card" id="calm-timer">
+            <div class="feature-card-graphic calm-timer-graphic" aria-hidden="true">
+                <div class="ct-demo">
+                    <div class="ct-row">
+                        <div class="ct-label">Standard timer</div>
+                        <div class="ct-digit">00:47</div>
+                    </div>
+                    <div class="ct-arrow">
+                        <i class="fa-solid fa-arrow-down"></i>
+                        <span>toggle Calm timer</span>
+                    </div>
+                    <div class="ct-row">
+                        <div class="ct-label">Calm timer</div>
+                        <div class="ct-calm-block ct-green">
+                            <span>Plenty of time</span>
+                        </div>
+                    </div>
+                    <div class="ct-row">
+                        <div class="ct-label"></div>
+                        <div class="ct-calm-block ct-amber">
+                            <span>Getting shorter</span>
+                        </div>
+                    </div>
+                    <div class="ct-row">
+                        <div class="ct-label"></div>
+                        <div class="ct-calm-block ct-red">
+                            <span>Nearly done</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="feature-card-body">
+                <div class="feature-tag feature-tag-1">Feature 1</div>
+                <h3>Calm Timer</h3>
+                <p class="feature-intro">
+                    Replace the ticking digit countdown with a quiet colour block.
+                </p>
+                <ul class="feature-list">
+                    <li>
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        The colour drifts slowly: <strong>green</strong> → <strong>amber</strong> → <strong>red</strong>. It never ticks.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        No digit changes pulling your gaze away from your work.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        Your choice is saved — the calm timer stays on every time you visit.
+                    </li>
+                </ul>
+                <!-- Easy-read version (hidden until toggled) -->
+                <div class="easy-read-block" hidden>
+                    <div class="er-symbol" aria-hidden="true">🟢 🟡 🔴</div>
+                    <p class="er-text">The clock shows a <strong>colour</strong>, not numbers.</p>
+                    <p class="er-text">Green = lots of time. Yellow = some time left. Red = nearly finished.</p>
+                    <p class="er-text">The colour changes slowly. It will not flash or jump.</p>
+                </div>
+                <div class="feature-where">
+                    <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                    Available on any live session page — look for the <strong>"Calm timer"</strong> button next to the clock.
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Feature 2: Composition Presence Flag ── -->
+        <div class="feature-card feature-card-flip" id="composition-flag">
+            <div class="feature-card-graphic composing-graphic" aria-hidden="true">
+                <div class="cf-demo">
+                    <div class="cf-participant">
+                        <div class="cf-name">You</div>
+                        <button class="cf-composing-btn" aria-hidden="true">
+                            <span class="cf-pulse"></span>
+                            I'm composing…
+                        </button>
+                        <p class="cf-hint">Press while you type in Grid 3 or your AAC app</p>
+                    </div>
+                    <div class="cf-arrow">
+                        <i class="fa-solid fa-arrow-right"></i>
+                        <span>host sees</span>
+                    </div>
+                    <div class="cf-host">
+                        <div class="cf-roster-heading">Participants</div>
+                        <div class="cf-chip cf-chip-normal">Alice (host)</div>
+                        <div class="cf-chip cf-chip-normal">Bob</div>
+                        <div class="cf-chip cf-chip-composing">
+                            <span class="cf-pulse-small"></span>
+                            You — <strong>✏ Composing…</strong>
+                        </div>
+                        <div class="cf-warning">
+                            <i class="fa-solid fa-triangle-exclamation"></i>
+                            One participant is still composing
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="feature-card-body">
+                <div class="feature-tag feature-tag-2">Feature 2</div>
+                <h3>Composition Presence Flag</h3>
+                <p class="feature-intro">
+                    Tell the host you are still working, even when your text box looks empty.
+                </p>
+                <ul class="feature-list">
+                    <li>
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        Press <strong>"I'm composing…"</strong> while you draft in Grid 3, Proloquo, or any external app.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        The host sees your name with a live <strong>✏ Composing…</strong> label on their screen.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        If the host tries to close the session, a warning stops them — so your voice is never cut off.
+                    </li>
+                </ul>
+                <!-- Easy-read version -->
+                <div class="easy-read-block" hidden>
+                    <div class="er-symbol" aria-hidden="true">✏️ 🛑</div>
+                    <p class="er-text">Press the <strong>"I'm composing"</strong> button when you are writing your answer.</p>
+                    <p class="er-text">The host can see you are still working.</p>
+                    <p class="er-text">They will wait for you. They cannot close the session.</p>
+                </div>
+                <div class="feature-where">
+                    <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                    Available on the participant view of any live session — look for the
+                    <strong>"I'm composing…"</strong> button below the text box.
+                </div>
+            </div>
+        </div>
+
+        <!-- ── Feature 3: Accessibility Mode ── -->
+        <div class="feature-card" id="accessibility-mode">
+            <div class="feature-card-graphic a-mode-graphic" aria-hidden="true">
+                <div class="am-demo">
+                    <div class="am-before">
+                        <div class="am-label">Standard</div>
+                        <div class="am-btn-small">Save</div>
+                        <div class="am-note">28 px button</div>
+                    </div>
+                    <div class="am-arrow">
+                        <i class="fa-solid fa-arrow-right"></i>
+                        <span>Accessibility Mode</span>
+                    </div>
+                    <div class="am-after">
+                        <div class="am-label">Accessibility Mode</div>
+                        <div class="am-btn-large">Save my response</div>
+                        <div class="am-note">80 × 80 px min target, high contrast</div>
+                    </div>
+                </div>
+            </div>
+            <div class="feature-card-body">
+                <div class="feature-tag feature-tag-3">Feature 3</div>
+                <h3>Accessibility Mode</h3>
+                <p class="feature-intro">
+                    Bigger targets, frozen layout, no animations — for eye-gaze and switch-scan users.
+                </p>
+                <ul class="feature-list">
+                    <li>
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        Every button and input grows to a minimum of <strong>80 × 80 px</strong> — large enough for eye-gaze activation.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        The page layout <strong>freezes completely</strong> — no pop-ups, no sliding banners, no reflows.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        All animations are switched off — smooth colour changes become instant.
+                    </li>
+                </ul>
+                <!-- Easy-read version -->
+                <div class="easy-read-block" hidden>
+                    <div class="er-symbol" aria-hidden="true">🔲 👁️</div>
+                    <p class="er-text">Everything on the page gets <strong>bigger</strong>.</p>
+                    <p class="er-text">The page stays still. Nothing pops up. Nothing moves.</p>
+                    <p class="er-text">It is easier to click or look at the buttons.</p>
+                </div>
+                <div class="feature-where">
+                    <i class="fa-solid fa-location-dot" aria-hidden="true"></i>
+                    Turn it on using the <strong>"Accessibility Mode"</strong> button in the top-right corner of every page.
+                </div>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<hr class="a-divider">
+
+<!-- ════════════════════════════════════════
+     SECTION 2 — BLIND & SCREEN-READER ACCESS
+     ════════════════════════════════════════ -->
+<section class="a-section" id="blind-access" aria-labelledby="blind-access-heading">
+    <div class="a-section-inner">
+
+        <h2 id="blind-access-heading" class="a-section-title">
+            <i class="fa-solid fa-eye-slash" aria-hidden="true"></i>
+            Blind &amp; screen-reader access
+        </h2>
+        <p class="a-section-sub">
+            KwaCart is built to work fully with a keyboard and screen reader — no mouse required,
+            no visual-only cues, no unlabelled controls. The list below describes exactly what
+            is in place across every page.
+        </p>
+
+        <div class="feature-card" id="skip-links">
+            <div class="feature-card-body" style="flex:1;">
+                <div class="feature-tag feature-tag-1">Navigation</div>
+                <h3>Skip-to-content link</h3>
+                <p class="feature-intro">
+                    Every page has an invisible "Skip to main content" link as its very first
+                    focusable element.
+                </p>
+                <ul class="feature-list">
+                    <li>
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        Press <kbd>Tab</kbd> once on any page — the link appears and moves keyboard
+                        focus straight past the navigation bar to the main content area.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        The main content region is marked with a <code>&lt;main&gt;</code> landmark
+                        so screen readers can jump to it directly using landmark navigation.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        The navigation bar is labelled <em>"Main navigation"</em>
+                        so screen readers distinguish it from other navigation landmarks on the page.
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="feature-card feature-card-flip" id="form-labels">
+            <div class="feature-card-body" style="flex:1;">
+                <div class="feature-tag feature-tag-2">Forms</div>
+                <h3>Labelled forms &amp; live error announcements</h3>
+                <p class="feature-intro">
+                    Every form field has an explicit label, and every error is announced aloud
+                    the moment it appears.
+                </p>
+                <ul class="feature-list">
+                    <li>
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        All inputs on the sign-up and log-in pages have visible
+                        <code>&lt;label&gt;</code> elements linked by <code>for</code>/<code>id</code>.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        Validation errors are placed in an <code>aria-live="assertive"</code> region
+                        so a screen reader announces them immediately — no hunting for red text.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        Password requirements and help text are linked to their input via
+                        <code>aria-describedby</code>, so they are read out when the field receives focus.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        Fields with a validation error are also marked
+                        <code>aria-invalid="true"</code>.
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="feature-card" id="contextual-controls">
+            <div class="feature-card-body" style="flex:1;">
+                <div class="feature-tag feature-tag-3">Controls</div>
+                <h3>Contextual control names</h3>
+                <p class="feature-intro">
+                    Every link and button has a unique, descriptive name — not just "View", "Delete",
+                    or "Open" repeated ten times in a row.
+                </p>
+                <ul class="feature-list">
+                    <li>
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        Archive table actions include the tool name and date — for example
+                        <em>"Delete Min Specs submission from 2024-11-14"</em>.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        Both archive tables have a screen-reader-only caption and column headers
+                        with <code>scope="col"</code>, so table-navigation mode works correctly.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        Drawing-canvas toolbar buttons (pen sizes S / M / L and the eraser)
+                        are labelled <em>"Pen size: small"</em>, <em>"Pen size: medium"</em>, etc.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        The tool catalog announces the current mode ("Work Solo" or "Facilitate")
+                        as a screen-reader-only page heading when the view switches.
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+        <div class="feature-card feature-card-flip" id="live-regions">
+            <div class="feature-card-body" style="flex:1;">
+                <div class="feature-tag feature-tag-1">Dynamic content</div>
+                <h3>Live region announcements</h3>
+                <p class="feature-intro">
+                    Content that changes without a page reload is announced automatically —
+                    no visual watching required.
+                </p>
+                <ul class="feature-list">
+                    <li>
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        The timer announces milestone intervals (<em>"Two minutes remaining"</em>,
+                        <em>"One minute remaining"</em>) via an
+                        <code>aria-live</code> region so a screen-reader user always knows
+                        how much time is left without looking at the clock.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        The autosave indicator on solo tool pages announces
+                        <em>"Draft saved"</em> each time a save completes.
+                    </li>
+                    <li>
+                        <i class="fa-solid fa-circle-check" aria-hidden="true"></i>
+                        Drawing-canvas actions (pen size change, eraser selected, canvas cleared)
+                        are announced via a dedicated <code>aria-live="polite"</code> status region.
+                    </li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+</section>
+
+<hr class="a-divider">
+
+<!-- ════════════════════════════════════════
+     SECTION 3 — ALL TOOLS
+     ════════════════════════════════════════ -->
+<section class="a-section" id="all-tools" aria-labelledby="all-tools-heading">
+    <div class="a-section-inner">
+
+        <h2 id="all-tools-heading" class="a-section-title">
+            <i class="fa-solid fa-grid-2" aria-hidden="true"></i>
+            All facilitation tools
+        </h2>
+        <p class="a-section-sub">
+            Every tool works with Accessibility Mode, the Calm Timer, and the Composition
+            Presence Flag. Two tools — Min Specs and 15% Solutions — are free to try without an account.
+        </p>
+
+        <!-- Warm-ups -->
+        <div class="tool-group">
+            <h3 class="tool-group-heading">
+                <i class="fa-solid fa-fire-flame-curved" aria-hidden="true"></i>
+                Low-risk warm-ups
+            </h3>
+            <div class="a-tools-grid">
+
+                <article class="a-tool-card" aria-labelledby="tool-i-am-and-i-like">
+                    <div class="a-tool-icon" aria-hidden="true"><i class="fa-solid fa-heart"></i></div>
+                    <div class="a-tool-body">
+                        <h4 id="tool-i-am-and-i-like">I Am and I Like</h4>
+                        <p class="a-tool-tagline">A quick energiser — go around the circle, share your name and something you love.</p>
+                        <div class="easy-read-block" hidden>
+                            <p class="er-text">👋 Tell the group your name and one thing you like.</p>
+                        </div>
+                        <div class="a-tool-meta">
+                            <span class="a-tool-badge a-tool-badge-warmup">Warm-up</span>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </div>
+
+        <!-- Facilitation tools -->
+        <div class="tool-group">
+            <h3 class="tool-group-heading">
+                <i class="fa-solid fa-people-group" aria-hidden="true"></i>
+                Facilitation tools
+            </h3>
+            <div class="a-tools-grid">
+
+                <article class="a-tool-card" aria-labelledby="tool-1-2-4-all">
+                    <div class="a-tool-icon" aria-hidden="true"><i class="fa-solid fa-sitemap"></i></div>
+                    <div class="a-tool-body">
+                        <h4 id="tool-1-2-4-all">1-2-4-All</h4>
+                        <p class="a-tool-tagline">Turn any question into group insight — alone, then pairs, then fours, then everyone.</p>
+                        <div class="easy-read-block" hidden>
+                            <p class="er-text">🧍 Think alone. 👫 Talk with one person. 👨‍👩‍👦‍👦 Talk with four people. 🌍 Share with everyone.</p>
+                        </div>
+                        <div class="a-tool-meta">
+                            <span class="a-tool-time"><i class="fa-regular fa-clock" aria-hidden="true"></i> 12 min</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="a-tool-card a-tool-card-free" aria-labelledby="tool-15-percent">
+                    <div class="a-tool-icon" aria-hidden="true"><i class="fa-solid fa-seedling"></i></div>
+                    <div class="a-tool-body">
+                        <h4 id="tool-15-percent">15% Solutions</h4>
+                        <p class="a-tool-tagline">What can you start doing right now, with the freedom and resources you already have?</p>
+                        <div class="easy-read-block" hidden>
+                            <p class="er-text">💡 What small thing can <em>you</em> do today — without asking anyone?</p>
+                        </div>
+                        <div class="a-tool-meta">
+                            <span class="a-tool-badge a-tool-badge-free">Free to try</span>
+                            <a href="{% url 'tools:tool_try' '15-percent-solutions' %}" class="a-tool-try-link">Try it &rarr;</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="a-tool-card" aria-labelledby="tool-25-10">
+                    <div class="a-tool-icon" aria-hidden="true"><i class="fa-solid fa-ranking-star"></i></div>
+                    <div class="a-tool-body">
+                        <h4 id="tool-25-10">25/10 Crowd Sourcing</h4>
+                        <p class="a-tool-tagline">Surface your group's boldest ideas in 30 minutes with cards and a countdown from 25.</p>
+                        <div class="easy-read-block" hidden>
+                            <p class="er-text">💡 Everyone writes a bold idea. People score each other's ideas. The best 10 win.</p>
+                        </div>
+                        <div class="a-tool-meta">
+                            <span class="a-tool-time"><i class="fa-regular fa-clock" aria-hidden="true"></i> 30 min</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="a-tool-card" aria-labelledby="tool-appreciative">
+                    <div class="a-tool-icon" aria-hidden="true"><i class="fa-solid fa-star"></i></div>
+                    <div class="a-tool-body">
+                        <h4 id="tool-appreciative">Appreciative Interviews</h4>
+                        <p class="a-tool-tagline">Uncover what's already working by sharing stories of peak success.</p>
+                        <div class="easy-read-block" hidden>
+                            <p class="er-text">🌟 Tell a story about something that went really well. Listen to others' stories.</p>
+                        </div>
+                        <div class="a-tool-meta">
+                            <span class="a-tool-time"><i class="fa-regular fa-clock" aria-hidden="true"></i> 30 min</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="a-tool-card" aria-labelledby="tool-cafe">
+                    <div class="a-tool-icon" aria-hidden="true"><i class="fa-solid fa-comments"></i></div>
+                    <div class="a-tool-body">
+                        <h4 id="tool-cafe">Conversation Café</h4>
+                        <p class="a-tool-tagline">Calm group dialogue on a hard question — a talking object and four structured rounds.</p>
+                        <div class="easy-read-block" hidden>
+                            <p class="er-text">🎙️ One person speaks at a time. Everyone else listens. Four rounds.</p>
+                        </div>
+                        <div class="a-tool-meta">
+                            <span class="a-tool-time"><i class="fa-regular fa-clock" aria-hidden="true"></i> 45 min</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="a-tool-card" aria-labelledby="tool-dad">
+                    <div class="a-tool-icon" aria-hidden="true"><i class="fa-solid fa-magnifying-glass-chart"></i></div>
+                    <div class="a-tool-body">
+                        <h4 id="tool-dad">Discovery &amp; Action Dialogue</h4>
+                        <p class="a-tool-tagline">Seven questions that surface hidden solutions already working in your group.</p>
+                        <div class="easy-read-block" hidden>
+                            <p class="er-text">🔍 Seven questions help the group find solutions that are already working.</p>
+                        </div>
+                        <div class="a-tool-meta">
+                            <span class="a-tool-time"><i class="fa-regular fa-clock" aria-hidden="true"></i> 35 min</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="a-tool-card" aria-labelledby="tool-drawing">
+                    <div class="a-tool-icon" aria-hidden="true"><i class="fa-solid fa-pencil"></i></div>
+                    <div class="a-tool-body">
+                        <h4 id="tool-drawing">Drawing Together</h4>
+                        <p class="a-tool-tagline">A silent, simultaneous visual exercise using five universal shapes.</p>
+                        <div class="easy-read-block" hidden>
+                            <p class="er-text">🖊️ Draw using five simple shapes — everyone draws at the same time, silently.</p>
+                        </div>
+                        <div class="a-tool-meta">
+                            <span class="a-tool-time"><i class="fa-regular fa-clock" aria-hidden="true"></i> 20 min</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="a-tool-card" aria-labelledby="tool-five-structural">
+                    <div class="a-tool-icon" aria-hidden="true"><i class="fa-solid fa-people-arrows"></i></div>
+                    <div class="a-tool-body">
+                        <h4 id="tool-five-structural">Five Structural Elements</h4>
+                        <p class="a-tool-tagline">Get into pairs, share challenges and expectations, build new connections fast.</p>
+                        <div class="easy-read-block" hidden>
+                            <p class="er-text">🤝 Talk with someone new. Share your challenge. Share what you hope for.</p>
+                        </div>
+                        <div class="a-tool-meta">
+                            <span class="a-tool-time"><i class="fa-regular fa-clock" aria-hidden="true"></i> 15 min</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="a-tool-card" aria-labelledby="tool-helping">
+                    <div class="a-tool-icon" aria-hidden="true"><i class="fa-solid fa-handshake-angle"></i></div>
+                    <div class="a-tool-body">
+                        <h4 id="tool-helping">Helping Heuristics</h4>
+                        <p class="a-tool-tagline">Practise four ways of helping in 15 minutes and discover your default pattern.</p>
+                        <div class="easy-read-block" hidden>
+                            <p class="er-text">🤲 Try four different ways to help someone. Find out which one you use most.</p>
+                        </div>
+                        <div class="a-tool-meta">
+                            <span class="a-tool-time"><i class="fa-regular fa-clock" aria-hidden="true"></i> 15 min</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="a-tool-card" aria-labelledby="tool-idea-gen">
+                    <div class="a-tool-icon" aria-hidden="true"><i class="fa-solid fa-lightbulb"></i></div>
+                    <div class="a-tool-body">
+                        <h4 id="tool-idea-gen">Idea Generation</h4>
+                        <p class="a-tool-tagline">A minute of individual reflection, then share with the group.</p>
+                        <div class="easy-read-block" hidden>
+                            <p class="er-text">💡 Think quietly for one minute. Then share your idea with the group.</p>
+                        </div>
+                        <div class="a-tool-meta">
+                            <span class="a-tool-time"><i class="fa-regular fa-clock" aria-hidden="true"></i> 10 min</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="a-tool-card" aria-labelledby="tool-improv">
+                    <div class="a-tool-icon" aria-hidden="true"><i class="fa-solid fa-masks-theater"></i></div>
+                    <div class="a-tool-body">
+                        <h4 id="tool-improv">Improv Prototyping</h4>
+                        <p class="a-tool-tagline">Act out the problem, spot what works, and rebuild a better version on the spot.</p>
+                        <div class="easy-read-block" hidden>
+                            <p class="er-text">🎭 Act out a problem as a short scene. Notice what works. Try a better version.</p>
+                        </div>
+                        <div class="a-tool-meta">
+                            <span class="a-tool-time"><i class="fa-regular fa-clock" aria-hidden="true"></i> 20 min</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="a-tool-card" aria-labelledby="tool-impromptu">
+                    <div class="a-tool-icon" aria-hidden="true"><i class="fa-solid fa-person-walking-arrow-right"></i></div>
+                    <div class="a-tool-body">
+                        <h4 id="tool-impromptu">Impromptu Networking</h4>
+                        <p class="a-tool-tagline">Meet three people, share your challenge, walk away with fresh ideas.</p>
+                        <div class="easy-read-block" hidden>
+                            <p class="er-text">🗣️ Talk to three different people. Tell each one your challenge. Listen to theirs.</p>
+                        </div>
+                        <div class="a-tool-meta">
+                            <span class="a-tool-time"><i class="fa-regular fa-clock" aria-hidden="true"></i> 20 min</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="a-tool-card a-tool-card-free" aria-labelledby="tool-min-specs">
+                    <div class="a-tool-icon" aria-hidden="true"><i class="fa-solid fa-list-check"></i></div>
+                    <div class="a-tool-body">
+                        <h4 id="tool-min-specs">Min Specs</h4>
+                        <p class="a-tool-tagline">Strip your rules down to the bone. What absolutely must stay?</p>
+                        <div class="easy-read-block" hidden>
+                            <p class="er-text">📋 Write all your rules. Cross out the ones that do not really matter. What is left?</p>
+                        </div>
+                        <div class="a-tool-meta">
+                            <span class="a-tool-badge a-tool-badge-free">Free to try</span>
+                            <a href="{% url 'tools:tool_try' 'min-specs' %}" class="a-tool-try-link">Try it &rarr;</a>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="a-tool-card" aria-labelledby="tool-nine-whys">
+                    <div class="a-tool-icon" aria-hidden="true"><i class="fa-solid fa-circle-question"></i></div>
+                    <div class="a-tool-body">
+                        <h4 id="tool-nine-whys">Nine Whys</h4>
+                        <p class="a-tool-tagline">Ask "why?" nine times and find out what actually drives you.</p>
+                        <div class="easy-read-block" hidden>
+                            <p class="er-text">❓ Ask "why?" again and again — nine times — to find out what really matters to you.</p>
+                        </div>
+                        <div class="a-tool-meta">
+                            <span class="a-tool-time"><i class="fa-regular fa-clock" aria-hidden="true"></i> 20 min</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="a-tool-card" aria-labelledby="tool-shift-share">
+                    <div class="a-tool-icon" aria-hidden="true"><i class="fa-solid fa-arrows-spin"></i></div>
+                    <div class="a-tool-body">
+                        <h4 id="tool-shift-share">Shift &amp; Share</h4>
+                        <p class="a-tool-tagline">Ditch the long presentations. Rotate through rapid-fire innovation stations instead.</p>
+                        <div class="easy-read-block" hidden>
+                            <p class="er-text">🔄 Visit short stations. Each one shows a new idea. You only stay for 10 minutes.</p>
+                        </div>
+                        <div class="a-tool-meta">
+                            <span class="a-tool-time"><i class="fa-regular fa-clock" aria-hidden="true"></i> 90 min</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="a-tool-card" aria-labelledby="tool-triz">
+                    <div class="a-tool-icon" aria-hidden="true"><i class="fa-solid fa-ban"></i></div>
+                    <div class="a-tool-body">
+                        <h4 id="tool-triz">TRIZ</h4>
+                        <p class="a-tool-tagline">List everything that would guarantee failure — then stop doing those things.</p>
+                        <div class="easy-read-block" hidden>
+                            <p class="er-text">🚫 Write down everything that would make things go badly wrong. Then stop doing those things.</p>
+                        </div>
+                        <div class="a-tool-meta">
+                            <span class="a-tool-time"><i class="fa-regular fa-clock" aria-hidden="true"></i> 30 min</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="a-tool-card" aria-labelledby="tool-troika">
+                    <div class="a-tool-icon" aria-hidden="true"><i class="fa-solid fa-user-group"></i></div>
+                    <div class="a-tool-body">
+                        <h4 id="tool-troika">Troika Consulting</h4>
+                        <p class="a-tool-tagline">Three people, three turns, back turned. Straight-talking peer advice in 30 minutes.</p>
+                        <div class="easy-read-block" hidden>
+                            <p class="er-text">👥 Three people. One person shares a problem. The others give advice while they look away.</p>
+                        </div>
+                        <div class="a-tool-meta">
+                            <span class="a-tool-time"><i class="fa-regular fa-clock" aria-hidden="true"></i> 30 min</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="a-tool-card" aria-labelledby="tool-uef">
+                    <div class="a-tool-icon" aria-hidden="true"><i class="fa-solid fa-fish"></i></div>
+                    <div class="a-tool-body">
+                        <h4 id="tool-uef">User Experience Fishbowl</h4>
+                        <p class="a-tool-tagline">Insiders share the unfiltered story. The room listens, then asks.</p>
+                        <div class="easy-read-block" hidden>
+                            <p class="er-text">🐟 A small group talks honestly. Everyone else listens. Then the room asks questions.</p>
+                        </div>
+                        <div class="a-tool-meta">
+                            <span class="a-tool-time"><i class="fa-regular fa-clock" aria-hidden="true"></i> 50 min</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="a-tool-card" aria-labelledby="tool-w3">
+                    <div class="a-tool-icon" aria-hidden="true"><i class="fa-solid fa-layer-group"></i></div>
+                    <div class="a-tool-body">
+                        <h4 id="tool-w3">What, So What, Now What?</h4>
+                        <p class="a-tool-tagline">Debrief any shared experience in three stages — facts first, then meaning, then action.</p>
+                        <div class="easy-read-block" hidden>
+                            <p class="er-text">📝 What happened? Why does it matter? What do we do next?</p>
+                        </div>
+                        <div class="a-tool-meta">
+                            <span class="a-tool-time"><i class="fa-regular fa-clock" aria-hidden="true"></i> 45 min</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="a-tool-card" aria-labelledby="tool-wicked">
+                    <div class="a-tool-icon" aria-hidden="true"><i class="fa-solid fa-bolt"></i></div>
+                    <div class="a-tool-body">
+                        <h4 id="tool-wicked">Wicked Questions</h4>
+                        <p class="a-tool-tagline">Name the contradictions your group is navigating — and make them visible.</p>
+                        <div class="easy-read-block" hidden>
+                            <p class="er-text">⚡ Name the things that feel impossible to do at the same time. Say them out loud.</p>
+                        </div>
+                        <div class="a-tool-meta">
+                            <span class="a-tool-time"><i class="fa-regular fa-clock" aria-hidden="true"></i> 25 min</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="a-tool-card" aria-labelledby="tool-wise-crowds">
+                    <div class="a-tool-icon" aria-hidden="true"><i class="fa-solid fa-users-gear"></i></div>
+                    <div class="a-tool-body">
+                        <h4 id="tool-wise-crowds">Wise Crowds</h4>
+                        <p class="a-tool-tagline">15 minutes of focused peer advice on a real challenge, with the client's back turned.</p>
+                        <div class="easy-read-block" hidden>
+                            <p class="er-text">🧠 Share your challenge. Look away. Your group gives you advice for 8 minutes.</p>
+                        </div>
+                        <div class="a-tool-meta">
+                            <span class="a-tool-time"><i class="fa-regular fa-clock" aria-hidden="true"></i> 15 min per person</span>
+                        </div>
+                    </div>
+                </article>
+
+                <article class="a-tool-card" aria-labelledby="tool-wise-crowds-large">
+                    <div class="a-tool-icon" aria-hidden="true"><i class="fa-solid fa-users-rectangle"></i></div>
+                    <div class="a-tool-body">
+                        <h4 id="tool-wise-crowds-large">Wise Crowds (Large Group)</h4>
+                        <p class="a-tool-tagline">Scale peer consultation to a full room — one client, primary team, satellite groups.</p>
+                        <div class="easy-read-block" hidden>
+                            <p class="er-text">🏟️ One person shares a challenge. A team helps them. The whole room also adds ideas.</p>
+                        </div>
+                        <div class="a-tool-meta">
+                            <span class="a-tool-time"><i class="fa-regular fa-clock" aria-hidden="true"></i> 60 min</span>
+                        </div>
+                    </div>
+                </article>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- ── CTA band ── -->
+<section class="cta-band">
+    <h2>Ready to run an accessible session?</h2>
+    <p>Register to unlock all tools, live sessions, and full AAC support.</p>
+    <div style="display:flex; gap:0.75rem; justify-content:center; flex-wrap:wrap;">
+        <a href="{% url 'accounts:signup' %}" class="btn btn-primary-inv btn-large">Register now</a>
+        <a href="{% url 'tools:tool_try' 'min-specs' %}" class="btn btn-large">Try Min Specs free</a>
+        <a href="{% url 'self_hosting' %}" class="btn btn-large">Self-host KwaCart</a>
+    </div>
+</section>
+
+</main>
+
+<footer class="footer">
+    KwaCart &mdash; a Liberating Structures facilitation platform.
+    Built as part of a Level&nbsp;5 Diploma project.
+</footer>
+
+<script>
+(function () {
+    var easyBtn = document.getElementById('easy-read-toggle');
+    var aacBtn  = document.getElementById('aac-mode-toggle');
+    var EASY_KEY = 'kwacart_easy_read';
+    var A11Y_KEY = 'kwacart_a11y_theme';
+
+    function applyEasyRead(on) {
+        document.documentElement.classList.toggle('easy-read', on);
+        document.querySelectorAll('.easy-read-block').forEach(function (b) {
+            b.hidden = !on;
+        });
+        easyBtn.setAttribute('aria-pressed', String(on));
+        easyBtn.innerHTML = on
+            ? '<i class="fa-solid fa-text-height" aria-hidden="true"></i> Standard version'
+            : '<i class="fa-solid fa-text-height" aria-hidden="true"></i> Easy-read version';
+        try {
+            if (on) localStorage.setItem(EASY_KEY, '1');
+            else    localStorage.removeItem(EASY_KEY);
+        } catch (_) {}
+    }
+
+    function applyA11y(on) {
+        document.documentElement.classList.toggle('a11y-theme', on);
+        aacBtn.setAttribute('aria-pressed', String(on));
+        aacBtn.innerHTML = on
+            ? '<i class="fa-solid fa-universal-access" aria-hidden="true"></i> Standard display'
+            : '<i class="fa-solid fa-universal-access" aria-hidden="true"></i> Accessibility Mode';
+        try {
+            if (on) localStorage.setItem(A11Y_KEY, '1');
+            else    localStorage.removeItem(A11Y_KEY);
+        } catch (_) {}
+    }
+
+    /* Restore saved preferences */
+    try {
+        if (localStorage.getItem(EASY_KEY) === '1') applyEasyRead(true);
+        if (localStorage.getItem(A11Y_KEY) === '1') applyA11y(true);
+    } catch (_) {}
+
+    easyBtn.addEventListener('click', function () {
+        applyEasyRead(easyBtn.getAttribute('aria-pressed') !== 'true');
+    });
+    aacBtn.addEventListener('click', function () {
+        applyA11y(aacBtn.getAttribute('aria-pressed') !== 'true');
+    });
+}());
+</script>
+</body>
+</html>

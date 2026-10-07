@@ -1,0 +1,62 @@
+/* KwaCart native activity layer: warm, high-contrast, and intentionally quiet. */
+.activity-frame {
+    --activity-ink: #25333a;
+    --activity-plum: #5d3a9b;
+    --activity-coral: #c6534c;
+    --activity-sun: #e69f00;
+    --activity-paper: #fffaf2;
+    color: var(--activity-ink);
+}
+.activity-intro {
+    border-left: 5px solid var(--activity-coral);
+    background: #fff3e5;
+    padding: 1rem 1.15rem;
+    margin: .8rem 0 1.35rem;
+    border-radius: 0 10px 10px 0;
+    line-height: 1.65;
+}
+.activity-intro strong { color: var(--activity-plum); }
+.activity-guidance {
+    display: flex; gap: .75rem; flex-wrap: wrap; align-items: baseline;
+    margin: .4rem 0 1.25rem; color: #52636b; font-size: .92rem;
+}
+.activity-guidance a { color: var(--activity-plum); font-weight: 700; }
+.activity-card {
+    background: var(--activity-paper);
+    border: 1px solid #eadcc8;
+    border-radius: 12px;
+    padding: clamp(1rem, 3vw, 1.5rem);
+    box-shadow: 0 5px 0 #f0e4d5;
+}
+.activity-card h2 { margin-top: 0; color: var(--activity-plum); }
+.activity-card textarea { background: #fffdf9; }
+.activity-feedback {
+    color: #29735b; font-size: .86rem; min-height: 1.3em;
+    transition: opacity .18s ease, transform .18s ease;
+}
+.activity-feedback.is-updated { transform: translateY(-2px); }
+.expressive-fieldset {
+    border: 0; padding: 0; margin: 0 0 1.3rem;
+}
+.expressive-fieldset > legend { font-weight: 700; margin-bottom: .6rem; }
+.expressive-fieldset > div {
+    display: grid; grid-template-columns: repeat(auto-fit, minmax(118px, 1fr)); gap: .55rem;
+}
+.expressive-fieldset > div > div { display: flex; }
+.expressive-fieldset label {
+    width: 100%; min-height: 4.7rem; display: flex; align-items: center;
+    justify-content: center; text-align: center; padding: .7rem;
+    border: 2px solid #d9cbbd; border-radius: 10px; background: #fffdf9;
+    cursor: pointer; transition: transform .16s ease, border-color .16s ease, background-color .16s ease;
+}
+.expressive-fieldset label:hover { transform: translateY(-2px); border-color: var(--activity-coral); }
+.expressive-fieldset input { position: absolute; opacity: 0; }
+.expressive-fieldset input:focus-visible + span,
+.expressive-fieldset input:focus-visible ~ span { outline: 3px solid #56b4e9; outline-offset: 3px; }
+.expressive-fieldset input:checked + span,
+.expressive-fieldset input:checked ~ span { font-weight: 800; color: var(--activity-plum); }
+.expressive-fieldset label:has(input:checked) { border-color: var(--activity-plum); background: #f4edff; }
+.expressive-fieldset label:has(input:focus-visible) { outline: 3px solid #56b4e9; outline-offset: 3px; }
+@media (max-width: 600px) {
+    .expressive-fieldset > div { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+}

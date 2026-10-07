@@ -1,0 +1,279 @@
+/* ── Breadcrumb nav ── */
+.breadcrumb { font-size: 0.875rem; color: #64748b; margin-bottom: 1.25rem; }
+.breadcrumb a { color: #5D3A9B; text-decoration: none; }
+
+/* ── Page header ── */
+.try-header {
+    border-bottom: 1px solid #e2e8f0;
+    padding-bottom: 1.25rem;
+    margin-bottom: 1.75rem;
+}
+.try-badge {
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: #3a1a6b;
+    background: #E1BE6A;
+    padding: 0.2rem 0.55rem;
+    border-radius: 3px;
+}
+.try-header h1 { margin: 0.5rem 0 0.4rem; font-size: 1.9rem; }
+.try-tagline { color: #64748b; font-style: italic; margin: 0 0 0.6rem; }
+.try-what { color: #334155; max-width: 640px; margin: 0; }
+
+/* ── Results section ── */
+.try-result {
+    background: #f0fdfa;
+    border: 2px solid #40B0A6;
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin-bottom: 2rem;
+}
+.try-result h2 { font-size: 1.2rem; color: #0d6b66; margin-bottom: 1rem; }
+.try-result__field { margin-bottom: 1.25rem; }
+.try-result__label {
+    font-size: 0.8rem;
+    text-transform: uppercase;
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    color: #64748b;
+    margin-bottom: 0.3rem;
+}
+.try-result__value {
+    white-space: pre-wrap;
+    background: #fff;
+    border: 1px solid #b2ede9;
+    border-radius: 5px;
+    padding: 0.75rem 1rem;
+    margin: 0;
+    color: #1e293b;
+}
+
+/* ── Sandbox download bar ── */
+.try-download {
+    display: flex;
+    align-items: center;
+    gap: 0.75rem;
+    padding-top: 1rem;
+    margin-top: 1rem;
+    border-top: 1px solid #b2ede9;
+    flex-wrap: wrap;
+}
+.try-download__btn {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.4rem;
+    padding: 0.5rem 1.1rem;
+    background: #0d6b66;
+    color: #fff;
+    border: none;
+    border-radius: 6px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    cursor: pointer;
+    font-family: inherit;
+    transition: background 0.15s;
+}
+.try-download__btn:hover,
+.try-download__btn:focus-visible {
+    background: #0a5550;
+    outline: 2px solid #0d6b66;
+    outline-offset: 2px;
+}
+.try-download__btn:disabled {
+    background: #64748b;
+    cursor: default;
+}
+.try-download__hint {
+    font-size: 0.8rem;
+    color: #64748b;
+    margin: 0;
+}
+
+/* ── Soft post-download CTA ── */
+.sandbox-cta {
+    background: #fdf4ff;
+    border: 1px solid #d8b4fe;
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+}
+.sandbox-cta__text { flex: 1; min-width: 220px; }
+.sandbox-cta__text strong { color: #581c87; display: block; margin-bottom: 0.25rem; }
+.sandbox-cta__text p { margin: 0; font-size: 0.9rem; color: #475569; }
+.sandbox-cta__actions {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    align-items: flex-start;
+}
+.sandbox-cta__signup {
+    display: inline-block;
+    padding: 0.6rem 1.25rem;
+    background: #7c3aed;
+    color: #fff;
+    border-radius: 6px;
+    text-decoration: none;
+    font-weight: 600;
+    font-size: 0.9rem;
+    white-space: nowrap;
+    transition: background 0.15s;
+}
+.sandbox-cta__signup:hover { background: #6d28d9; }
+.sandbox-cta__secondary {
+    font-size: 0.8rem;
+    color: #7c3aed;
+    white-space: nowrap;
+}
+
+/* ── Sign-up nudge (post-result) ── */
+.try-nudge {
+    background: #f5f0ff;
+    border: 1px solid #d4b8f0;
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+    margin-bottom: 2rem;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    align-items: center;
+}
+.try-nudge__text { flex: 1; min-width: 220px; }
+.try-nudge__text strong { color: #3d2469; }
+.try-nudge__text p { margin: 0.3rem 0 0; font-size: 0.9rem; color: #475569; }
+.try-nudge__link {
+    display: inline-block;
+    padding: 0.6rem 1.2rem;
+    background: #5D3A9B;
+    color: #fff;
+    border-radius: 5px;
+    text-decoration: none;
+    font-weight: 600;
+    white-space: nowrap;
+}
+
+/* ── Divider and "Try again" heading ── */
+.try-divider { border: none; border-top: 1px solid #e2e8f0; margin-bottom: 1.75rem; }
+.try-again-heading { font-size: 1.1rem; margin-bottom: 1rem; }
+
+/* ── Error message ── */
+.try-error {
+    background: #fef2f2;
+    border: 1px solid #fca5a5;
+    border-radius: 6px;
+    padding: 1rem;
+    margin-bottom: 1.5rem;
+    color: #991b1b;
+}
+
+/* ── Countdown timer widget ── */
+.try-timer {
+    margin-bottom: 1.5rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1rem 1.25rem;
+}
+.try-timer__header {
+    display: flex;
+    align-items: flex-start;
+    justify-content: space-between;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+}
+.try-timer__label {
+    font-size: 0.7rem;
+    font-weight: 700;
+    letter-spacing: 0.07em;
+    text-transform: uppercase;
+    color: #5D3A9B;
+    margin: 0 0 0.2rem;
+}
+.try-timer__label-value { font-size: 0.9rem; color: #334155; margin: 0; }
+.try-timer__controls { display: flex; align-items: center; gap: 1rem; }
+.try-timer__display {
+    font-size: 2rem;
+    font-weight: 800;
+    font-variant-numeric: tabular-nums;
+    color: #5D3A9B;
+    min-width: 5ch;
+    text-align: center;
+}
+.try-timer__buttons { display: flex; gap: 0.5rem; }
+.try-timer__start-btn {
+    padding: 0.4rem 0.9rem;
+    background: #5D3A9B;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    font-family: inherit;
+    font-weight: 600;
+}
+.try-timer__reset-btn {
+    padding: 0.4rem 0.7rem;
+    background: #fff;
+    color: #5D3A9B;
+    border: 1px solid #5D3A9B;
+    border-radius: 5px;
+    font-size: 0.9rem;
+    cursor: pointer;
+    font-family: inherit;
+}
+.try-timer__bar-track {
+    margin-top: 0.75rem;
+    background: #e2d8f5;
+    border-radius: 4px;
+    height: 5px;
+    overflow: hidden;
+}
+.try-timer__bar-fill {
+    background: #5D3A9B;
+    height: 100%;
+    width: 100%;
+    border-radius: 4px;
+    transition: width 1s linear;
+}
+.try-timer__complete {
+    display: none;
+    margin: 0.6rem 0 0;
+    font-size: 0.875rem;
+    color: #0d6b66;
+    font-weight: 600;
+}
+
+/* ── How to use details block ── */
+.how-to-use {
+    margin-bottom: 1.75rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 6px;
+    padding: 0.9rem 1.1rem;
+}
+.how-to-use summary { cursor: pointer; font-weight: 600; color: #5D3A9B; }
+.how-to-use p { margin-top: 0.75rem; color: #334155; }
+
+/* ── Form field helpers ── */
+.form-group { margin-bottom: 1.25rem; }
+.field-help { font-size: 0.85rem; color: #64748b; margin: 0.2rem 0 0.4rem; }
+.field-error { color: #dc2626; font-size: 0.875rem; margin-top: 0.3rem; }
+
+/* ── Submit button modifier ── */
+.btn-submit { padding: 0.65rem 1.4rem; }
+
+/* ── Upsell footer ── */
+.try-upsell {
+    margin-top: 2.5rem;
+    background: #f8fafc;
+    border: 1px solid #e2e8f0;
+    border-radius: 8px;
+    padding: 1.25rem 1.5rem;
+}
+.try-upsell p { margin: 0.3rem 0 0; font-size: 0.9rem; color: #475569; }
+.try-upsell a { color: #5D3A9B; }

@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+{% block title %}Self-host KwaCart{% endblock %}
+{% block meta %}
+<meta name="description" content="Run KwaCart for free on your own computer or server, with local storage and no payment services.">
+<meta property="og:title" content="Self-host KwaCart">
+<meta property="og:description" content="Free self-hosted facilitation tools, sessions, learning and archives.">
+<meta property="og:type" content="website">
+{% endblock %}
+{% block extra_css %}<link rel="stylesheet" href="{% static 'css/academy.css' %}">{% endblock %}
+{% block content %}
+<div class="academy-shell">
+    <header class="academy-lesson-header">
+        <p class="academy-kicker">Free self-hosted software</p>
+        <h1>Run KwaCart on your own computer or server.</h1>
+        <p class="academy-summary">All facilitation tools, live sessions, the Academy and archives are available without a subscription. You control the instance and its data.</p>
+        <p><a class="academy-secondary-link" href="{{ kwacart_source_url }}">Get KwaCart source on GitHub</a></p>
+        <p>On GitHub, choose <strong>Code → Download ZIP</strong>, or clone the repository. The software is licensed under GNU AGPL v3.</p>
+    </header>
+    <nav class="academy-pagination" aria-label="Self-hosting sections">
+        <a href="#local">Run locally</a>
+        <a href="#server">Run a shared server</a>
+        <a href="#data">Keep your data safe</a>
+    </nav>
+    <section class="academy-section" id="local" aria-labelledby="local-title">
+        <h2 id="local-title">Run locally</h2>
+        <p>Download the source, install Python 3.12 or newer, then open a terminal in the project folder.</p>
+        <pre style="overflow:auto; padding:1rem; background:var(--academy-lilac);"><code>python -m pip install -r requirements.txt
+python manage.py migrate
+python manage.py createsuperuser
+python manage.py runserver 127.0.0.1:8000</code></pre>
+        <p>Open <code>http://127.0.0.1:8000</code> in your browser. Accounts and session work are stored in the local SQLite database; media and exports are stored on your disk. No Stripe, Cloudinary or Replit account is needed.</p>
+        <p>The development server is for local use only. Live participants need to reach the same shared instance to collaborate.</p>
+    </section>
+    <section class="academy-section" id="server" aria-labelledby="server-title">
+        <h2 id="server-title">Run a shared server</h2>
+        <p>Use <code>config.settings.selfhost</code> with a private secret key, your allowed domain names, persistent storage and a production web server. Put HTTPS and media delivery behind a reverse proxy. The included self-hosting guide covers these settings.</p>
+        <p>SQLite is suitable for a small instance; use your own PostgreSQL server when you need more simultaneous writers. Software use requires no subscription, but hardware, electricity, domains or optional hosting services can have their own costs.</p>
+    </section>
+    <section class="academy-section" id="data" aria-labelledby="data-title">
+        <h2 id="data-title">Keep your data safe</h2>
+        <p>Back up both the database and media folder, keep private keys outside the repository, and install security updates. The operator decides who can register, how the instance is exposed and which retention settings to apply.</p>
+        <p>Self-hosting does not remove an operator’s responsibilities for participants’ information. Set appropriate policies and notices for your own use, particularly when sessions involve children or sensitive material.</p>
+        <a class="academy-secondary-link" href="{% url 'academy_dashboard' %}">Explore the Academy</a>
+    </section>
+</div>
+{% endblock %}
