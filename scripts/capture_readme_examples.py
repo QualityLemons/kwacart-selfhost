@@ -11,7 +11,7 @@ import shutil
 import sys
 import tempfile
 import threading
-from datetime import datetime, timezone
+from datetime import datetime, timedelta, timezone
 from socketserver import ThreadingMixIn
 from wsgiref.simple_server import WSGIServer, WSGIRequestHandler, make_server
 
@@ -81,7 +81,10 @@ def main():
             host=user, data_owner=user, tool_slug='min-specs', tool_version='1.0',
             status='closed', closed_at=stamp,
         )
-        ToolSession.objects.filter(pk=session.pk).update(created_at=stamp)
+        ToolSession.objects.filter(pk=session.pk).update(
+            created_at=stamp - timedelta(minutes=30),
+        )
+        session.refresh_from_db()
         for contributor in (user, participant):
             ToolInstance.objects.create(
                 user=contributor, data_owner=user, session=session,
