@@ -18,6 +18,69 @@ KwaCart's software is licensed under GNU Affero General Public License v3.0
 attributed content retain their respective rights and licences. The software is
 provided without warranty.
 
+## Screenshots and archived outputs
+
+These screenshots show KwaCart's real interface using **fictional demonstration
+data**. The examples use Min Specs; other tools save their own activity fields.
+They are not records of an actual workshop.
+
+### Browse previous work
+
+The **Knowledge Bank** groups your work by tool. Inside a tool's archive, solo
+submissions and collaborative sessions are listed separately, with dates and
+links to view results. Access is limited to authorised users; archiving does
+not publish a workshop on the internet.
+
+![Min Specs archive showing a solo submission and a closed collaborative session, using fictional demo data](screenshots/archive-list.png)
+
+### Open an archived result
+
+A solo record shows the tool name, submission date, tool version, **Results**
+and **Your input**. In this example, the original rules, the rules removed during
+sifting and the final minimum list remain visible. Download buttons appear when
+the export files were successfully generated.
+
+![Archived Min Specs result showing the original rules, sifting decisions, final minimum rules and download controls](screenshots/archived-result.png)
+
+### Preview and download the output
+
+**Preview Markdown** opens a formatted, readable preview without leaving the
+archive. You can also download the files and keep them outside KwaCart.
+
+![Markdown preview of the fictional Min Specs output, with a title, date, tool version and clearly separated results](screenshots/markdown-preview.png)
+
+| Output | What it contains | How to use it |
+| --- | --- | --- |
+| Archive page | Saved result fields and, for solo work, the original input | Review work inside your own KwaCart instance |
+| Markdown (`.md`) | Tool heading, date/version metadata and named result sections | Open in a text editor or Markdown viewer; copy into notes or documentation |
+| Rich Text Format (`.rtf`) | A formatted document containing the activity results and metadata | Open in Word, LibreOffice or another RTF-compatible editor |
+| Closed-session exports | One combined document with session metadata and a section for each participant's saved contribution | Keep a workshop record without opening each contribution separately |
+
+**Try the actual generated example files:**
+
+- Solo Min Specs: [view Markdown](examples/min-specs-solo.md) ·
+  [download/open RTF](examples/min-specs-solo.rtf).
+- Collaborative Min Specs: [view combined Markdown](examples/min-specs-session.md) ·
+  [download/open combined RTF](examples/min-specs-session.rtf).
+
+On GitHub, use **Raw** or **Download raw file** to save an example file rather
+than the surrounding GitHub page. Participant email addresses in these samples
+use the reserved `example.test` domain.
+
+Exports contain the saved responses, not an automatically written evaluation
+or facilitator report. The solo export contains result fields; the original
+input remains available on the archive page. Collaborative exports identify
+contributors, so review them before sharing. Supported drawings are embedded
+when their image can be read; attachment transcriptions or links may appear in
+session exports. External attachment links can stop working if their files are
+deleted or unavailable.
+
+KwaCart currently produces Markdown and RTF, **not native PDF or DOCX exports**.
+The RTF's appearance can vary between document editors. Downloaded copies are
+independent of the archive: deleting an archive record does not erase files
+already saved to someone's computer. Export files alone are not a complete
+instance backup; see the backup instructions below.
+
 ## Local use
 
 Requirements: Python 3.12 or newer and pip. On Windows, use `py` instead of

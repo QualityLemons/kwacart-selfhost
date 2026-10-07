@@ -15,6 +15,15 @@ SOURCE_DIRS = {
 ROOT_FILES = {
     'manage.py', 'requirements.txt', 'pytest.ini', 'LICENSE', 'LICENSE.md', 'NOTICE',
     'scripts/build_source_release.py', 'docs/SELF_HOSTING.md',
+    'scripts/capture_readme_examples.py',
+    # Only the newly generated synthetic examples; never export all legacy docs.
+    'docs/screenshots/archive-list.png',
+    'docs/screenshots/archived-result.png',
+    'docs/screenshots/markdown-preview.png',
+    'docs/examples/min-specs-solo.md',
+    'docs/examples/min-specs-solo.rtf',
+    'docs/examples/min-specs-session.md',
+    'docs/examples/min-specs-session.rtf',
 }
 SECRET_PATTERNS = (
     re.compile(r'cloudinary://[^/\s]+:[^@\s]+@'),
@@ -51,7 +60,11 @@ def main():
         target = OUTPUT / path
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copyfile(ROOT / path, target)
-    shutil.copyfile(ROOT / 'docs' / 'SELF_HOSTING.md', OUTPUT / 'README.md')
+    readme = (ROOT / 'docs' / 'SELF_HOSTING.md').read_text()
+    # The guide lives one directory deeper than the public README.
+    for directory in ('screenshots', 'examples'):
+        readme = readme.replace(f']({directory}/', f'](docs/{directory}/')
+    (OUTPUT / 'README.md').write_text(readme)
     (OUTPUT / '.gitignore').write_text(
         '__pycache__/\n*.pyc\n*.sqlite3\n*.log\n.env\ninstance.env\nmedia/\n'
         'staticfiles/\ndata/\n.venv/\ndist/\n',
