@@ -15,6 +15,24 @@ import urllib.parse
 import urllib.request
 
 
+def native_window(binary, env, data):
+    marker = data / 'native-window-check.txt'
+    marker.unlink(missing_ok=True)
+    gui = subprocess.Popen([str(binary), '--smoke-test'], env=env)
+    try:
+        code = gui.wait(timeout=180)
+        assert code == 0 and marker.exists(), 'native GUI did not reach ready state'
+    except (AssertionError, subprocess.TimeoutExpired):
+        gui.kill()
+        gui.wait(timeout=15)
+        for name in ('native-window-check-error.txt', 'desktop.log', 'worker.log'):
+            log = data / name
+            if log.exists():
+                print(f'{name}:\n{log.read_text(encoding="utf-8", errors="replace")[-8000:]}', flush=True)
+        raise
+    assert marker.read_text() == 'ready'
+
+
 def check(binary):
     with tempfile.TemporaryDirectory(prefix='KwaCart native check ') as directory:
         data = Path(directory) / 'user data'
@@ -24,9 +42,7 @@ def check(binary):
         env['KWACART_DESKTOP_DATA_DIR'] = str(data)
         env['DATABASE_URL'] = 'postgresql://invalid.invalid/forbidden'
         env['DJANGO_SETTINGS_MODULE'] = 'config.settings.production'
-        gui = subprocess.Popen([str(binary), '--smoke-test'], env=env)
-        assert gui.wait(timeout=180) == 0
-        assert (data / 'native-window-check.txt').read_text() == 'ready'
+        native_window(binary, env, data)
         key_before = (data / '.kwacart-local-key').read_bytes()
         jar = http.cookiejar.CookieJar()
         opener = urllib.request.build_opener(
@@ -107,8 +123,7 @@ def check(binary):
         # Force an earlier schema-version marker to exercise the real parent
         # backup/update path, then restart the extracted application.
         (data / 'installed-version.json').write_text(json.dumps({'version': '0.9.0'}))
-        gui = subprocess.Popen([str(binary), '--smoke-test'], env=env)
-        assert gui.wait(timeout=180) == 0
+        native_window(binary, env, data)
         assert (data / '.kwacart-local-key').read_bytes() == key_before
         assert (data / 'media/retained.txt').read_text() == 'retain this upload'
         backups = list((data / 'backups').iterdir())

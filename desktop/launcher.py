@@ -11,6 +11,7 @@ import threading
 import time
 import urllib.request
 import webbrowser
+from .browser import open_system_browser
 from .runtime import (
     data_directory, environment, exclusive_instance, mark_updated,
     prepare_update, resource_root,
@@ -119,7 +120,7 @@ def window(no_browser=False, smoke_test=False):
     def open_browser():
         if url:
             try:
-                opened = webbrowser.open(url)
+                opened = open_system_browser(url)
             except (webbrowser.Error, OSError):
                 opened = False
             if not opened:
@@ -177,6 +178,9 @@ def window(no_browser=False, smoke_test=False):
                 elif event == 'error':
                     status.set(text)
                     open_button.configure(state='disabled')
+                    if smoke_test:
+                        (data / 'native-window-check-error.txt').write_text(text, encoding='utf-8')
+                        app.after(100, close)
                 elif event == 'stopped' and closing.is_set():
                     app.destroy()
                     return

@@ -69,3 +69,28 @@ def test_frozen_subprocess_dispatch_does_not_use_python_scripts(monkeypatch):
     assert worker_command(8088) == [
         '/read only folder/KwaCart', '--desktop-worker', '--port', '8088',
     ]
+
+
+@pytest.mark.parametrize('base', ['', 'relative-folder'])
+def test_empty_or_relative_data_base_never_uses_install_folder(monkeypatch, base):
+    monkeypatch.setattr(runtime.sys, 'platform', 'linux')
+    monkeypatch.delenv('KWACART_DESKTOP_DATA_DIR', raising=False)
+    monkeypatch.setenv('XDG_DATA_HOME', base)
+    assert runtime.data_directory() == runtime.Path.home() / '.local/share/kwacart'
+
+
+def test_system_browser_restores_bundle_environment_even_on_error(monkeypatch):
+    from desktop import browser
+    monkeypatch.setenv('LD_LIBRARY_PATH', '/bundle/libs')
+    monkeypatch.setenv('LD_LIBRARY_PATH_ORIG', '/system/libs')
+    monkeypatch.setenv('DYLD_LIBRARY_PATH', '/bundle/mac-libs')
+    monkeypatch.delenv('DYLD_LIBRARY_PATH_ORIG', raising=False)
+    def failed_browser(url):
+        assert runtime.os.environ['LD_LIBRARY_PATH'] == '/system/libs'
+        assert 'DYLD_LIBRARY_PATH' not in runtime.os.environ
+        raise OSError('No browser')
+    monkeypatch.setattr(browser.webbrowser, 'open', failed_browser)
+    with pytest.raises(OSError):
+        browser.open_system_browser('http://127.0.0.1:8080/')
+    assert runtime.os.environ['LD_LIBRARY_PATH'] == '/bundle/libs'
+    assert runtime.os.environ['DYLD_LIBRARY_PATH'] == '/bundle/mac-libs'

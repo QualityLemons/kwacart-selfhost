@@ -14,10 +14,11 @@ def main():
     if (ROOT / '.env').exists() or (ROOT / 'db.sqlite3').exists():
         raise SystemExit('Build only from a clean public checkout, not workspace data.')
     subprocess.run([sys.executable, 'scripts/build_source_release.py'], cwd=ROOT, check=True)
+    license_env = {**os.environ, 'PYTHONUTF8': '1'}
     notices = subprocess.check_output([
         sys.executable, '-m', 'piplicenses', '--format=plain-vertical',
         '--with-license-file', '--no-license-path', '--with-notice-file',
-    ], cwd=ROOT, text=True)
+    ], cwd=ROOT, text=True, encoding='utf-8', env=license_env)
     python_license = next((p for p in (
         Path(sys.base_prefix) / 'LICENSE.txt',
         Path(sys.base_prefix) / 'LICENSE',
@@ -32,8 +33,8 @@ def main():
         raise SystemExit('Native runtime notices are missing.')
     (ROOT / 'THIRD_PARTY_NOTICES.txt').write_text(
         'Third-party distributions keep their original licences.\n\nPython:\n'
-        + python_license.read_text(errors='replace') + '\n\n'
-        + native.read_text() + '\n\n' + notices,
+        + python_license.read_text(encoding='utf-8', errors='replace') + '\n\n'
+        + native.read_text(encoding='utf-8') + '\n\n' + notices,
         encoding='utf-8',
     )
     (ROOT / 'SOURCE.txt').write_text(
@@ -41,6 +42,7 @@ def main():
         'Exact corresponding source is included in kwacart-source.zip.\n'
         'Public repository: https://github.com/QualityLemons/kwacart-selfhost\n'
         f'Build commit: {os.environ.get("GITHUB_SHA", "local build")}\n',
+        encoding='utf-8',
     )
     # PyInstaller's Django hook otherwise chooses config.settings (an empty
     # package here). Inspect the same settings as the packaged worker, using

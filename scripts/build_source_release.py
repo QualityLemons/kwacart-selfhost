@@ -64,15 +64,16 @@ def main():
         target = OUTPUT / path
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(ROOT / path, target)
-    readme = (ROOT / 'docs' / 'SELF_HOSTING.md').read_text()
+    readme = (ROOT / 'docs' / 'SELF_HOSTING.md').read_text(encoding='utf-8')
     readme = readme.replace('](DESKTOP_RELEASES.md)', '](docs/DESKTOP_RELEASES.md)')
     # The guide lives one directory deeper than the public README.
     for directory in ('screenshots', 'examples'):
         readme = readme.replace(f']({directory}/', f'](docs/{directory}/')
-    (OUTPUT / 'README.md').write_text(readme)
+    (OUTPUT / 'README.md').write_text(readme, encoding='utf-8')
     (OUTPUT / '.gitignore').write_text(
         '__pycache__/\n*.pyc\n*.sqlite3\n*.log\n.env\ninstance.env\nmedia/\n'
         'staticfiles/\ndata/\n.venv/\ndist/\n.kwacart-runtime/\n.kwacart-local-key\n',
+        encoding='utf-8',
     )
     archive = ROOT / 'dist' / 'kwacart-source.zip'
     with zipfile.ZipFile(archive, 'w', zipfile.ZIP_DEFLATED) as bundle:

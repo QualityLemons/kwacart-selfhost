@@ -21,10 +21,16 @@ def data_directory():
     if override:
         return Path(override).expanduser().resolve()
     if sys.platform == 'win32':
-        return Path(os.environ['LOCALAPPDATA']) / 'KwaCart'
+        base = Path(os.environ.get('LOCALAPPDATA') or Path.home() / 'AppData' / 'Local')
+        if not base.is_absolute():
+            base = Path.home() / 'AppData' / 'Local'
+        return base / 'KwaCart'
     if sys.platform == 'darwin':
         return Path.home() / 'Library' / 'Application Support' / 'KwaCart'
-    return Path(os.environ.get('XDG_DATA_HOME', Path.home() / '.local/share')) / 'kwacart'
+    base = Path(os.environ.get('XDG_DATA_HOME') or Path.home() / '.local/share')
+    if not base.is_absolute():
+        base = Path.home() / '.local/share'
+    return base / 'kwacart'
 
 
 def environment(data, ticket):
