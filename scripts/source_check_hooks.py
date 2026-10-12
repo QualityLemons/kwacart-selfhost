@@ -6,8 +6,9 @@ installation, Django, account creation nor HTTP login.
 """
 import os
 from pathlib import Path
+import re
 import socket
-import subprocess
+import sys
 import urllib.request
 import webbrowser
 
@@ -30,16 +31,21 @@ if os.environ.get('KWACART_CHECK_OFFLINE') == '1':
 
     socket.socket.connect = connect
     socket.socket.connect_ex = connect_ex
-    original_popen = subprocess.Popen
-
-    def popen(command, *args, **kwargs):
-        if isinstance(command, (list, tuple)) and any(
-            str(part) in ('pip', 'ensurepip') for part in command
-        ):
+    def no_install(event, args):
+        if event != 'subprocess.Popen':
+            return
+        command = args[1]
+        if isinstance(command, (list, tuple)):
+            installing = any(str(part) in ('pip', 'ensurepip') for part in command)
+        else:
+            # Windows audits the final command-line string, not the argv list.
+            installing = bool(re.search(r'(?:^|\s)(?:pip|ensurepip)(?:\s|$)', str(command)))
+        if installing:
             raise RuntimeError('CI offline launch attempted package installation')
-        return original_popen(command, *args, **kwargs)
 
-    subprocess.Popen = popen
+    # An audit hook preserves the Popen class. Windows asyncio subclasses it;
+    # replacing it with a function breaks Django imports before any networking.
+    sys.addaudithook(no_install)
 
 
 def browser_open(url, *args, **kwargs):

@@ -188,3 +188,26 @@ def test_native_terminal_matches_final_output_after_child_exit(monkeypatch):
     terminal.child.read_nonblocking.return_value = 'Stopping KwaCart.'
     terminal.child.isalive.return_value = False
     assert terminal.expect('Stopping KwaCart.', timeout=1) == 'Stopping KwaCart.'
+
+
+def test_offline_ci_hook_preserves_subprocess_class_and_blocks_bootstrap():
+    import os
+    import subprocess
+    import sys
+    code = """
+import subprocess, sys
+import scripts.source_check_hooks
+import asyncio
+class CompatibleWithWindowsAsyncio(subprocess.Popen):
+    pass
+for module in ('pip', 'ensurepip'):
+    try:
+        subprocess.run([sys.executable, '-m', module], check=True)
+    except RuntimeError as error:
+        assert 'package installation' in str(error)
+    else:
+        raise AssertionError('offline hook allowed package bootstrap')
+subprocess.run([sys.executable, '-c', 'import asyncio'], check=True)
+"""
+    subprocess.run([sys.executable, '-c', code], check=True, timeout=30,
+                   env={**os.environ, 'KWACART_CHECK_OFFLINE': '1'})
