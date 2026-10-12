@@ -21,6 +21,11 @@ ROOT_FILES = {
     'scripts/native_desktop_media_check.py',
     'scripts/fetch_native_notices.py', 'docs/DESKTOP_RELEASES.md',
     '.github/workflows/desktop.yml',
+    # Explicitly reviewed source-launcher CI; never allowlist .github wholesale.
+    '.github/workflows/source-launchers.yml',
+    'scripts/native_source_check.py',
+    'scripts/source_check_hooks.py',
+    'docs/SOURCE_LAUNCHER_CHECKS.md',
     # Only the newly generated synthetic examples; never export all legacy docs.
     'docs/screenshots/archive-list.png',
     'docs/screenshots/archived-result.png',

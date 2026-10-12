@@ -1,4 +1,4 @@
-"""Launcher checks without creating a virtual environment or installing packages."""
+"""Fast unit checks; real native installation is in source-launchers.yml."""
 from argparse import Namespace
 from pathlib import Path
 import socket
@@ -126,3 +126,33 @@ def test_exited_server_never_claims_to_be_ready():
     process.poll.return_value = 1
     with pytest.raises(launcher.LauncherError, match='could not start'):
         launcher.wait_for_server(process, 'http://127.0.0.1:8000/')
+
+
+@pytest.mark.parametrize('version', [(3, 11), (3, 15)])
+def test_unsupported_python_fails_before_touching_instance(tmp_path, monkeypatch, version):
+    monkeypatch.setattr(launcher.sys, 'version_info', version)
+    runtime = Mock()
+    monkeypatch.setattr(launcher, 'runtime_python', runtime)
+    with pytest.raises(launcher.LauncherError, match='3.12, 3.13 or 3.14'):
+        launcher.launch(tmp_path, Namespace(port=8000, use_current_python=False, no_browser=True))
+    runtime.assert_not_called()
+    assert list(tmp_path.iterdir()) == []
+
+
+def test_source_ci_publication_is_explicitly_allowlisted():
+    from scripts.build_source_release import ROOT_FILES, SOURCE_DIRS
+    assert '.github' not in SOURCE_DIRS
+    assert {
+        '.github/workflows/source-launchers.yml',
+        'scripts/native_source_check.py',
+        'scripts/source_check_hooks.py',
+        'docs/SOURCE_LAUNCHER_CHECKS.md',
+    } <= ROOT_FILES
+    assert '.github/workflows/accessibility.yml' not in ROOT_FILES
+
+
+def test_native_check_refuses_to_mislabel_linux_as_native(tmp_path, monkeypatch):
+    from scripts import native_source_check
+    monkeypatch.setattr(native_source_check.sys, 'platform', 'linux')
+    with pytest.raises(AssertionError, match='native Windows or macOS'):
+        native_source_check.check(tmp_path / 'not-a-real-archive.zip')
