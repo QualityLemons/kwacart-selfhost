@@ -5,6 +5,7 @@ import json
 import os
 from pathlib import Path
 import re
+import shutil
 import socket
 import sqlite3
 import subprocess
@@ -143,7 +144,34 @@ def check(binary):
         print('PASS: native frozen GUI, worker, first account, static/tool/media routes, restart, update backup.')
 
 
+def check_read_only_install(binary):
+    source = next((p for p in binary.parents if p.name.endswith('.app')), binary.parent)
+    with tempfile.TemporaryDirectory(prefix='KwaCart installation with spaces ') as directory:
+        install = Path(directory) / source.name
+        shutil.copytree(source, install, symlinks=True)
+        executable = install / binary.relative_to(source)
+        modes = {}
+        for path in [install, *install.rglob('*')]:
+            if not path.is_symlink():
+                modes[path] = path.stat().st_mode
+                path.chmod(modes[path] & ~0o222)
+        def snapshot():
+            return {
+                str(p.relative_to(install)): (p.lstat().st_size, p.lstat().st_mtime_ns)
+                for p in install.rglob('*') if p.is_file() or p.is_symlink()
+            }
+        before = snapshot()
+        try:
+            check(executable)
+            assert snapshot() == before, 'The app wrote into its installation folder'
+        finally:
+            for path, mode in modes.items():
+                if path.exists():
+                    path.chmod(mode)
+        print('PASS: copied native package runs from a read-only installation with spaces.')
+
+
 if __name__ == '__main__':
     parser = argparse.ArgumentParser()
     parser.add_argument('binary', type=Path)
-    check(parser.parse_args().binary.resolve())
+    check_read_only_install(parser.parse_args().binary.resolve())

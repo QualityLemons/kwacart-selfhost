@@ -7,7 +7,8 @@ root = Path(SPECPATH).parent
 datas = []
 hidden = []
 for name in ('django', 'accounts', 'academy', 'archive', 'tools',
-             'exporters', 'config', 'desktop', 'cloudinary', 'cloudinary_storage'):
+             'exporters', 'config', 'desktop', 'cloudinary', 'cloudinary_storage',
+             'whitenoise', 'waitress'):
     hidden += collect_submodules(name)
     datas += collect_data_files(name)
 for name in ('templates', 'static', 'library'):
