@@ -14,7 +14,8 @@
         <p class="academy-kicker">Free self-hosted software</p>
         <h1>Run KwaCart on your own computer or server.</h1>
         <p class="academy-summary">All facilitation tools, live sessions, the Academy and archives are available without a subscription. You control the instance and its data.</p>
-        <p><a class="academy-secondary-link" href="https://github.com/QualityLemons/kwacart-selfhost/archive/refs/heads/main.zip">Download the KwaCart ZIP</a></p>
+        <p><a class="academy-secondary-link" href="https://github.com/QualityLemons/kwacart-selfhost/releases">Find standalone desktop packages</a></p>
+        <p><a href="https://github.com/QualityLemons/kwacart-selfhost/archive/refs/heads/main.zip">Download the source ZIP instead</a></p>
         <p><a href="{{ kwacart_source_url }}">View the source on GitHub</a>. The software is licensed under GNU AGPL v3.</p>
     </header>
     <nav class="academy-pagination" aria-label="Self-hosting sections">
@@ -24,6 +25,9 @@
     </nav>
     <section class="academy-section" id="local" aria-labelledby="local-title">
         <h2 id="local-title">Run locally</h2>
+        <p><strong>Standalone desktop edition:</strong> choose a tested package for Windows, Intel Mac, Apple silicon Mac or Linux from the public releases. Extract it, open KwaCart and create your first local account in the browser. Python is bundled; no terminal commands or cloud account are required. Keep the KwaCart desktop window open, and use Stop KwaCart when you finish.</p>
+        <p><a href="https://github.com/QualityLemons/kwacart-selfhost/blob/main/docs/DESKTOP_RELEASES.md">Read the desktop download, security-warning and update instructions</a>. Previews are unsigned; do not disable system security. If no package is listed yet, use the source option below.</p>
+        <h3>Source edition (requires Python)</h3>
         <ol>
             <li><strong>Install Python once.</strong> Use Python 3.13 from <a href="https://www.python.org/downloads/">python.org</a> (3.12 and 3.14 also work). On Windows, select “Add python.exe to PATH” if offered.</li>
             <li><strong>Download and extract the ZIP.</strong> Windows: right-click → Extract All. Mac: double-click the ZIP. Open the extracted folder containing <code>manage.py</code> and the Start KwaCart files. Do not run inside the ZIP.</li>
@@ -33,7 +37,7 @@
         </ol>
         <p><strong>Keep the launcher window open.</strong> Press Ctrl+C in it to stop KwaCart. Next time, start the same launcher from the same folder; your account and saved work remain there.</p>
         <p><a href="https://github.com/QualityLemons/kwacart-selfhost#local-use-from-zip-to-browser">Read the complete Windows, Mac and Linux walkthrough, including troubleshooting</a>.</p>
-        <p>No Stripe, Cloudinary or Replit account is needed. This remains a browser-based application that requires Python, not a standalone desktop installer.</p>
+        <p>No GitHub, Replit, Stripe, Cloudinary or cloud database account is needed. The source ZIP requires Python; standalone desktop packages bundle it.</p>
         <p>The local address is only for this computer: sending it to someone else will not let them join. Live participants on other devices need a shared instance. Do not expose the local development server to the internet.</p>
     </section>
     <section class="academy-section" id="server" aria-labelledby="server-title">

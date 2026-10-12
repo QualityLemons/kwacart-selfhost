@@ -8,8 +8,15 @@ checkout or payment requirement.
 · [View the source on GitHub](https://github.com/QualityLemons/kwacart-selfhost)
 
 KwaCart runs on your own computer and opens in your normal web browser.
-The ZIP is source software with a launcher, not a standalone desktop installer.
+The ZIP above is source software with a launcher, not a standalone desktop installer.
 You do not need a GitHub, Replit, Stripe, Cloudinary or cloud database account.
+
+**Without installing Python:** use a standalone package from
+**[KwaCart desktop releases](https://github.com/QualityLemons/kwacart-selfhost/releases)**.
+See **[download and first-account instructions](DESKTOP_RELEASES.md)** for
+Windows, Intel/Apple silicon Mac and Linux. Desktop previews are unsigned;
+choose a tested package asset, not the “Source code” ZIP. The source instructions
+below remain available for advanced users and shared servers.
 
 KwaCart's software is licensed under GNU Affero General Public License v3.0
 (`AGPL-3.0-only`); see `LICENSE` and `NOTICE`. Third-party libraries and

@@ -1,0 +1,9 @@
+# Runtime only: users never install these. CI builds with Python 3.13.
+django==6.0.8
+django-environ==0.13.0
+whitenoise==6.6.0
+psycopg2-binary==2.9.12
+dj-database-url==3.1.2
+cloudinary==1.44.2
+django-cloudinary-storage==0.3.0
+waitress==3.0.2

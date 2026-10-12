@@ -10,13 +10,16 @@ ROOT = Path(__file__).resolve().parent.parent
 OUTPUT = ROOT / 'dist' / 'kwacart-source'
 SOURCE_DIRS = {
     'accounts', 'academy', 'archive', 'config', 'exporters', 'tools', 'templates',
-    'static', 'library', 'tests',
+    'static', 'library', 'tests', 'desktop', 'packaging',
 }
 ROOT_FILES = {
     'manage.py', 'requirements.txt', 'pytest.ini', 'LICENSE', 'LICENSE.md', 'NOTICE',
     'scripts/build_source_release.py', 'docs/SELF_HOSTING.md',
     'scripts/capture_readme_examples.py',
     'start_kwacart.py', 'Start KwaCart.bat', 'Start KwaCart.command',
+    'scripts/build_desktop.py', 'scripts/native_desktop_check.py',
+    'scripts/fetch_native_notices.py', 'docs/DESKTOP_RELEASES.md',
+    '.github/workflows/desktop.yml',
     # Only the newly generated synthetic examples; never export all legacy docs.
     'docs/screenshots/archive-list.png',
     'docs/screenshots/archived-result.png',
@@ -62,6 +65,7 @@ def main():
         target.parent.mkdir(parents=True, exist_ok=True)
         shutil.copy2(ROOT / path, target)
     readme = (ROOT / 'docs' / 'SELF_HOSTING.md').read_text()
+    readme = readme.replace('](DESKTOP_RELEASES.md)', '](docs/DESKTOP_RELEASES.md)')
     # The guide lives one directory deeper than the public README.
     for directory in ('screenshots', 'examples'):
         readme = readme.replace(f']({directory}/', f'](docs/{directory}/')

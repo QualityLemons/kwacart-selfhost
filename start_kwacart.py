@@ -167,6 +167,11 @@ def launch(root, args):
 
 
 def main():
+    # A frozen executable is not a Python interpreter: never invoke it with
+    # manage.py or pip arguments. Its child workers use an explicit dispatch.
+    if getattr(sys, 'frozen', False) or '--desktop' in sys.argv or '--desktop-worker' in sys.argv:
+        from desktop.launcher import main as desktop_main
+        return desktop_main()
     parser = argparse.ArgumentParser(description=__doc__)
     parser.add_argument('--port', type=int, default=8000)
     parser.add_argument('--no-browser', action='store_true')
