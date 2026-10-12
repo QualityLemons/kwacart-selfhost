@@ -4,6 +4,28 @@ KwaCart is free. Standalone packages bundle Python, Django, the tool library,
 templates and static assets. No Python install, terminal command, cloud account
 or payment is required to use a desktop package.
 
+## Published preview
+
+**Verified on 12 October 2026:** [desktop-v1.0.0 is published](https://github.com/QualityLemons/kwacart-selfhost/releases/tag/desktop-v1.0.0)
+in the public repository. This is a real download release, not only a proposed
+workflow. Its assets are:
+
+* `KwaCart-windows-x64.zip`
+* `KwaCart-macos-intel.zip`
+* `KwaCart-macos-apple-silicon.zip`
+* `KwaCart-linux-x64.tar.gz`
+* `kwacart-source.zip`
+* `SHA256SUMS.txt`
+
+The [native build and publication run](https://github.com/QualityLemons/kwacart-selfhost/actions/runs/38257503979)
+completed successfully on all four platforms. Each actual frozen application
+passed first-account, static/tool/media, shutdown, restart and update-backup
+checks from a copied, read-only installation with spaces in its path.
+The published checksum file was downloaded successfully and matches the
+release asset digests. These downloads remain unsigned previews; automated
+native checks are not a claim of signing, notarization or manual screen-reader
+verification.
+
 ## Download and open
 
 Use only **[KwaCart's public releases](https://github.com/QualityLemons/kwacart-selfhost/releases)**.
