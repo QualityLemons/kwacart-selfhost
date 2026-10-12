@@ -1,5 +1,5 @@
 """Persistent state, exclusive ownership and pre-migration backups."""
-from contextlib import contextmanager
+from contextlib import closing, contextmanager
 from datetime import datetime, timezone
 import json
 import os
@@ -95,7 +95,7 @@ def prepare_update(data):
     backup = data / 'backups' / datetime.now(timezone.utc).strftime('%Y%m%dT%H%M%S%fZ')
     backup.mkdir(parents=True, mode=0o700)
     # SQLite backup handles journal/WAL state; the worker has not started yet.
-    with sqlite3.connect(database) as source, sqlite3.connect(backup / 'db.sqlite3') as target:
+    with closing(sqlite3.connect(database)) as source, closing(sqlite3.connect(backup / 'db.sqlite3')) as target:
         source.backup(target)
     shutil.copy2(data / '.kwacart-local-key', backup)
     if (data / 'media').exists():

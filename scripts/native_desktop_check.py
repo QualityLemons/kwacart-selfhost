@@ -1,5 +1,6 @@
 """Exercise the actual frozen executable on its matching native runner."""
 import argparse
+from contextlib import closing
 import http.cookiejar
 import json
 import os
@@ -131,7 +132,7 @@ def check(binary):
         assert len(backups) == 1
         assert (backups[0] / '.kwacart-local-key').read_bytes() == key_before
         assert (backups[0] / 'media/retained.txt').is_file()
-        with sqlite3.connect(backups[0] / 'db.sqlite3') as db:
+        with closing(sqlite3.connect(backups[0] / 'db.sqlite3')) as db:
             assert db.execute('SELECT COUNT(*) FROM accounts_user').fetchone() == (1,)
         proc, base = start()
         try:

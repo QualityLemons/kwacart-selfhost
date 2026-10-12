@@ -1,5 +1,6 @@
 import json
 import sqlite3
+from contextlib import closing
 from unittest.mock import Mock
 
 import pytest
@@ -27,20 +28,31 @@ def test_missing_key_with_existing_data_is_not_regenerated(tmp_path):
     assert not (tmp_path / '.kwacart-local-key').exists()
 
 
-def test_update_preserves_database_media_key_and_backs_up_once(tmp_path):
+def test_update_preserves_database_media_key_and_backs_up_once(tmp_path, monkeypatch):
     runtime.environment(tmp_path, 'ticket')
-    with sqlite3.connect(tmp_path / 'db.sqlite3') as db:
+    with closing(sqlite3.connect(tmp_path / 'db.sqlite3')) as db:
         db.execute('CREATE TABLE saved (value TEXT)')
         db.execute("INSERT INTO saved VALUES ('preserve')")
+        db.commit()
     (tmp_path / 'media').mkdir()
     (tmp_path / 'media/upload.txt').write_text('keep')
     (tmp_path / 'installed-version.json').write_text(json.dumps({'version': '0.9.0'}))
     key = (tmp_path / '.kwacart-local-key').read_bytes()
+    connections = []
+    connect = sqlite3.connect
+    def tracked_connect(path):
+        connection = connect(path)
+        connections.append(connection)
+        return connection
+    monkeypatch.setattr(runtime.sqlite3, 'connect', tracked_connect)
     runtime.prepare_update(tmp_path)
+    for connection in connections:
+        with pytest.raises(sqlite3.ProgrammingError, match='closed'):
+            connection.execute('SELECT 1')
     backup = next((tmp_path / 'backups').iterdir())
     assert (backup / '.kwacart-local-key').read_bytes() == key
     assert (backup / 'media/upload.txt').read_text() == 'keep'
-    with sqlite3.connect(backup / 'db.sqlite3') as db:
+    with closing(sqlite3.connect(backup / 'db.sqlite3')) as db:
         assert db.execute('SELECT value FROM saved').fetchone() == ('preserve',)
     runtime.mark_updated(tmp_path)
     runtime.prepare_update(tmp_path)
