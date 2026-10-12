@@ -21,7 +21,9 @@ The private runtime's actual version and `pip check` are verified.
 A real terminal drives Django's initial email/password prompts with a fresh
 synthetic account. A CI-only browser callback checks the exact local URL returns
 HTTP 200 before recording the browser request. HTTP login uses CSRF and cookies.
-Ctrl+C must stop the launcher and server cleanly. An immediate restart on the
+Ctrl+C must stop the launcher and server cleanly. If Windows asks “Terminate
+batch job (Y/N)?”, the test answers N so the wrapper can finish and return its
+recorded exit status, then dismisses the final pause. An immediate restart on the
 same port blocks external Python socket connections and rejects pip/ensurepip
 subprocesses, verifies no setup repeats, and checks the account, local key and
 authenticated session survive.

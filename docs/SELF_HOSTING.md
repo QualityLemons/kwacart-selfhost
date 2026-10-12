@@ -121,6 +121,8 @@ the shared-server instructions below.
 
 - To **stop**, return to the launcher window and press **Ctrl+C**. Closing a
   browser tab alone does not stop the server.
+  On Windows, if asked **Terminate batch job (Y/N)?**, type **N** and press
+  **Enter**, then press a key at the final pause to close the window.
 - To **return**, open the **same extracted folder** and start the same launcher
   again. Sign in with the same account. You do not need to download the ZIP
   or create another account each time.

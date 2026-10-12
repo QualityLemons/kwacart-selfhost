@@ -47,12 +47,15 @@ class Terminal:
             self.child.send(value)
 
     def expect(self, text, timeout=120):
+        alternatives = (text,) if isinstance(text, str) else text
         deadline = time.monotonic() + timeout
         while time.monotonic() < deadline:
-            index = self.output.find(text, self.cursor)
-            if index >= 0:
-                self.cursor = index + len(text)
-                return
+            matches = [(self.output.find(value, self.cursor), value) for value in alternatives]
+            matches = [(index, value) for index, value in matches if index >= 0]
+            if matches:
+                index, value = min(matches)
+                self.cursor = index + len(value)
+                return value
             pending = self.output[self.cursor:]
             if any(message in pending for message in (
                 'KwaCart could not open:', 'Python was not found.',
@@ -68,6 +71,10 @@ class Terminal:
                 else:
                     chunk = self.child.read_nonblocking(4096, timeout=0.2)
                 self.output += chunk
+                if chunk:
+                    # A fast child can exit immediately after its final message.
+                    # Match/drain the buffered output before checking liveness.
+                    continue
             except Exception as exc:
                 # Terminal timeout/EOF are expected while polling. Other failures
                 # must not be mistaken for a successful application check.
@@ -85,7 +92,12 @@ class Terminal:
         self.send('\x03')
         self.expect('Stopping KwaCart.', timeout=30)
         if os.name == 'nt':
-            self.expect('Press any key', timeout=30)
+            prompt = self.expect(('Press any key', 'Terminate batch job'), timeout=30)
+            if prompt == 'Terminate batch job':
+                # cmd.exe itself receives Ctrl+C too. Resume the batch after
+                # Python's clean shutdown, rather than forcibly aborting it.
+                self.send('n\r')
+                self.expect('Press any key', timeout=30)
             self.send('\r')
         deadline = time.monotonic() + 30
         while self.alive() and time.monotonic() < deadline:

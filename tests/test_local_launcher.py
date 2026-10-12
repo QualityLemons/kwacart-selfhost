@@ -166,3 +166,25 @@ def test_source_zip_command_permissions_do_not_depend_on_builder_os(tmp_path):
     entry = source_zip_entry(path, 'kwacart/Start KwaCart.command')
     assert entry.create_system == 3
     assert entry.external_attr >> 16 == 0o100755
+
+
+def test_native_terminal_accepts_windows_batch_confirmation():
+    from scripts.native_source_check import Terminal
+    terminal = Terminal.__new__(Terminal)
+    terminal.output = 'Stopping KwaCart.\r\nTerminate batch job (Y/N)?'
+    terminal.cursor = 0
+    assert terminal.expect('Stopping KwaCart.') == 'Stopping KwaCart.'
+    assert terminal.expect(('Press any key', 'Terminate batch job')) == 'Terminate batch job'
+
+
+def test_native_terminal_matches_final_output_after_child_exit(monkeypatch):
+    from scripts import native_source_check
+    monkeypatch.setattr(native_source_check.os, 'name', 'posix')
+    terminal = native_source_check.Terminal.__new__(native_source_check.Terminal)
+    terminal.output = ''
+    terminal.cursor = 0
+    terminal.redactions = []
+    terminal.child = Mock()
+    terminal.child.read_nonblocking.return_value = 'Stopping KwaCart.'
+    terminal.child.isalive.return_value = False
+    assert terminal.expect('Stopping KwaCart.', timeout=1) == 'Stopping KwaCart.'
