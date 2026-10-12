@@ -9,3 +9,5 @@ staticfiles/
 data/
 .venv/
 dist/
+.kwacart-runtime/
+.kwacart-local-key

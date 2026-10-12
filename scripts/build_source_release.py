@@ -16,6 +16,7 @@ ROOT_FILES = {
     'manage.py', 'requirements.txt', 'pytest.ini', 'LICENSE', 'LICENSE.md', 'NOTICE',
     'scripts/build_source_release.py', 'docs/SELF_HOSTING.md',
     'scripts/capture_readme_examples.py',
+    'start_kwacart.py', 'Start KwaCart.bat', 'Start KwaCart.command',
     # Only the newly generated synthetic examples; never export all legacy docs.
     'docs/screenshots/archive-list.png',
     'docs/screenshots/archived-result.png',
@@ -59,7 +60,7 @@ def main():
     for path in selected:
         target = OUTPUT / path
         target.parent.mkdir(parents=True, exist_ok=True)
-        shutil.copyfile(ROOT / path, target)
+        shutil.copy2(ROOT / path, target)
     readme = (ROOT / 'docs' / 'SELF_HOSTING.md').read_text()
     # The guide lives one directory deeper than the public README.
     for directory in ('screenshots', 'examples'):
@@ -67,7 +68,7 @@ def main():
     (OUTPUT / 'README.md').write_text(readme)
     (OUTPUT / '.gitignore').write_text(
         '__pycache__/\n*.pyc\n*.sqlite3\n*.log\n.env\ninstance.env\nmedia/\n'
-        'staticfiles/\ndata/\n.venv/\ndist/\n',
+        'staticfiles/\ndata/\n.venv/\ndist/\n.kwacart-runtime/\n.kwacart-local-key\n',
     )
     archive = ROOT / 'dist' / 'kwacart-source.zip'
     with zipfile.ZipFile(archive, 'w', zipfile.ZIP_DEFLATED) as bundle:

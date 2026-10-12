@@ -14,8 +14,8 @@
         <p class="academy-kicker">Free self-hosted software</p>
         <h1>Run KwaCart on your own computer or server.</h1>
         <p class="academy-summary">All facilitation tools, live sessions, the Academy and archives are available without a subscription. You control the instance and its data.</p>
-        <p><a class="academy-secondary-link" href="{{ kwacart_source_url }}">Get KwaCart source on GitHub</a></p>
-        <p>On GitHub, choose <strong>Code → Download ZIP</strong>, or clone the repository. The software is licensed under GNU AGPL v3.</p>
+        <p><a class="academy-secondary-link" href="https://github.com/QualityLemons/kwacart-selfhost/archive/refs/heads/main.zip">Download the KwaCart ZIP</a></p>
+        <p><a href="{{ kwacart_source_url }}">View the source on GitHub</a>. The software is licensed under GNU AGPL v3.</p>
     </header>
     <nav class="academy-pagination" aria-label="Self-hosting sections">
         <a href="#local">Run locally</a>
@@ -24,13 +24,17 @@
     </nav>
     <section class="academy-section" id="local" aria-labelledby="local-title">
         <h2 id="local-title">Run locally</h2>
-        <p>Download the source, install Python 3.12 or newer, then open a terminal in the project folder.</p>
-        <pre style="overflow:auto; padding:1rem; background:var(--academy-lilac);"><code>python -m pip install -r requirements.txt
-python manage.py migrate
-python manage.py createsuperuser
-python manage.py runserver 127.0.0.1:8000</code></pre>
-        <p>Open <code>http://127.0.0.1:8000</code> in your browser. Accounts and session work are stored in the local SQLite database; media and exports are stored on your disk. No Stripe, Cloudinary or Replit account is needed.</p>
-        <p>The development server is for local use only. Live participants need to reach the same shared instance to collaborate.</p>
+        <ol>
+            <li><strong>Install Python once.</strong> Use Python 3.13 from <a href="https://www.python.org/downloads/">python.org</a> (3.12 and 3.14 also work). On Windows, select “Add python.exe to PATH” if offered.</li>
+            <li><strong>Download and extract the ZIP.</strong> Windows: right-click → Extract All. Mac: double-click the ZIP. Open the extracted folder containing <code>manage.py</code> and the Start KwaCart files. Do not run inside the ZIP.</li>
+            <li><strong>Start the launcher.</strong> Windows: double-click <code>Start KwaCart.bat</code>. Mac: open <code>Start KwaCart.command</code>. Linux: run <code>sh "./Start KwaCart.command"</code> in that folder. The first launch installs packages and needs internet.</li>
+            <li><strong>Create your first login.</strong> Follow the email and password prompts. Password characters are invisible while you type. This is your local account, not a GitHub or Replit login.</li>
+            <li><strong>Use the browser.</strong> Once “KwaCart is ready” appears, your browser should open. Click Login and use your new account. If it does not open, paste <code>http://127.0.0.1:8000/</code> into the browser’s address bar.</li>
+        </ol>
+        <p><strong>Keep the launcher window open.</strong> Press Ctrl+C in it to stop KwaCart. Next time, start the same launcher from the same folder; your account and saved work remain there.</p>
+        <p><a href="https://github.com/QualityLemons/kwacart-selfhost#local-use-from-zip-to-browser">Read the complete Windows, Mac and Linux walkthrough, including troubleshooting</a>.</p>
+        <p>No Stripe, Cloudinary or Replit account is needed. This remains a browser-based application that requires Python, not a standalone desktop installer.</p>
+        <p>The local address is only for this computer: sending it to someone else will not let them join. Live participants on other devices need a shared instance. Do not expose the local development server to the internet.</p>
     </section>
     <section class="academy-section" id="server" aria-labelledby="server-title">
         <h2 id="server-title">Run a shared server</h2>

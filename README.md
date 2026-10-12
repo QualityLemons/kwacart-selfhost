@@ -4,19 +4,161 @@ KwaCart is free self-hosted facilitation software. It includes all tools, live
 sessions, the Academy, archives and exports. There is no subscription,
 checkout or payment requirement.
 
-This is a browser-based application you run, not a desktop executable. Download
-the source from [QualityLemons/kwacart-selfhost](https://github.com/QualityLemons/kwacart-selfhost)
-using **Code → Download ZIP** and extract it, or clone the repository:
+**[Download the latest KwaCart ZIP](https://github.com/QualityLemons/kwacart-selfhost/archive/refs/heads/main.zip)**
+· [View the source on GitHub](https://github.com/QualityLemons/kwacart-selfhost)
 
-```sh
-git clone https://github.com/QualityLemons/kwacart-selfhost.git
-cd kwacart-selfhost
-```
+KwaCart runs on your own computer and opens in your normal web browser.
+The ZIP is source software with a launcher, not a standalone desktop installer.
+You do not need a GitHub, Replit, Stripe, Cloudinary or cloud database account.
 
 KwaCart's software is licensed under GNU Affero General Public License v3.0
 (`AGPL-3.0-only`); see `LICENSE` and `NOTICE`. Third-party libraries and
 attributed content retain their respective rights and licences. The software is
 provided without warranty.
+
+## Local use: from ZIP to browser
+
+**First time:** install Python once → download and extract the ZIP → start
+KwaCart → create a login → use the toolkit in your browser.
+
+### 1. Install Python once
+
+Install **Python 3.13 (recommended)** from [python.org](https://www.python.org/downloads/).
+Python 3.12 and 3.14 are also supported by this launcher. Do not assume a newer,
+untested Python release will work with the included package versions.
+
+- **Windows:** run the Python installer. Select **Add python.exe to PATH** if
+  that option appears. Finish installing before starting KwaCart.
+- **Mac:** open the downloaded Python installer and follow its instructions.
+  The older Python supplied by your operating system may not be suitable.
+- **Linux:** install a supported Python version and its `venv` support using
+  your distribution's package manager.
+
+You do not need to install Playwright's browser or set up a cloud service.
+The first KwaCart launch needs internet to download its Python packages;
+later launches reuse the installed packages unless the requirements change.
+
+### 2. Download the ZIP
+
+Click **[Download the latest KwaCart ZIP](https://github.com/QualityLemons/kwacart-selfhost/archive/refs/heads/main.zip)**.
+Your browser normally saves it in **Downloads**. If you prefer to use the
+GitHub repository page, choose the green **Code** button, then **Download ZIP**.
+
+### 3. Extract it — do not run it inside the ZIP
+
+- **Windows:** right-click the downloaded ZIP → **Extract All…** → **Extract**.
+- **Mac:** double-click the ZIP to create an ordinary folder.
+- **Linux:** use your file manager's **Extract** option.
+
+Move the extracted folder somewhere you will keep it, such as **Documents**.
+Open it. If you see another folder inside, open that too: the right folder
+contains **`Start KwaCart.bat`**, **`Start KwaCart.command`**, **`start_kwacart.py`**,
+**`manage.py`** and **`requirements.txt`** together.
+The folder name may include `main` or a release number; its exact name does not matter.
+If Windows hides the endings such as `.bat` and `.py`, enable
+**View → Show → File name extensions** in File Explorer.
+
+If the Start KwaCart files are missing, you probably downloaded an older
+release or opened the wrong folder. Download the latest ZIP linked above.
+Opening `README.md` or an HTML template does **not** start the toolkit.
+
+### 4. Start KwaCart
+
+| Your computer | What to do |
+| --- | --- |
+| Windows | Double-click **`Start KwaCart.bat`** in the extracted folder. |
+| Mac | Double-click **`Start KwaCart.command`**. A Terminal window should open. If it cannot open, use the Mac fallback below. |
+| Linux | Open a terminal in the extracted folder and run `sh "./Start KwaCart.command"`. |
+
+**Mac fallback:** open **Terminal** from Applications → Utilities. Type `sh `
+(including the space), drag **`Start KwaCart.command`** from Finder into the
+Terminal window, then press **Return**. This runs the correct file without
+having to type the folder path. Do not disable your computer's security
+settings or run an untrusted copy of KwaCart.
+
+The launcher creates a private `.kwacart-runtime` folder, installs the required
+packages and prepares the database. Several minutes of installation messages
+on the first run are normal. **Leave the launcher window open.**
+
+### 5. Create your first login
+
+On the first run, the launcher asks you to create an administrator account.
+Type your email address and press **Enter**, then choose and confirm a password.
+**Nothing appears while you type the password**, not even dots: this is normal.
+If it is rejected as too short or too common, choose a stronger password.
+This account exists on your own KwaCart installation, not on GitHub or Replit.
+
+If an active administrator already exists, this step is skipped; use the
+account you previously created. Do not recreate your database to make a new login.
+
+### 6. Use KwaCart in your browser
+
+When the terminal says **`KwaCart is ready`**, your default browser should open:
+
+**[Open KwaCart on this computer: http://127.0.0.1:8000/](http://127.0.0.1:8000/)**
+
+If it does not open automatically, open Chrome, Edge, Firefox or Safari and
+paste that address into the **address bar at the top**, not a search box.
+The address works **only while KwaCart is running on this computer**; clicking
+it before starting the launcher will give a connection error.
+
+Click **Login**, use the email and password you created, then choose
+**Work Solo**, **Facilitate**, **Academy** or **Knowledge Bank**. The toolkit
+is used in this browser tab; the terminal is just keeping the local server running.
+
+This local address cannot be sent to other people so they can join remotely:
+`127.0.0.1` means each person's own computer. For multi-device workshops, use
+the shared-server instructions below.
+
+### Stop and return another day
+
+- To **stop**, return to the launcher window and press **Ctrl+C**. Closing a
+  browser tab alone does not stop the server.
+- To **return**, open the **same extracted folder** and start the same launcher
+  again. Sign in with the same account. You do not need to download the ZIP
+  or create another account each time.
+- Keep the **whole folder**. Your accounts and saved work are in `db.sqlite3`;
+  uploads and exports are in `media/`. The hidden `.kwacart-local-key` file
+  belongs to this installation too. Back these up; deleting the folder deletes
+  your local installation and its stored work.
+- Do not upload this working folder, its database, media or private key to
+  GitHub. Public source releases must exclude your personal instance data.
+- Downloaded exports are separate copies. They are not a complete backup of
+  the database, accounts and uploaded files.
+
+### If something does not work
+
+| What you see | What to check |
+| --- | --- |
+| The launcher says Python was not found | Install a supported Python version, then try again. On Windows, enable the installer's PATH option if offered. |
+| `manage.py` or `requirements.txt` cannot be found | Extract the entire ZIP and open the inner project folder, not the compressed folder. Keep all files together. |
+| Package installation fails | Keep internet connected, check that the extracted folder is writable, and read the error in the launcher window. Starting it again retries incomplete installation. |
+| The password looks blank as you type | This is normal. Type it and press Enter. |
+| The browser says “can't connect” | Check that the launcher is still open and says “KwaCart is ready”. Use the exact address it prints, including the port. |
+| Port 8000 is already in use | KwaCart may already be running in another window. Use that window or stop it first. Advanced: run the launcher with `--port 8001` and use the new address it prints. |
+| The launcher closes or shows an error | Run the appropriate command below in a terminal to keep the message visible. Read the error; do not delete `db.sqlite3` as a fix. |
+
+**Terminal fallback — first open a terminal in the extracted folder:**
+
+- **Windows:** in File Explorer, click the folder's address bar, type
+  `powershell`, then press Enter. In that window run `py -3.13 .\start_kwacart.py`.
+  If you installed Python 3.12 or 3.14, substitute that version for `3.13`.
+- **Mac:** open Terminal, type `cd `, drag the extracted **folder** into the
+  window and press Return. Then run `sh "./Start KwaCart.command"`.
+- **Linux:** right-click the extracted folder → **Open in Terminal**, then run
+  `sh "./Start KwaCart.command"`.
+
+The launcher binds only to this computer and uses local SQLite and filesystem
+storage. It does not use cloud credentials inherited from another application.
+It uses Django's development server: **do not expose it to the internet**.
+Some browser features such as microphone recording require a secure context;
+localhost qualifies.
+
+**Advanced/manual setup:** if you intentionally manage your own Python packages,
+install `requirements.txt` and run `python start_kwacart.py --use-current-python`.
+The launcher still handles database preparation, account setup and browser opening.
+Git users can clone `https://github.com/QualityLemons/kwacart-selfhost.git`
+instead of downloading a ZIP.
 
 ## Screenshots and archived outputs
 
@@ -80,31 +222,6 @@ The RTF's appearance can vary between document editors. Downloaded copies are
 independent of the archive: deleting an archive record does not erase files
 already saved to someone's computer. Export files alone are not a complete
 instance backup; see the backup instructions below.
-
-## Local use
-
-Requirements: Python 3.12 or newer and pip. On Windows, use `py` instead of
-`python` if that is how your Python installation is configured.
-
-From the extracted project folder:
-
-```sh
-python -m pip install -r requirements.txt
-python manage.py migrate
-python manage.py createsuperuser
-python manage.py runserver 127.0.0.1:8000
-```
-
-Open http://127.0.0.1:8000. No Replit, Stripe, Cloudinary or cloud database account
-is required. Initial package installation needs internet access; the application
-uses local SQLite and filesystem media by default. Some browser features such as
-microphone recording require a secure context (localhost or HTTPS).
-
-Keep `db.sqlite3` and `media/` together. They contain your instance's accounts,
-session work and uploaded/exported files. Do not commit them to GitHub.
-
-The development server and its built-in development key are for local use only.
-Never expose that configuration directly to the internet.
 
 ## Shared or public server
 
