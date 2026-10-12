@@ -119,6 +119,9 @@ def check(binary):
             assert db.execute('SELECT COUNT(*) FROM accounts_user').fetchone() == (1,)
         proc, base = start()
         try:
+            # The original cookies can still be authenticated because the
+            # signing key survived. Check first-run closure as a new visitor.
+            jar.clear()
             assert opener.open(base + '/desktop/setup/').geturl().endswith('/accounts/login/')
         finally:
             stop(proc)
