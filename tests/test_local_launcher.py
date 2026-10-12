@@ -156,3 +156,13 @@ def test_native_check_refuses_to_mislabel_linux_as_native(tmp_path, monkeypatch)
     monkeypatch.setattr(native_source_check.sys, 'platform', 'linux')
     with pytest.raises(AssertionError, match='native Windows or macOS'):
         native_source_check.check(tmp_path / 'not-a-real-archive.zip')
+
+
+def test_source_zip_command_permissions_do_not_depend_on_builder_os(tmp_path):
+    from scripts.build_source_release import source_zip_entry
+    path = tmp_path / 'Start KwaCart.command'
+    path.write_text('#!/bin/sh\n')
+    path.chmod(0o644)  # Windows checkout cannot supply Unix execute bits.
+    entry = source_zip_entry(path, 'kwacart/Start KwaCart.command')
+    assert entry.create_system == 3
+    assert entry.external_attr >> 16 == 0o100755

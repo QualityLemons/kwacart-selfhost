@@ -42,6 +42,17 @@ SECRET_PATTERNS = (
 )
 
 
+def source_zip_entry(path, relative):
+    """Write portable Unix permissions even when the release is built on Windows."""
+    entry = zipfile.ZipInfo.from_file(path, relative)
+    entry.create_system = 3
+    entry.external_attr = (
+        0o100755 if Path(relative).name == 'Start KwaCart.command' else 0o100644
+    ) << 16
+    entry.compress_type = zipfile.ZIP_DEFLATED
+    return entry
+
+
 def main():
     files = subprocess.check_output(
         ['git', 'ls-files', '-z', '--cached', '--others', '--exclude-standard'],
@@ -85,7 +96,8 @@ def main():
     with zipfile.ZipFile(archive, 'w', zipfile.ZIP_DEFLATED) as bundle:
         for path in sorted(OUTPUT.rglob('*')):
             if path.is_file():
-                bundle.write(path, Path('kwacart') / path.relative_to(OUTPUT))
+                relative = str(Path('kwacart') / path.relative_to(OUTPUT)).replace('\\', '/')
+                bundle.writestr(source_zip_entry(path, relative), path.read_bytes())
     print(f'Clean source tree: {OUTPUT.relative_to(ROOT)}')
     print(f'Source archive: {archive.relative_to(ROOT)}')
     print('Not published. Use clean Git history and verify the repository destination before uploading.')
