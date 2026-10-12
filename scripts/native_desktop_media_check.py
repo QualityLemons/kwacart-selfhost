@@ -1,6 +1,8 @@
 """Fixture creation and HTTP authorization checks against the native server."""
 import http.cookiejar
 import os
+from pathlib import Path
+import sys
 import urllib.error
 import urllib.parse
 import urllib.request
@@ -9,6 +11,7 @@ import urllib.request
 def check_private_media(owner_opener, base, data, key):
     # Python on the runner seeds records only; all HTTP below reaches the
     # packaged executable, never a Python replacement for the native server.
+    sys.path.insert(0, str(Path(__file__).resolve().parent.parent))
     os.environ.update(
         DJANGO_SETTINGS_MODULE='config.settings.desktop',
         KWACART_DATA_DIR=str(data), SECRET_KEY=key.decode(),
