@@ -5,6 +5,7 @@ import shutil
 import subprocess
 import sys
 import sysconfig
+import tempfile
 
 ROOT = Path(__file__).resolve().parent.parent
 
@@ -41,10 +42,21 @@ def main():
         'Public repository: https://github.com/QualityLemons/kwacart-selfhost\n'
         f'Build commit: {os.environ.get("GITHUB_SHA", "local build")}\n',
     )
-    subprocess.run(
-        [sys.executable, '-m', 'PyInstaller', '--noconfirm', '--clean',
-         'packaging/kwacart.spec'], cwd=ROOT, check=True,
-    )
+    # PyInstaller's Django hook otherwise chooses config.settings (an empty
+    # package here). Inspect the same settings as the packaged worker, using
+    # disposable build-only state, never a developer's key or database.
+    with tempfile.TemporaryDirectory(prefix='kwacart-build-settings-') as data:
+        env = os.environ.copy()
+        for name in ('DATABASE_URL', 'CLOUDINARY_URL', 'SECRET_KEY'):
+            env.pop(name, None)
+        env.update(
+            DJANGO_SETTINGS_MODULE='config.settings.desktop',
+            KWACART_DATA_DIR=data, SECRET_KEY='build-only-not-a-user-key-' + 'x' * 40,
+        )
+        subprocess.run(
+            [sys.executable, '-m', 'PyInstaller', '--noconfirm', '--clean',
+             'packaging/kwacart.spec'], cwd=ROOT, env=env, check=True,
+        )
     # Documentation and notices also sit beside the app, not only inside it.
     for name in ('LICENSE', 'NOTICE', 'THIRD_PARTY_NOTICES.txt', 'SOURCE.txt'):
         shutil.copy2(ROOT / name, ROOT / 'dist/KwaCart')

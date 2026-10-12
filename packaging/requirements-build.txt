@@ -1,2 +1,3 @@
 pyinstaller==6.16.0
+pyinstaller-hooks-contrib==2026.8
 pip-licenses==5.0.0
