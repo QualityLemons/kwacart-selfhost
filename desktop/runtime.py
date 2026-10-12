@@ -9,7 +9,7 @@ import shutil
 import sqlite3
 import sys
 
-VERSION = '1.0.0'
+VERSION = '1.0.1'
 
 
 def resource_root():

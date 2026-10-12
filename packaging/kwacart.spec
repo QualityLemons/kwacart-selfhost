@@ -33,7 +33,7 @@ if sys.platform == 'darwin':
     app = BUNDLE(
         coll, name='KwaCart.app', bundle_identifier='org.kwacart.desktop',
         info_plist={
-            'CFBundleShortVersionString': '1.0.0',
+            'CFBundleShortVersionString': '1.0.1',
             'NSHighResolutionCapable': True,
             'LSMinimumSystemVersion': '13.0',
         },

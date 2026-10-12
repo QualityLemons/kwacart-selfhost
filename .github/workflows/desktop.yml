@@ -7,9 +7,9 @@ on:
         type: boolean
         default: false
       tag:
-        description: New release tag (for example desktop-v1.0.0)
+        description: New release tag (for example desktop-v1.0.1)
         type: string
-        default: desktop-v1.0.0
+        default: desktop-v1.0.1
   push:
     paths:
       - desktop/**

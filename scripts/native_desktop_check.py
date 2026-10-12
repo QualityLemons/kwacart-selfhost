@@ -15,6 +15,7 @@ import time
 import urllib.error
 import urllib.parse
 import urllib.request
+from native_desktop_media_check import check_private_media
 
 
 def native_window(binary, env, data):
@@ -110,9 +111,7 @@ def check(binary):
                 'SELECT is_superuser FROM accounts_user WHERE email=?', ('native@example.test',),
             ).fetchone() == (1,)
             db.close()
-            (data / 'media').mkdir(exist_ok=True)
-            (data / 'media/retained.txt').write_text('retain this upload')
-            assert opener.open(base + '/media/retained.txt').read() == b'retain this upload'
+            retained = check_private_media(opener, base, data, key_before)
             try:
                 opener.open(urllib.request.Request(
                     base + '/desktop/health/', headers={'Host': 'hostile.example'},
@@ -127,13 +126,13 @@ def check(binary):
         (data / 'installed-version.json').write_text(json.dumps({'version': '0.9.0'}))
         native_window(binary, env, data)
         assert (data / '.kwacart-local-key').read_bytes() == key_before
-        assert (data / 'media/retained.txt').read_text() == 'retain this upload'
+        assert (data / 'media' / retained).read_text() == 'retain this upload'
         backups = list((data / 'backups').iterdir())
         assert len(backups) == 1
         assert (backups[0] / '.kwacart-local-key').read_bytes() == key_before
-        assert (backups[0] / 'media/retained.txt').is_file()
+        assert (backups[0] / 'media' / retained).is_file()
         with closing(sqlite3.connect(backups[0] / 'db.sqlite3')) as db:
-            assert db.execute('SELECT COUNT(*) FROM accounts_user').fetchone() == (1,)
+            assert db.execute('SELECT COUNT(*) FROM accounts_user').fetchone() == (2,)
         proc, base = start()
         try:
             # The original cookies can still be authenticated because the

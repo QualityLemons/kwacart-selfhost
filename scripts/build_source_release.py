@@ -18,6 +18,7 @@ ROOT_FILES = {
     'scripts/capture_readme_examples.py',
     'start_kwacart.py', 'Start KwaCart.bat', 'Start KwaCart.command',
     'scripts/build_desktop.py', 'scripts/native_desktop_check.py',
+    'scripts/native_desktop_media_check.py',
     'scripts/fetch_native_notices.py', 'docs/DESKTOP_RELEASES.md',
     '.github/workflows/desktop.yml',
     # Only the newly generated synthetic examples; never export all legacy docs.

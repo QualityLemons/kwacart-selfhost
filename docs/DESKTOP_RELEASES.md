@@ -4,11 +4,13 @@ KwaCart is free. Standalone packages bundle Python, Django, the tool library,
 templates and static assets. No Python install, terminal command, cloud account
 or payment is required to use a desktop package.
 
-## Published preview
+## Preview security update
 
-**Verified on 12 October 2026:** [desktop-v1.0.0 is published](https://github.com/QualityLemons/kwacart-selfhost/releases/tag/desktop-v1.0.0)
-in the public repository. This is a real download release, not only a proposed
-workflow. Its assets are:
+The initial `desktop-v1.0.0` preview was withdrawn on 12 October 2026 because
+its generic media route bypassed private workshop export ownership checks.
+Do not use that binary. Upgrade by replacing the app, not the data folder.
+The corrected `desktop-v1.0.1` preview is being verified on native runners
+before publication. Its expected assets are:
 
 * `KwaCart-windows-x64.zip`
 * `KwaCart-macos-intel.zip`
@@ -17,14 +19,12 @@ workflow. Its assets are:
 * `kwacart-source.zip`
 * `SHA256SUMS.txt`
 
-The [native build and publication run](https://github.com/QualityLemons/kwacart-selfhost/actions/runs/38257503979)
-completed successfully on all four platforms. Each actual frozen application
-passed first-account, static/tool/media, shutdown, restart and update-backup
-checks from a copied, read-only installation with spaces in its path.
-The published checksum file was downloaded successfully and matches the
-release asset digests. These downloads remain unsigned previews; automated
-native checks are not a claim of signing, notarization or manual screen-reader
-verification.
+The updated native checks require anonymous visitors and unrelated signed-in
+accounts to be denied private exports and uploads, while authorized owners can
+still download their exports and view registered workshop attachments. There
+is no general-purpose `/media/` file server in the corrected desktop edition.
+These downloads remain unsigned previews; automated native checks are not a
+claim of signing, notarization or manual screen-reader verification.
 
 ## Download and open
 

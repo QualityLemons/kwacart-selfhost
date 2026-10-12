@@ -24,7 +24,8 @@ SECURE_SSL_REDIRECT = False
 SECURE_PROXY_SSL_HEADER = None
 ROOT_URLCONF = 'desktop.urls'
 MIDDLEWARE = MIDDLEWARE + ['desktop.setup.FirstAccountMiddleware']
-# WhiteNoise serves only collected assets; user media is served explicitly.
+# WhiteNoise serves only collected assets. Private exports use authorized
+# archive endpoints; desktop.media scopes inline access to owned attachments.
 WHITENOISE_USE_FINDERS = False
 SETUP_TICKET = os.environ.get('KWACART_SETUP_TICKET', '')
 AUTH_PASSWORD_VALIDATORS = [
