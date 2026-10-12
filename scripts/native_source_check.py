@@ -53,6 +53,12 @@ class Terminal:
             if index >= 0:
                 self.cursor = index + len(text)
                 return
+            pending = self.output[self.cursor:]
+            if any(message in pending for message in (
+                'KwaCart could not open:', 'Python was not found.',
+                'is not recognized as an internal or external command',
+            )):
+                break
             try:
                 if os.name == 'nt':
                     data = self.child.fileobj.recv(4096)
