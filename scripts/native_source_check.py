@@ -1,5 +1,6 @@
 """Native source-ZIP checks. Run on Windows/macOS, never against workspace data."""
 import argparse
+import codecs
 from contextlib import closing
 import hashlib
 import http.cookiejar
@@ -25,9 +26,12 @@ class Terminal:
     def __init__(self, command, cwd, env):
         self.output = ''
         self.cursor = 0
+        self.redactions = []
         if os.name == 'nt':
             from winpty import PtyProcess
-            self.child = PtyProcess.spawn(subprocess.list2cmdline(command), cwd=str(cwd), env=env)
+            self.child = PtyProcess.spawn(command, cwd=str(cwd), env=env)
+            self.child.fileobj.settimeout(0.2)
+            self.decoder = codecs.getincrementaldecoder('utf-8')(errors='replace')
         else:
             import pexpect
             self.child = pexpect.spawn(command[0], command[1:], cwd=str(cwd), env=env,
@@ -51,19 +55,25 @@ class Terminal:
                 return
             try:
                 if os.name == 'nt':
-                    chunk = self.child.read(4096, blocking=False)
+                    data = self.child.fileobj.recv(4096)
+                    if not data:
+                        break
+                    chunk = self.decoder.decode(data)
                 else:
                     chunk = self.child.read_nonblocking(4096, timeout=0.2)
                 self.output += chunk
             except Exception as exc:
                 # Terminal timeout/EOF are expected while polling. Other failures
                 # must not be mistaken for a successful application check.
-                if exc.__class__.__name__ not in ('TIMEOUT', 'EOF'):
+                if exc.__class__.__name__ not in ('TIMEOUT', 'EOF', 'EOFError', 'TimeoutError'):
                     raise
             if not self.alive():
                 break
             time.sleep(0.05)
-        raise AssertionError(f'Native terminal did not reach expected step: {text!r}')
+        diagnostic = self.output[-6000:]
+        for value in self.redactions:
+            diagnostic = diagnostic.replace(value, '[redacted synthetic credential]')
+        raise AssertionError(f'Native terminal did not reach expected step: {text!r}\n{diagnostic}')
 
     def stop(self):
         self.send('\x03')
@@ -87,6 +97,7 @@ class Terminal:
             time.sleep(2)
         if self.alive():
             self.child.terminate(force=True)
+        self.child.close(force=True)
 
 
 def windows_shim(folder):
@@ -250,6 +261,7 @@ def check(archive):
         email = f'ci-{secrets.token_hex(8)}@example.test'
         password = secrets.token_urlsafe(32) + '-8a!'
         child = Terminal(wrapper_command(root, '--port', str(port)), work, env)
+        child.redactions = [password]
         try:
             child.expect('Email:', timeout=900)
             child.send(email + '\r')
@@ -296,6 +308,7 @@ def check(archive):
             env['KWACART_CHECK_OFFLINE'] = '1'
             browser.unlink()
             child = Terminal(wrapper_command(root, '--port', str(port)), work, env)
+            child.redactions = [password]
             child.expect('KwaCart is ready:', timeout=180)
             assert 'Create your first login' not in child.output
             assert 'Installing KwaCart packages' not in child.output
